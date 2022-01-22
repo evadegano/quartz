@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/evadegano/bloodstone/issues"
   },
-  "homepage": "https://github.com/evadegano/bloodstone#readme"
+  "homepage": "https://github.com/evadegano/bloodstone#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.10"
+  }
 }

@@ -3,11 +3,13 @@
   "display": "Node 14",
 
   "compilerOptions": {
-    "lib": ["es2020"],
+    "lib": ["dom", "es2020"],
     "module": "commonjs",
-    "target": "es2020",
+    "target": "esnext",
+    "watch": true,
 
     "strict": true,
+    "strictNullChecks": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
