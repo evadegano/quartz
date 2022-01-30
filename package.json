@@ -1,24 +1,20 @@
 {
-  "name": "bloodstone",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "quartz-server",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsc -w"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/evadegano/bloodstone.git"
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^14.3.2",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.8",
+    "morgan": "^1.10.0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/evadegano/bloodstone/issues"
-  },
-  "homepage": "https://github.com/evadegano/bloodstone#readme",
   "devDependencies": {
-    "@types/node": "^17.0.10"
+    "nodemon": "^2.0.15"
   }
 }
