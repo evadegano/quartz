@@ -2,17 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var crypto = require("crypto");
 var Block = /** @class */ (function () {
-    function Block(prevHash, transaction) {
+    function Block(prevHash, transactions) {
         this.nonce = Math.round(Math.random() * 999999999);
         this.timestamps = Date.now();
         this.prevHash = prevHash;
-        this.transaction = transaction;
+        this.transactions = transactions;
         this.hash = this.getHash();
     }
     // hash block's content
     Block.prototype.getHash = function () {
         // convert object to a JSON string for hashing
-        var blockData = [this.prevHash, this.transaction, this.timestamps];
+        var blockData = [this.prevHash, this.transactions, this.timestamps];
         var str = JSON.stringify(blockData);
         // hash block
         var hasher = crypto.createHash("SHA256");
@@ -37,6 +37,19 @@ var Block = /** @class */ (function () {
             // else, try another solution
             this.nonce++;
         }
+    };
+    Block.prototype.getBalanceOfAddress = function (address) {
+        var balance = 0;
+        for (var _i = 0, _a = this.transactions; _i < _a.length; _i++) {
+            var transaction = _a[_i];
+            if (transaction.fromPublicKey === address) {
+                balance -= transaction.amount;
+            }
+            if (transaction.toPublicKey === address) {
+                balance += transaction.amount;
+            }
+        }
+        return balance;
     };
     return Block;
 }());

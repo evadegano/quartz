@@ -2,17 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var block_1 = require("./block");
 var transaction_1 = require("./transaction");
-var Ledger = /** @class */ (function () {
-    function Ledger() {
+var Blockchain = /** @class */ (function () {
+    function Blockchain() {
         this.ledger = [this.createGenesisBlock()];
         this.pendingTransactions = [];
         this.difficulty = 4;
         this.miningReward = 100;
     }
-    Ledger.prototype.createGenesisBlock = function () {
+    Blockchain.prototype.createGenesisBlock = function () {
         return new block_1.default(null, []);
     };
-    Object.defineProperty(Ledger.prototype, "getLastBlock", {
+    Object.defineProperty(Blockchain.prototype, "getLastBlock", {
         // get last of the ledger
         get: function () {
             return this.ledger[this.ledger.length - 1];
@@ -21,10 +21,10 @@ var Ledger = /** @class */ (function () {
         configurable: true
     });
     // add transaction to pending transactions
-    Ledger.prototype.addPendingTransaction = function (transaction) {
+    Blockchain.prototype.addPendingTransaction = function (transaction) {
         this.pendingTransactions.push(transaction);
     };
-    Ledger.prototype.minePendingTransactions = function (miningRewardAddress) {
+    Blockchain.prototype.minePendingTransactions = function (miningRewardAddress) {
         var newBlock = new block_1.default(this.getLastBlock.hash, this.pendingTransactions);
         newBlock.mine(this.difficulty);
         // make sure that the ledger is valid
@@ -38,7 +38,7 @@ var Ledger = /** @class */ (function () {
         }
     };
     // make sure that the ledger hasn't been modified
-    Ledger.prototype.isValid = function () {
+    Blockchain.prototype.isValid = function () {
         for (var i = 1; i < this.ledger.length; i++) {
             var currentBlock = this.ledger[i];
             var prevBlock = this.ledger[i - 1];
@@ -54,7 +54,7 @@ var Ledger = /** @class */ (function () {
         console.log("Blockchain is valid.");
         return true;
     };
-    Ledger.prototype.getTotalBalanceOfAddress = function (address) {
+    Blockchain.prototype.getTotalBalanceOfAddress = function (address) {
         var balance = 0;
         for (var _i = 0, _a = this.ledger; _i < _a.length; _i++) {
             var block = _a[_i];
@@ -62,7 +62,7 @@ var Ledger = /** @class */ (function () {
         }
         return balance;
     };
-    Ledger.instance = new Ledger(); // singleton instance
-    return Ledger;
+    Blockchain.instance = new Blockchain(); // singleton instance
+    return Blockchain;
 }());
-exports.default = Ledger;
+exports.default = Blockchain;

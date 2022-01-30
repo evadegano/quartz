@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var crypto = require("crypto");
-var ledger_1 = require("./ledger");
+var blockchain_1 = require("./blockchain");
 var transaction_1 = require("./transaction");
 var Wallet = /** @class */ (function () {
     function Wallet() {
@@ -23,7 +23,10 @@ var Wallet = /** @class */ (function () {
         sign.update(transaction.toString()).end();
         // sign signature
         var signature = sign.sign(this.privateKey);
-        ledger_1.default.instance.addBlock(transaction, this.publicKey, signature);
+        // add transaction to Ledger if valid
+        if (transaction.isValid(signature)) {
+            blockchain_1.default.instance.addPendingTransaction(transaction);
+        }
     };
     return Wallet;
 }());

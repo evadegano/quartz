@@ -4,21 +4,21 @@ import Transaction from "./transaction"
 
 class Block {
   public prevHash: string;
-  public transaction: Transaction;
+  public transactions: Transaction[];
   public hash: string;
   public nonce: number = Math.round(Math.random() * 999999999);
   public timestamps: number = Date.now();
 
-  constructor(prevHash: string, transaction: Transaction) {
+  constructor(prevHash: string, transactions: Transaction[]) {
     this.prevHash = prevHash;
-    this.transaction = transaction;
+    this.transactions = transactions;
     this.hash = this.getHash();
   }
 
   // hash block's content
   getHash() {
     // convert object to a JSON string for hashing
-    const blockData = [this.prevHash, this.transaction, this.timestamps];
+    const blockData = [this.prevHash, this.transactions, this.timestamps];
     const str = JSON.stringify(blockData);
 
     // hash block
@@ -50,6 +50,22 @@ class Block {
       // else, try another solution
       this.nonce ++;
     }
+  }
+
+  getBalanceOfAddress(address: string) {
+    let balance = 0;
+
+      for (let transaction of this.transactions) {
+        if (transaction.fromPublicKey === address) {
+          balance -= transaction.amount;
+        }
+
+        if (transaction.toPublicKey === address) {
+          balance += transaction.amount;
+        }
+      }
+
+    return balance;
   }
 }
 

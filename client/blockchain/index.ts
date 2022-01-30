@@ -1,9 +1,15 @@
 import Wallet from "./wallet";
-import Ledger from "./ledger";
+import Blockchain from "./blockchain";
 
-const ledger = Ledger.instance;
+const blockchain = Blockchain.instance;
 
 const satoshi = new Wallet();
 const eva = new Wallet();
 
 satoshi.sendMoney(50, eva.publicKey);
+
+console.log(Blockchain)
+
+blockchain.minePendingTransactions(satoshi.publicKey);
+
+console.log(blockchain.getTotalBalanceOfAddress(satoshi.publicKey));

@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import Ledger from "./ledger";
+import Ledger from "./blockchain";
 import Transaction from "./transaction";
 
 
@@ -30,7 +30,11 @@ class Wallet {
 
     // sign signature
     const signature = sign.sign(this.privateKey);
-    Ledger.instance.addBlock(transaction, this.publicKey, signature);
+
+    // add transaction to Ledger if valid
+    if (transaction.isValid(signature)) {
+      Ledger.instance.addPendingTransaction(transaction);
+    }
   }
 }
 

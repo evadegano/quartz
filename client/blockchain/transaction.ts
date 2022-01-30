@@ -16,6 +16,20 @@ class Transaction {
   toString() {
     return JSON.stringify(this);
   }
+
+  isValid(signature: Buffer) {
+    // create transaction verifier
+    const verifier = crypto.createVerify("SHA256");
+    verifier.update(this.toString());
+    // verify that address and signature are valid
+    const isValid = verifier.verify(this.fromPublicKey, signature);
+
+    if (isValid) {
+      return true;
+    }
+
+    return false;
+  }
 }
 
 export default Transaction;
