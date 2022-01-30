@@ -2,7 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var wallet_1 = require("./wallet");
 var ledger_1 = require("./ledger");
+var ledger = ledger_1.default.instance;
 var satoshi = new wallet_1.default();
 var eva = new wallet_1.default();
 satoshi.sendMoney(50, eva.publicKey);
-console.log(ledger_1.default.instance);
+console.log(ledger.isValid());
+ledger.ledger[1].transaction.amount = 100;
+console.log(ledger.isValid());

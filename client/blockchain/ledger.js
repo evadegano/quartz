@@ -6,8 +6,11 @@ var transaction_1 = require("./transaction");
 var Ledger = /** @class */ (function () {
     function Ledger() {
         this.difficulty = 4;
-        this.ledger = [new block_1.default(null, new transaction_1.default(100, "genesis", "satoshi"))];
+        this.ledger = [this.createGenesisBlock()];
     }
+    Ledger.prototype.createGenesisBlock = function () {
+        return new block_1.default(null, new transaction_1.default(100, "genesis", "satoshi"));
+    };
     Object.defineProperty(Ledger.prototype, "lastBlock", {
         // get last of the ledger
         get: function () {
@@ -16,26 +19,6 @@ var Ledger = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    // proof of work
-    // find a number that, when added to the block's nonce
-    // produces a hash that starts with a certain amount of 0
-    Ledger.prototype.mine = function (nonce) {
-        var solution = 1;
-        console.log("⛏ mining...");
-        while (true) {
-            var hasher = crypto.createHash("MD5"); // use MD5 because 128 bits hence faster to compute than SHA256
-            hasher.update((nonce + solution).toString()).end();
-            var attempt = hasher.digest("hex");
-            var substToMatch = new Array(this.difficulty).fill(0).join("");
-            // return solution if found
-            if (attempt.substr(0, this.difficulty) === substToMatch) {
-                console.log("Solved: ".concat(solution));
-                return solution;
-            }
-            // else, try another solution
-            solution++;
-        }
-    };
     // add block to the ledger
     Ledger.prototype.addBlock = function (transaction, fromPublicKey, signature) {
         // create transaction verifier
@@ -44,10 +27,32 @@ var Ledger = /** @class */ (function () {
         // verify that address and signature are valid
         var isValid = verifier.verify(fromPublicKey, signature);
         if (isValid) {
+            // create new block
             var newBlock = new block_1.default(this.lastBlock.hash, transaction);
-            this.mine(newBlock.nonce);
-            this.ledger.push(newBlock);
+            // mine block
+            newBlock.mine(this.difficulty);
+            // make sure that the ledger is valid
+            if (this.isValid()) {
+                this.ledger.push(newBlock);
+            }
         }
+    };
+    // make sure that the ledger hasn't been modified
+    Ledger.prototype.isValid = function () {
+        for (var i = 1; i < this.ledger.length; i++) {
+            var currentBlock = this.ledger[i];
+            var prevBlock = this.ledger[i - 1];
+            if (currentBlock.hash !== currentBlock.getHash()) {
+                console.log("Blockchain is not valid.");
+                return false;
+            }
+            if (currentBlock.prevHash !== prevBlock.hash) {
+                console.log("Blockchain is not valid.");
+                return false;
+            }
+        }
+        console.log("Blockchain is valid.");
+        return true;
     };
     Ledger.instance = new Ledger(); // singleton instance
     return Ledger;

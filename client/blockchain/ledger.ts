@@ -9,41 +9,20 @@ class Ledger {
   public difficulty: number = 4;
 
   constructor () {
-    this.ledger = [new Block(null, new Transaction(100, "genesis", "satoshi"))];
+    this.ledger = [this.createGenesisBlock()];
+  }
+
+  createGenesisBlock () {
+    return new Block(null, new Transaction(100, "genesis", "satoshi"));
   }
 
   // get last of the ledger
-  get lastBlock() {
+  get lastBlock () {
     return this.ledger[this.ledger.length - 1];
   }
 
-  // proof of work
-  // find a number that, when added to the block's nonce
-  // produces a hash that starts with a certain amount of 0
-  mine (nonce: number) {
-    let solution = 1;
-    console.log("⛏ mining...");
-
-    while (true) {
-      const hasher = crypto.createHash("MD5"); // use MD5 because 128 bits hence faster to compute than SHA256
-      hasher.update((nonce + solution).toString()).end();
-
-      const attempt = hasher.digest("hex");
-      const substToMatch = new Array(this.difficulty).fill(0).join("");
-
-      // return solution if found
-      if (attempt.substr(0, this.difficulty) === substToMatch) {
-        console.log(`Solved: ${solution}`);
-        return solution;
-      }
-
-      // else, try another solution
-      solution ++;
-    }
-  }
-
   // add block to the ledger
-  addBlock(transaction: Transaction, fromPublicKey: string, signature: Buffer) {
+  addBlock (transaction: Transaction, fromPublicKey: string, signature: Buffer) {
     // create transaction verifier
     const verifier = crypto.createVerify("SHA256");
     verifier.update(transaction.toString());
@@ -51,10 +30,37 @@ class Ledger {
     const isValid = verifier.verify(fromPublicKey, signature);
 
     if (isValid) {
+      // create new block
       const newBlock = new Block(this.lastBlock.hash, transaction);
-      this.mine(newBlock.nonce);
-      this.ledger.push(newBlock);
+      // mine block
+      newBlock.mine(this.difficulty);
+
+      // make sure that the ledger is valid
+      if (this.isValid()) {
+        this.ledger.push(newBlock);
+      }
     }
+  }
+
+  // make sure that the ledger hasn't been modified
+  isValid() {
+    for (let i  = 1; i < this.ledger.length; i++) {
+      const currentBlock = this.ledger[i];
+      const prevBlock = this.ledger[i - 1];
+
+      if (currentBlock.hash !== currentBlock.getHash()) {
+        console.log("Blockchain is not valid.");
+        return false;
+      }
+
+      if (currentBlock.prevHash !== prevBlock.hash) {
+        console.log("Blockchain is not valid.");
+        return false;
+      }
+    }
+
+    console.log("Blockchain is valid.");
+    return true;
   }
 }
 
