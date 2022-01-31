@@ -8,8 +8,8 @@ const eva = new Wallet();
 
 satoshi.sendMoney(50, eva.publicKey);
 
-console.log(Blockchain)
-
 blockchain.minePendingTransactions(satoshi.publicKey);
 
-console.log(blockchain.getTotalBalanceOfAddress(satoshi.publicKey));
+blockchain.ledger[1].transactions[0].amount = 1;
+
+console.log(blockchain.isValid());

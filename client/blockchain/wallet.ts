@@ -21,18 +21,13 @@ class Wallet {
   }
 
   sendMoney(amount: number, toPublicKey: string) {
+    // create transaction
     const transaction = new Transaction(amount, this.publicKey, toPublicKey);
-
-    // create signature
-    const sign = crypto.createSign("SHA256");
     // sign transaction
-    sign.update(transaction.toString()).end();
-
-    // sign signature
-    const signature = sign.sign(this.privateKey);
+    transaction.signTransaction(this);
 
     // add transaction to Ledger if valid
-    if (transaction.isValid(signature)) {
+    if (transaction.isValid()) {
       Ledger.instance.addPendingTransaction(transaction);
     }
   }

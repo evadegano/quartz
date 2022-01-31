@@ -22,6 +22,14 @@ var Blockchain = /** @class */ (function () {
     });
     // add transaction to pending transactions
     Blockchain.prototype.addPendingTransaction = function (transaction) {
+        // make sure that transaction has
+        if (!transaction.fromPublicKey || !transaction.toPublicKey) {
+            throw new Error("Transaction must include a from and to address.");
+        }
+        // make sure that transaction is valid
+        if (!transaction.isValid()) {
+            throw new Error("Cannot add an invalid transaction to the ledger.");
+        }
         this.pendingTransactions.push(transaction);
     };
     Blockchain.prototype.minePendingTransactions = function (miningRewardAddress) {
@@ -42,12 +50,19 @@ var Blockchain = /** @class */ (function () {
         for (var i = 1; i < this.ledger.length; i++) {
             var currentBlock = this.ledger[i];
             var prevBlock = this.ledger[i - 1];
-            if (currentBlock.hash !== currentBlock.getHash()) {
-                console.log("Blockchain is not valid.");
+            // verify current block's transactions
+            if (!currentBlock.areTransactionsValid()) {
+                console.log("Error: block ".concat(currentBlock.hash, " has invalid transactions."));
                 return false;
             }
+            // make sure that the current block is valid
+            if (currentBlock.hash !== currentBlock.getHash()) {
+                console.log("Error: block ".concat(currentBlock.hash, " has been tampered with."));
+                return false;
+            }
+            // make sure that there is no broken link between blocks
             if (currentBlock.prevHash !== prevBlock.hash) {
-                console.log("Blockchain is not valid.");
+                console.log("Error: block ".concat(prevBlock.hash, " has been tampered with."));
                 return false;
             }
         }

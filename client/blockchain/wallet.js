@@ -16,15 +16,12 @@ var Wallet = /** @class */ (function () {
         this.privateKey = keypair.privateKey;
     }
     Wallet.prototype.sendMoney = function (amount, toPublicKey) {
+        // create transaction
         var transaction = new transaction_1.default(amount, this.publicKey, toPublicKey);
-        // create signature
-        var sign = crypto.createSign("SHA256");
         // sign transaction
-        sign.update(transaction.toString()).end();
-        // sign signature
-        var signature = sign.sign(this.privateKey);
+        transaction.signTransaction(this);
         // add transaction to Ledger if valid
-        if (transaction.isValid(signature)) {
+        if (transaction.isValid()) {
             blockchain_1.default.instance.addPendingTransaction(transaction);
         }
     };

@@ -67,6 +67,18 @@ class Block {
 
     return balance;
   }
+
+  // verify all transactions in the block
+  areTransactionsValid() {
+    for (let transaction of this.transactions) {
+      if (!transaction.isValid()) {
+        console.log(`Error: transaction ${transaction.hash} is not valid.`)
+        return false;
+      }
+    }
+
+    return true;
+  }
 }
 
 

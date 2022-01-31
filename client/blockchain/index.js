@@ -6,6 +6,6 @@ var blockchain = blockchain_1.default.instance;
 var satoshi = new wallet_1.default();
 var eva = new wallet_1.default();
 satoshi.sendMoney(50, eva.publicKey);
-console.log(blockchain_1.default);
 blockchain.minePendingTransactions(satoshi.publicKey);
-console.log(blockchain.getTotalBalanceOfAddress(satoshi.publicKey));
+blockchain.ledger[1].transactions[0].amount = 1;
+console.log(blockchain.isValid());

@@ -51,6 +51,17 @@ var Block = /** @class */ (function () {
         }
         return balance;
     };
+    // verify all transactions in the block
+    Block.prototype.areTransactionsValid = function () {
+        for (var _i = 0, _a = this.transactions; _i < _a.length; _i++) {
+            var transaction = _a[_i];
+            if (!transaction.isValid()) {
+                console.log("Error: transaction ".concat(transaction.hash, " is not valid."));
+                return false;
+            }
+        }
+        return true;
+    };
     return Block;
 }());
 exports.default = Block;
