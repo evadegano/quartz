@@ -14,9 +14,27 @@ const Transaction = require("../models/Transaction.model");
 const Ledger = require("../models/Ledger.model");
 
 
-// GET homepage
-router.get("/", (req, res, next) => {
-  res.json("All good in here");
+// GET blockchain data
+router.get("/blockchain", (req, res, next) => {
+  return;
+});
+
+
+// GET pending transactions
+router.get("/pending-transactions", (req, res, next) => {
+  return;
+});
+
+
+// GET block transactions
+router.get("/blockId:", (req, res, next) => {
+  return;
+});
+
+
+// GET some user wallet
+router.get("/walletId:", (req, res, next) => {
+  return;
 });
 
 

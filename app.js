@@ -1,23 +1,23 @@
-// ℹ️ Gets access to environment variables/settings
-// https://www.npmjs.com/package/dotenv
-require("dotenv/config");
-
-// ℹ️ Connects to the database
-require("./db");
-
-// Handles http requests (express is node js framework)
-// https://www.npmjs.com/package/express
-const express = require("express");
-
+require("dotenv/config"); // get access to environment variables
+require("./db"); // connects to the database
+const passport = require("passport"); // handles authentication and authorization
+const express = require("express"); // node framework to handle http requests
 const app = express();
 
-// ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
-require("./config")(app);
+// import app middlewares
+require("./config/index")(app);
 
-// 👇 Start handling routes here
-// Contrary to the views version, all routes are controlled from the routes/index.js
-const allRoutes = require("./routes");
-app.use("/api", allRoutes);
+// import passport middlewares
+require("./config/passport")(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// import routes
+const mainRoutes = require("./routes/index");
+app.use("/api", mainRoutes);
+
+const authRoutes = require("./routes/auth");
+app.use("/api", authRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
