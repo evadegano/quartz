@@ -11,7 +11,12 @@ var Transaction = /** @class */ (function () {
     // hash transaction's content
     Transaction.prototype.getHash = function () {
         // convert object to a JSON string for hashing
-        var transacData = [this.amount, this.fromPublicKey, this.toPublicKey, this.timestamps, this.signature];
+        var transacData = {
+            timestamps: this.timestamps,
+            amount: this.amount,
+            fromPublicKey: this.fromPublicKey,
+            toPublicKey: this.toPublicKey,
+        };
         var str = JSON.stringify(transacData);
         // hash block
         var hasher = crypto.createHash("SHA256");

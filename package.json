@@ -5,8 +5,6 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "ts": "tsc ./blockhain/index.ts --target ES5",
-    "js": "node ./blockchain/index.js"
   },
   "dependencies": {
     "@types/node": "^17.0.13",

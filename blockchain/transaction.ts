@@ -5,6 +5,7 @@ class Transaction {
     public amount: number;
     public fromPublicKey: string;
     public toPublicKey: string;
+    public status: string;
     public signature: Buffer;
     public hash: string;
     public timestamps: number = Date.now();
@@ -14,12 +15,19 @@ class Transaction {
     this.amount = amount;
     this.fromPublicKey = fromPublicKey;
     this.toPublicKey = toPublicKey;
+    this.status = "Sent";
   }
 
   // hash transaction's content
   getHash() {
     // convert object to a JSON string for hashing
-    const transacData = [this.amount, this.fromPublicKey, this.toPublicKey, this.timestamps, this.signature];
+    const transacData = {
+      timestamps: this.timestamps,
+      amount: this.amount, 
+      fromPublicKey: this.fromPublicKey,
+      toPublicKey: this.toPublicKey,
+    };
+    
     const str = JSON.stringify(transacData);
 
     // hash block

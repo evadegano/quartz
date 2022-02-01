@@ -30,7 +30,10 @@ var Blockchain = /** @class */ (function () {
         if (!transaction.isValid()) {
             throw new Error("Cannot add an invalid transaction to the ledger.");
         }
+        // add transaction to pending transactions
         this.pendingTransactions.push(transaction);
+        // update transaction's status
+        transaction.status = "pending";
     };
     Blockchain.prototype.minePendingTransactions = function (miningRewardAddress) {
         var newBlock = new block_1.default(this.getLastBlock.hash, this.pendingTransactions);
@@ -39,6 +42,8 @@ var Blockchain = /** @class */ (function () {
         if (this.isValid()) {
             // add block to ledger
             this.ledger.push(newBlock);
+            // update transactions status
+            newBlock.transactions.map(function (transaction) { return transaction.status = "mined"; });
             // empty pending transactions array and add reward transaction
             this.pendingTransactions = [
                 new transaction_1.default(this.miningReward, null, miningRewardAddress)

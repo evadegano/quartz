@@ -1,11 +1,12 @@
 import * as crypto from "crypto";
-import Ledger from "./blockchain";
+import Blockchain from "./blockchain";
 import Transaction from "./transaction";
 
 
 class Wallet {
   public publicKey: string; // to send money
   public privateKey: string; // to receive money
+  public balance: number;
 
   constructor() {
     // digital signature to sign and verify hash
@@ -20,7 +21,19 @@ class Wallet {
     this.privateKey = keypair.privateKey;
   }
 
+  updateBalance() {
+    this.balance = Blockchain.instance.getTotalBalanceOfAddress(this.publicKey);
+  }
+
   sendMoney(amount: number, toPublicKey: string) {
+    // update balance
+    this.updateBalance();
+
+    // make sure the wallet has enough funds
+    if (amount > this.balance) {
+      throw new Error("Not enough funds.");
+    }
+
     // create transaction
     const transaction = new Transaction(amount, this.publicKey, toPublicKey);
     // sign transaction
@@ -28,7 +41,7 @@ class Wallet {
 
     // add transaction to Ledger if valid
     if (transaction.isValid()) {
-      Ledger.instance.addPendingTransaction(transaction);
+      Blockchain.instance.addPendingTransaction(transaction);
     }
   }
 }

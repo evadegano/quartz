@@ -7,9 +7,14 @@ const blockSchema = new Schema({
     },
     prevHash: {
       type: String,
-      required: [true, "Prev hash required"]
+      required: [true, "Prev hash required."],
+      unique: [true, "Hashing error."]
     },
-    transactions: [String]
+    transactions: [String],
+    hash: {
+      type: String,
+      unique: [true, "Hashing error."]
+    },
   },
   {
     timestamps: true

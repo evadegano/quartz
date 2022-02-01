@@ -15,7 +15,16 @@ var Wallet = /** @class */ (function () {
         this.publicKey = keypair.publicKey;
         this.privateKey = keypair.privateKey;
     }
+    Wallet.prototype.updateBalance = function () {
+        this.balance = blockchain_1.default.instance.getTotalBalanceOfAddress(this.publicKey);
+    };
     Wallet.prototype.sendMoney = function (amount, toPublicKey) {
+        // update balance
+        this.updateBalance();
+        // make sure the wallet has enough funds
+        if (amount > this.balance) {
+            throw new Error("Not enough funds.");
+        }
         // create transaction
         var transaction = new transaction_1.default(amount, this.publicKey, toPublicKey);
         // sign transaction

@@ -12,6 +12,16 @@ const transactionSchema = new Schema({
     toPublicKey: {
       type: String,
       required: [true, "Public key required."]
+    },
+    status: {
+      type: String,
+      enum: ["Initialized", "Awaiting mining", "Mined"],
+      default: "Initialized"
+    },
+    signature: Buffer,
+    hash: {
+      type: String,
+      unique: [true, "Hashing error."]
     }
   },
   {

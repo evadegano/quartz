@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Component } from "react";
 import SideNavbar from "../navbar/SideNavbar";
 import Header from "./Header";

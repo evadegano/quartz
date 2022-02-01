@@ -13,6 +13,11 @@ const walletSchema = new Schema({
       type: String,
       required: [true, "Private key required."]
     },
+    balance: {
+      type: Number,
+      required: [true, "Balance is required."],
+      default: 0
+    },
     active: {
       type: Boolean,
       default: true
