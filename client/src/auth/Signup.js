@@ -1,0 +1,83 @@
+import { Component } from "react";
+import { signup } from "./auth-service";
+import NavbarBrand from "../navbar/NavbarBrand";
+
+
+
+class Signup extends Component {
+  state = {
+    email: "",
+    password: "",
+    passwordConfirm: ""
+  }
+
+  handleChange = (event) => {
+    const { name, value } = event.target;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    const email = this.state.email;
+    const password = this.state.password;
+    const passwordConfirm = this.state.passwordConfirm;
+
+    signup(email, password, passwordConfirm)
+      .then((response) => {
+        this.setState({
+          email: null,
+          password: null,
+          passwordConfirm: null
+        });
+
+        this.props.updateUser(response);
+      })
+      .catch(err => console.log(err))
+  }
+
+  render() {
+    return (
+      <div>
+        <NavbarBrand />
+        
+        <div className="centered-col-container">
+
+        <h1 className="title">Sign up</h1>
+
+          <form className="box s-container" onSubmit={this.handleSubmit}>
+            <div className="field">
+              <label className="label">Email</label>
+              <div className="control">
+                <input name="email" value={this.state.email} className="input" type="email" placeholder="e.g. alex@example.com" onChange={this.handleChange} />
+              </div>
+            </div>
+
+            <div className="field">
+              <label className="label">Password</label>
+              <div className="control">
+                <input name="password" value={this.state.password} className="input" type="password" placeholder="********" onChange={this.handleChange} />
+              </div>
+              <p>Your password must contain at least 8 characters, including one cap letter, one number and one special character.</p>
+            </div>
+
+            <div className="field">
+              <label className="label">Confirm password</label>
+              <div className="control">
+                <input name="passwordConfirm" value={this.state.passwordConfirm} className="input" type="password" placeholder="********" onChange={this.handleChange} />
+              </div>
+            </div>
+
+            <button className="button is-primary">Sign up</button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+}
+
+
+export default Signup;
