@@ -10,7 +10,8 @@ const blockchainSchema = new Schema({
     miningReward: {
       type: Number,
       required: [true, "Difficulty is required"]
-    }
+    },
+    hash: String
   },
   {
     timestamps: true

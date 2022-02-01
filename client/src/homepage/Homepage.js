@@ -12,6 +12,7 @@ function Homepage() {
           <div className="columns centered-row-container">
             <div className="column">
               <h1 className="title">Store your crypto-assets safely</h1>
+              <p>Quartz Live is an online wallet built on the Quartz blockchain.</p>
             </div>
             <div className="column">
               Second column

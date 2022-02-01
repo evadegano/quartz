@@ -11,21 +11,25 @@ const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
 const Block = require("../models/Block.model");
 const Transaction = require("../models/Transaction.model");
-const Ledger = require("../models/Ledger.model");
+const Blockchain = require("../models/Blockchain.model");
 
 
 // GET user dashboard
 router.get("/wallet/:userId", (req, res, next) => {
-  // search for wallet based on user_id
+  // fetch user
 
-  // populate 
+  // fetch wallet
+
+  // fetch corresponding transactions
+
+  // return data
   return;
 });
 
 
 // GET user profile
 router.get("/users/:userId", (req, res, next) => {
-  // if 
+  // fetch user
   return;
 });
 

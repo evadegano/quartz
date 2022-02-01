@@ -4,7 +4,7 @@ import { loggedIn } from './auth/auth-service';
 import Homepage from './homepage/Homepage';
 import Signup from './auth/Signup';
 import Login from './auth/Login';
-import Dashboard from './dashboard/Dashboard';
+import Dashboard from './user/Dashboard';
 import './styles/App.css';
 import "./mystyles.css";
 
