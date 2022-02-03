@@ -1,7 +1,5 @@
 import { Component } from "react";
 import { signup } from "./auth-service";
-import NavbarBrand from "../navbar/NavbarBrand";
-
 
 
 class Signup extends Component {
@@ -20,18 +18,19 @@ class Signup extends Component {
   }
 
   handleSubmit = (event) => {
+    // prevent page from reloading
     event.preventDefault();
 
-    const email = this.state.email;
-    const password = this.state.password;
-    const passwordConfirm = this.state.passwordConfirm;
+    // post data
+    const { email, password, passwordConfirm } = this.state;
 
     signup(email, password, passwordConfirm)
       .then((response) => {
+        // reset state
         this.setState({
-          email: null,
-          password: null,
-          passwordConfirm: null
+          email: "",
+          password: "",
+          passwordConfirm: ""
         });
 
         this.props.updateUser(response);
@@ -42,8 +41,6 @@ class Signup extends Component {
   render() {
     return (
       <div>
-        <NavbarBrand />
-        
         <div className="centered-col-container">
 
         <h1 className="title">Sign up</h1>

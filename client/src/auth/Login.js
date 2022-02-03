@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { login } from "./auth-service";
-import NavbarBrand from "../navbar/NavbarBrand";
 
 
 class Login extends Component {
@@ -18,15 +17,18 @@ class Login extends Component {
   }
 
   handleSubmit = (event) => {
+    // prevent page from reloading
     event.preventDefault();
-    const email = this.state.email;
-    const password = this.state.password;
+
+    // post data
+    const { email, password } = this.state;
 
     login(email, password)
       .then(response => {
+        // reset state
         this.setState({
-          email: null,
-          password: null
+          email: "",
+          password: ""
         });
 
         this.props.updateUser(response);
@@ -37,8 +39,6 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <NavbarBrand />
-        
         <div className="centered-col-container">
 
         <h1 className="title">Log in</h1>

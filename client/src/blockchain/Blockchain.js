@@ -1,25 +1,32 @@
 import { Link, Switch, Route } from "react-router-dom";
 import { Component } from "react";
-import Block from "./Block";
+import Header from "../global/Header";
+import Blocks from "./Blocks";
+import TransacVolumes from "./TransacVolumes";
+import BlockchainStats from "./BlockchainStats";
 
 
 class Blockchain extends Component {
   state = {
-    blocks = []
+    blocks: []
   }
 
   render() {
     return (
       <div>
-        {this.state.blocks.map((block, idx) => {
-          <Link to=":blockId" >
-            <Block key={block.hash} index={idx} blockHash={block.hash} blockPrevHash={block.prevHash} blockNonce={block.nonce} blockTimestamps={block.timestamps}  />
-          </Link>
-        })}
+        <Header title="Quartz blockchain" subtitle="" />
 
-        <Switch>
-          <Route to="/:blockId" />
-        </Switch>
+        <div className="columns centered-row-container">
+          <div className="column">
+            <TransacVolumes />
+          </div>
+
+          <div className="column">
+            <BlockchainStats />
+          </div>
+        </div>
+
+        <Blocks />
       </div>
     );
   }

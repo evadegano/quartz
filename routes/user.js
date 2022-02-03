@@ -14,8 +14,8 @@ const Transaction = require("../models/Transaction.model");
 const Blockchain = require("../models/Blockchain.model");
 
 
-// GET user dashboard
-router.get("/wallet/:userId", (req, res, next) => {
+// GET user wallet
+router.get("/user/:walletId", (req, res, next) => {
   // fetch user
 
   // fetch wallet
@@ -26,29 +26,32 @@ router.get("/wallet/:userId", (req, res, next) => {
   return;
 });
 
+// POST a transaction
+router.post("/user/:walletId/transaction", (req, res, next) => {
+  return;
+});
+
 
 // GET user profile
-router.get("/users/:userId", (req, res, next) => {
+router.get("/user/:userId", (req, res, next) => {
   // fetch user
   return;
 });
 
 
-// PUT user profile
-router.put("/users/:userId", (req, res, next) => {
+// PUT user data
+router.put("/user/:userId", (req, res, next) => {
+  // fetch user
   return;
 });
 
 
-// DELETE user
-router.delete("/users/:userId", (req, res, next) => {
+// DELETE user data
+router.delete("/user/:userId", (req, res, next) => {
+  // fetch user
   return;
 });
 
-// POST user transaction
-router.post("/users/:userId/transaction", (req, res, next) => {
-  return;
-});
 
 
 module.exports = router;

@@ -11,6 +11,10 @@ const blockSchema = new Schema({
       unique: [true, "Hashing error."]
     },
     transactions: [String],
+    miner: {
+      type: String,
+      required: [true, "Miner required."]
+    },
     hash: {
       type: String,
       unique: [true, "Hashing error."]

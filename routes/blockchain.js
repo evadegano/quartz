@@ -27,6 +27,12 @@ router.get("/blockchain", (req, res, next) => {
 });
 
 
+// GET all transations
+router.get("/transactions", (req, res, next) => {
+  return;
+});
+
+
 // GET pending transactions
 router.get("/pending-transactions", (req, res, next) => {
   const blockchainHash = "";
@@ -40,29 +46,27 @@ router.get("/pending-transactions", (req, res, next) => {
 });
 
 
-// GET block transactions
-router.get("/blockId:", (req, res, next) => {
-  // get block hash
-  const blockHash = ""
 
-  // fetch block
-
-  // populate transactions
-
-  // return data
+// GET all blocks
+router.get("/blocks", (req, res, next) => {
   return;
 });
 
 
-// GET some user wallet
-router.get("/walletId:", (req, res, next) => {
-  // get wallet hash
+// GET block transactions
+router.get("/blocks/:blockId", (req, res, next) => {
+  return;
+});
 
-  // fetch wallet
 
-  // fetch corresponding transactions
+// GET all wallets
+router.get("/wallets", (req, res, next) => {
+  return;
+});
 
-  // return data
+
+// GET wallet details
+router.get("/wallets/:walletId", (req, res, next) => {
   return;
 });
 
