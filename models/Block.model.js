@@ -10,15 +10,16 @@ const blockSchema = new Schema({
       required: [true, "Prev hash required."],
       unique: [true, "Hashing error."]
     },
-    transactions: [String],
+    transactions: {
+      type: [Schema.Types.ObjectId],
+      ref: "Transaction"
+    },
     miner: {
       type: String,
       required: [true, "Miner required."]
     },
-    hash: {
-      type: String,
-      unique: [true, "Hashing error."]
-    },
+    miningReward: Number,
+    miningDuration: Number
   },
   {
     timestamps: true

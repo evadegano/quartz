@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { login } from "./auth-service";
+import NavbarBrand from "../navbar/NavbarBrand";
 
 
 class Login extends Component {
@@ -39,9 +41,10 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <div className="centered-col-container">
+        <NavbarBrand />
 
-        <h1 className="title">Log in</h1>
+        <div className="centered-col-container">
+          <h1 className="title">Log in</h1>
 
           <form className="box s-container" onSubmit={this.handleSubmit}>
             <div className="field">
@@ -60,6 +63,8 @@ class Login extends Component {
 
             <button className="button is-primary">Log in</button>
           </form>
+
+          <Link>I forgot my password</Link>
         </div>
       </div>
     );
