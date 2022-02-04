@@ -14,11 +14,6 @@ const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
 
 
-// GET signup page
-// router.get("/signup", (req, res, next) => {
-//   res.json("Signup page");
-// });
-
 
 // POST signup page
 router.post("/signup", (req, res, next) => {
@@ -83,7 +78,8 @@ router.post("/signup", (req, res, next) => {
 });
 
 
-// POST wallet (should do it on the client side instead?)
+// POST wallet 
+// question: should I do it on the client side instead?
 router.post("/user/wallet", (req, res, next) => {
   // generate new keypairs
   const keypair = genKeys();
@@ -104,12 +100,6 @@ router.post("/user/wallet", (req, res, next) => {
     })
     .catch((err) => res.status(500).json({ message: "Something went wrong." }))
 })
-
-
-// GET login page
-router.get("/login", (req, res, next) => {
-  res.json("login page");
-});
 
 
 // POST login page
