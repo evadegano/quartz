@@ -11,7 +11,6 @@ const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
 const Block = require("../models/Block.model");
 const Transaction = require("../models/Transaction.model");
-const Ledger = require("../models/Ledger.model");
 
 
 // GET homepage

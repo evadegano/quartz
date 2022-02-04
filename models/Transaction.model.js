@@ -13,16 +13,11 @@ const transactionSchema = new Schema({
       type: String,
       required: [true, "Public key required."]
     },
-    status: {
-      type: String,
-      enum: ["Initialized", "Awaiting mining", "Mined"],
-      default: "Initialized"
+    mined: {
+      type: Boolean,
+      default: false
     },
     signature: Buffer,
-    hash: {
-      type: String,
-      unique: [true, "Hashing error."]
-    }
   },
   {
     timestamps: true

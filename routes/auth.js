@@ -6,12 +6,12 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const bcryptSalt = 10;
 
+// wallet signature to sign and verify transactions
+const genKeys = require("../helpers/genKeys");
+
 // database models
 const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
-const Block = require("../models/Block.model");
-const Transaction = require("../models/Transaction.model");
-const Ledger = require("../models/Ledger.model");
 
 
 // GET signup page
@@ -26,20 +26,20 @@ router.post("/signup", (req, res, next) => {
 
   // make sure both email and password have been given
   if (!email | !password | !passwordConfirm) {
-    res.status(400).json({ message: "Email and password are required."});
+    res.status(400).json({ message: "Email and password are required." });
     return;
   }
 
   // make sure that passwords match
   if (password !== passwordConfirm) {
-    res.status(400).json({ message: "Confirmation password doesn't match password."});
+    res.status(400).json({ message: "Confirmation password doesn't match password." });
     return
   }
 
   // verify password format
   const pwdRgex = /^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$/;
   if (!pwdRgex.test(password)) {
-    res.status(400).json({ message: "Password must contain at least 8 characters, one cap letter, one number and one special character."});
+    res.status(400).json({ message: "Password must contain at least 8 characters, one cap letter, one number and one special character." });
     return;
   }
 
@@ -54,7 +54,7 @@ router.post("/signup", (req, res, next) => {
   User.findOne({ email }, (err, user) => {
       // if found, return error
       if (user) {
-        res.status(400).json({ message: "This email address is already linked to an account."});
+        res.status(400).json({ message: "This email address is already linked to an account." });
         return;
       }
 
@@ -80,9 +80,30 @@ router.post("/signup", (req, res, next) => {
         })
         .catch((err) => res.status(500).json({ message: "Something went wrong." }))
     })
-
-    // create wallet for this user
 });
+
+
+// POST wallet (should do it on the client side instead?)
+router.post("/user/wallet", (req, res, next) => {
+  // generate new keypairs
+  const keypair = genKeys();
+  // create new wallet
+  const newWallet = new Wallet({
+    user_id: req.user._id,
+    name: "",
+    publicKey: keypair.publicKey,
+    lastConnection: Date.now()
+  })
+
+  newWallet.save()
+    .then(() => {
+      res.status(200).json({
+        newWallet,
+        privateKey: keypair.privateKey
+      });
+    })
+    .catch((err) => res.status(500).json({ message: "Something went wrong." }))
+})
 
 
 // GET login page
@@ -115,6 +136,8 @@ router.post("/login", (req, res, next) => {
       res.status(200).json(user);
     })
   })
+
+  // update connection date
 });
 
 

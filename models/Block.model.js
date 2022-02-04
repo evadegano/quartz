@@ -5,6 +5,7 @@ const blockSchema = new Schema({
       type: Number,
       required: [true, "Nonce required."]
     },
+    merkleRoot: String,
     prevHash: {
       type: String,
       required: [true, "Prev hash required."],

@@ -11,64 +11,78 @@ const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
 const Block = require("../models/Block.model");
 const Transaction = require("../models/Transaction.model");
-const Blockhain = require("../models/Blockchain.model");
 
 
-// GET blockchain data
-router.get("/blockchain", (req, res, next) => {
-  const blockchainHash = "";
+// // GET blockchain data
+// router.get("/blockchain", (req, res, next) => {
+//   const blockchainHash = "";
 
-  // fetch blocks from ledger
+//   // fetch blocks from ledger
 
-  // populate blocks
+//   // populate blocks
 
-  // return data
-  return;
-});
-
-
-// GET all transations
-router.get("/transactions", (req, res, next) => {
-  return;
-});
+//   // return data
+//   return;
+// });
 
 
-// GET pending transactions
-router.get("/pending-transactions", (req, res, next) => {
-  const blockchainHash = "";
-
-  // fetch pending transactions from blochain
-
-  // populate transactions
-
-  // return data
-  return;
-});
+// // GET all transations
+// router.get("/transactions", (req, res, next) => {
+//   return;
+// });
 
 
+// // GET pending transactions
+// router.get("/pending-transactions", (req, res, next) => {
+//   const blockchainHash = "";
 
-// GET all blocks
-router.get("/blocks", (req, res, next) => {
-  return;
-});
+//   // fetch pending transactions from blochain
 
+//   // populate transactions
 
-// GET block transactions
-router.get("/blocks/:blockId", (req, res, next) => {
-  return;
-});
-
-
-// GET all wallets
-router.get("/wallets", (req, res, next) => {
-  return;
-});
+//   // return data
+//   return;
+// });
 
 
-// GET wallet details
-router.get("/wallets/:walletId", (req, res, next) => {
-  return;
-});
+
+// // GET all blocks
+// router.get("/blocks", (req, res, next) => {
+//   return;
+// });
+
+
+// // GET block transactions
+// router.get("/blocks/:blockId", (req, res, next) => {
+//   return;
+// });
+
+
+// // GET all wallets
+// router.get("/wallets", (req, res, next) => {
+//   return;
+// });
+
+
+// // GET wallet details
+// router.get("/wallets/:walletId", (req, res, next) => {
+//   return;
+// });
+
+// POST new block
+router.post("/block/blockId", (req, res, next) => {
+  // create new block
+
+  // mine new block
+
+  // make sure that the blockchain is still valid (hasn't been tampered with)
+
+  // add block to the database
+
+  // update transactions statuses
+
+  // send reward
+})
 
 
 module.exports = router;
