@@ -14,4 +14,15 @@ function genKeys() {
 }
 
 
-module.exports = genKeys;
+function signTransac(transactionData, privateKey) {
+  // create signature
+  const sign = crypto.createSign("SHA256");
+  // sign transaction
+  sign.update(JSON.stringify(transactionData)).end();
+  const signature = sign.sign(privateKey);
+
+  return signature;
+}
+
+
+module.exports = { genKeys, signTransac };

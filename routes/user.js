@@ -1,10 +1,10 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = require("express").Router();
 const passport = require("passport");
 
-// package for password encryption
-const bcrypt = require("bcryptjs");
-const salt = 10;
+// function to cryptographically sign transactions
+const { signTransac } = require("../helpers/blockchain");
 
 // database models
 const User = require("../models/User.model");
@@ -15,25 +15,44 @@ const Transaction = require("../models/Transaction.model");
 
 // GET user wallet
 router.get("/user/:walletId", (req, res, next) => {
-  // get wallet id
+  // store wallet info
   const walletId = req.params.walletId;
+  let walletPublicKey;
 
   // fetch wallet by wallet id
   Wallet.findById(walletId)
-    .then((walletFromDB) => {
-      return;
+    .then((walletFromDB) => walletPublicKey = walletFromDB.publicKey)
+    .catch(() => res.status(500).json({ message: "Something went wrong." }))
+
+  // fetch transactions by wallet public key
+  const p1 = Transaction.find({ $or: [{ fromPublicKey: walletPublicKey }, { toPublicKey: walletPublicKey }]});
+
+  // fetch blocks mined by this wallet public key
+  const p2 = Block.find({ miner: walletPublicKey });
+
+  Promise.all([p1, p2])
+    .then((values) => {
+      const [ transactionsFromDB, blocksFromDB ] = values;
+
+      // calculate rank (is it needed?)
+
+      // calculate block mined and rewards
+      let rewards = 0;
+      let blocksMined = 0;
+
+      for (let block of blocksFromDB) {
+        rewards += block.miningReward;
+        blocksMined++;
+      }
+
+      // return all data
+      res.status(200).json({
+        transactions: transactionsFromDB,
+        rewards,
+        blocksMined
+      })
     })
-    .catch((err) => res.status(500).json({ message: "Something went wrong." }))
-
-    // fetch transactions by wallet public key
-
-    // calculate rank
-
-    // calculate rewards
-
-    // calculate blocks mined
-
-    // return all data
+    .catch(() => res.status(500).json({ message: "Something went wrong." }))
 });
 
 
@@ -41,13 +60,14 @@ router.get("/user/:walletId", (req, res, next) => {
 // question: is it ok to use private key like this?
 router.post("/user/:walletId/transaction", (req, res, next) => {
   // get transaction data
-  const { amount, fromPublicKey, toPublicKey, userPrivateKey } = req.body;
+  const { amount, fromPublicKey, fromPrivateKey, toPublicKey } = req.body;
   const walletId = req.params.walletId;
-  let walletBalance = 0;
+  let balance = 0;
 
   // make sure all data has been given
   if (!amount || !fromPublicKey || !toPublicKey) {
-    res.status(400).json({ message: "Please fill in all fields." })
+    res.status(400).json({ message: "Please fill in all fields." });
+    return;
   }
 
   // make sure wallet address and sender address are the same
@@ -57,9 +77,10 @@ router.post("/user/:walletId/transaction", (req, res, next) => {
 
       if (walletPublicKey !== fromPublicKey) {
         res.status(400).json({ message: "You cannot send coins from another account." });
+        return;
       }
     })
-    .catch((err) => res.status(500).json({ message: "Something went wrong." }))
+    .catch(() => res.status(500).json({ message: "Something went wrong." }))
   
   // get total balance of this wallet by querying all transactions
   Transaction.find({ fromPublicKey })
@@ -67,35 +88,45 @@ router.post("/user/:walletId/transaction", (req, res, next) => {
       // deduce debit from balance
       balance = transactionsFromDB.reduce((sum, transac) => sum - transac.amount, balance);
     })
-    .catch((err) => res.status(500).json({ message: "Something went wrong." }))
+    .catch(() => res.status(500).json({ message: "Something went wrong." }))
 
   Transaction.find({ toPublicKey: fromPublicKey })
   .then((transactionsFromDB) => {
     // add credit to balance
     balance = transactionsFromDB.reduce((sum, transac) => sum + transac.amount, balance);
   })
-  .catch((err) => res.status(500).json({ message: "Something went wrong." }))
+  .catch(() => res.status(500).json({ message: "Something went wrong." }))
 
   // make sure the wallet has enough funds
   if (balance < amount) {
     res.status(400).json({ message: "Insufficient funds." });
+    return;
   }
+
+  // sign the transaction
+  const transacData = {
+    amount,
+    fromPublicKey,
+    toPublicKey
+  }
+  const signature = signTransac(transacData, fromPrivateKey);
+
+  // hash transaction (is it needed?)
+
+  // make sure it is valid (is it needed?)
 
   // create a transaction
   const newTransaction = new Transaction({
+    _id: signature,
     amount,
     fromPublicKey,
-    toPublicKey,
-    signature: "temp"
+    toPublicKey
   })
 
-  // sign the transaction
-
-  // make sure it is valid
-
-  // add to database if valid
-
-  return;
+  // add to database
+  newTransaction.save()
+    .then(() => res.status(200).json(newTransaction))
+    .catch(() => res.status(500).json({ message: "Something went wrong." }))
 });
 
 
@@ -107,12 +138,10 @@ router.get("/user/:userId", (req, res, next) => {
   // fetch user by _id
   User.findById(userId)
     .then((userFromDB) => {
+      // return data
       res.status(200).json(userFromDB);
     })
-    .catch((err) => res.status(500).json({ message: "Something went wrong." }))
-
-  // return data
-  return;
+    .catch(() => res.status(500).json({ message: "Something went wrong." }))
 });
 
 
@@ -125,6 +154,7 @@ router.put("/user/:userId", (req, res, next) => {
   // make sure that passwords match
   if (password !== passwordConfirm) {
     res.status(400).json({ message: "Confirmation password doesn't match password." });
+    return;
   }
 
   // verify password format
@@ -147,21 +177,33 @@ router.put("/user/:userId", (req, res, next) => {
     password
   })
     .then((user) => res.status(200).json(user))
-    .catch((err) => res.status(500).json({ message: "Something went wrong." }))
-
-  // update database
-  return;
+    .catch(() => res.status(500).json({ message: "Something went wrong." }))
 });
 
 
 // DELETE user data
 router.delete("/user/:userId", (req, res, next) => {
-  // fetch user by _id
+  // get user id
+  const userId = req.params.userId;
 
-  // delete profile
+  // make sure the id is valid
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    res.status(400).json({ message: "This user id is not valid." });
+    return;
+  }
+
+  // fetch user by _id and delete
+  const p1 = User.findByIdAndRemove(userId);
 
   // turn wallet's status into inactive
-  return;
+  const p2 = Wallet.findOneAndUpdate({ user_id: userId }, {
+    active: false,
+    deactivationDate: Date.now()
+  });
+
+  Promise.all([p1, p2])
+    .then(() => res.status(200).json({ message: "Your account has been removed successfully." }))
+    .catch(() => res.status(500).json({ message: "Something went wrong." }))    
 });
 
 

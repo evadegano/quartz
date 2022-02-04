@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const bcryptSalt = 10;
 
 // wallet signature to sign and verify transactions
-const genKeys = require("../helpers/genKeys");
+const { genKeys } = require("../helpers/blockchain");
 
 // database models
 const User = require("../models/User.model");
@@ -107,7 +107,8 @@ router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, failureDetails) => {
     // return error if any
     if (err) {
-      res.status(500).json({ message: "Something went wrong when authenticating user." })
+      res.status(500).json({ message: "Something went wrong when authenticating user." });
+      return;
     }
 
     // return error if no user
@@ -126,8 +127,6 @@ router.post("/login", (req, res, next) => {
       res.status(200).json(user);
     })
   })
-
-  // update connection date
 });
 
 
@@ -140,7 +139,7 @@ router.get("/loggedin", (req, res, next) => {
   }
 
   // else return error
-  res.status(403).json({ message: "Unauthorized" })
+  res.status(403).json({ message: "Unauthorized" });
 });
 
 
