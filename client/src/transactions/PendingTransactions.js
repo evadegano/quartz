@@ -2,7 +2,9 @@ import Transaction from "./Transaction";
 
 
 function PendingTransactions(props) {
-  return;
+  return (
+    <Transaction />
+  );
 }
 
 

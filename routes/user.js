@@ -13,7 +13,7 @@ const Block = require("../models/Block.model");
 const Transaction = require("../models/Transaction.model");
 
 
-// GET user wallet
+// GET user wallet -> filtre à faire côté client ?
 router.get("/user/:walletId", (req, res, next) => {
   // store wallet info
   const walletId = req.params.walletId;

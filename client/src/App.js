@@ -12,6 +12,9 @@ import "./mystyles.css";
 class App extends Component {
   state = {
     loggedInUser: null,
+    wallets: [],
+    transactions: [],
+    blocks: []
   }
 
   updateLoggedInUser = (userObj) => {
