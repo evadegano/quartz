@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { Switch, Route } from "react-router-dom";
-import { loggedIn } from './auth/auth-service';
-import { getTransactions, getBlocks, getWallets } from './blockchain/blockchain-service';
+import { loggedIn } from './services/auth-service';
+import { getTransactions, getBlocks, getWallets } from './services/blockchain-service';
 import Homepage from './homepage/Homepage';
 import Auth from './auth/Auth';
 import Private from './private';
@@ -83,7 +83,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Homepage} />
           <Route path="/auth" render={() => <Auth updateUser={this.updateLoggedInUser} />} />
-          <Route path="/user" render={() => <Private  />} />
+          <Route path="/user" render={() => <Private user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
           <Route path="/legal" component={Legal} />
         </Switch>
       </div>

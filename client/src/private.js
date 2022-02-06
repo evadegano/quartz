@@ -12,20 +12,28 @@ import WalletDetails from "./wallets/WalletDetails";
 
 
 class Private extends Component {
+  // find the wallet of the logged in user
+  getUserWallet = (userId) => {
+    const userWallet = this.props.wallets.find(wallet => wallet.user_id === userId);
+    return userWallet;
+  }
+
   render() {
+    const userWallet = this.getUserWallet(this.props.user._id);
+
     return (
       <div>
         <SideNavbar />
 
         <Switch>
-          <Route exact path="/user/walletId" render={() => <Overview />} />
-          <Route exact path="/user/userId" render={() => <Profile />} />
+          <Route exact path="/user/walletId" render={() => <Overview userWallet={userWallet} transactions={this.props.transactions} />} />
+          <Route exact path="/user/userId" render={() => <Profile user={this.props.user} />} />
           <Route exact path="/user/blockchain" render={() => <Blockchain />} />
-          <Route exact path="/user/transactions" render={() => <Transactions />} />
-          <Route exact path="/user/blocks" render={() => <Blocks />} />
-          <Route exact path="/user/blocks/blockId" render={() => <BlockDetails />} />
-          <Route exact path="/user/wallets" render={() => <Wallets />} />
-          <Route exact path="/user/wallets/walletId" render={() => <WalletDetails />} />
+          <Route exact path="/user/transactions" render={() => <Transactions transactions={this.props.transactions} />} />
+          <Route exact path="/user/blocks" render={() => <Blocks blocks={this.props.blocks} />} />
+          <Route exact path="/user/blocks/blockId" render={() => <BlockDetails blocks={this.props.blocks} />} />
+          <Route exact path="/user/wallets" render={() => <Wallets wallets={this.props.wallets} />} />
+          <Route exact path="/user/wallets/walletId" render={() => <WalletDetails wallets={this.props.wallets} />} />
         </Switch>
       </div>
     );

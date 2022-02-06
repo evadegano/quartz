@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { signup } from "./auth-service";
+import { signup } from "../services/auth-service";
 
 
 class Signup extends Component {
