@@ -11,7 +11,7 @@ import Wallets from "./wallets/Wallets";
 import WalletDetails from "./wallets/WalletDetails";
 
 
-class UserSpace extends Component {
+class Private extends Component {
   render() {
     return (
       <div>
@@ -33,4 +33,4 @@ class UserSpace extends Component {
 }
 
 
-export default UserSpace;
+export default Private;

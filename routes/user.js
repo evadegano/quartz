@@ -17,8 +17,9 @@ const Block = require("../models/Block.model");
 const Transaction = require("../models/Transaction.model");
 
 
-// GET user wallet -> filtre à faire côté client ?
-router.get("/user/:walletId", (req, res, next) => {
+// GET user wallet 
+// question: filtre à faire côté client ?
+router.get("/:walletId", (req, res, next) => {
   // store wallet info
   const walletId = req.params.walletId;
   let walletPublicKey;
@@ -62,7 +63,7 @@ router.get("/user/:walletId", (req, res, next) => {
 
 // POST a transaction 
 // question: is it ok to use private key like this?
-router.post("/user/:walletId/transaction", (req, res, next) => {
+router.post("/:walletId/transaction", (req, res, next) => {
   // get transaction data
   const { amount, fromPublicKey, fromPrivateKey, toPublicKey } = req.body;
   const walletId = req.params.walletId;
@@ -135,22 +136,22 @@ router.post("/user/:walletId/transaction", (req, res, next) => {
 
 
 // GET user profile
-router.get("/user/:userId", (req, res, next) => {
-  // get user id
-  const userId = req.params.userId;
+// router.get("/user/:userId", (req, res, next) => {
+//   // get user id
+//   const userId = req.params.userId;
 
-  // fetch user by _id
-  User.findById(userId)
-    .then((userFromDB) => {
-      // return data
-      res.status(200).json(userFromDB);
-    })
-    .catch(() => res.status(500).json({ message: "Something went wrong." }))
-});
+//   // fetch user by _id
+//   User.findById(userId)
+//     .then((userFromDB) => {
+//       // return data
+//       res.status(200).json(userFromDB);
+//     })
+//     .catch(() => res.status(500).json({ message: "Something went wrong." }))
+// });
 
 
 // PUT user data
-router.put("/user/:userId", (req, res, next) => {
+router.put("/:userId", (req, res, next) => {
   // get data
   const { email, password, passwordConfirm } = req.body;
   const userId = req.params.userId;
@@ -196,7 +197,7 @@ router.put("/user/:userId", (req, res, next) => {
 
 
 // DELETE user data
-router.delete("/user/:userId", (req, res, next) => {
+router.delete("/:userId", (req, res, next) => {
   // get user id
   const userId = req.params.userId;
 

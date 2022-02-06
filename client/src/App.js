@@ -4,7 +4,7 @@ import { loggedIn } from './auth/auth-service';
 import { getTransactions, getBlocks, getWallets } from './blockchain/blockchain-service';
 import Homepage from './homepage/Homepage';
 import Auth from './auth/Auth';
-import UserSpace from './UserSpace';
+import Private from './private';
 import Legal from "./legal/Legal";
 import './styles/App.css';
 import "./mystyles.css";
@@ -83,7 +83,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Homepage} />
           <Route path="/auth" render={() => <Auth updateUser={this.updateLoggedInUser} />} />
-          <Route path="/user" component={UserSpace} />
+          <Route path="/user" render={() => <Private  />} />
           <Route path="/legal" component={Legal} />
         </Switch>
       </div>
