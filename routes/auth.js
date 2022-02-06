@@ -28,7 +28,7 @@ router.post("/signup", (req, res, next) => {
   // make sure that passwords match
   if (password !== passwordConfirm) {
     res.status(400).json({ message: "Confirmation password doesn't match password." });
-    return
+    return;
   }
 
   // verify password format

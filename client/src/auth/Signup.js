@@ -1,6 +1,5 @@
 import { Component } from "react";
 import { signup } from "./auth-service";
-import NavbarBrand from "../navbar/NavbarBrand";
 
 
 class Signup extends Component {
@@ -42,8 +41,6 @@ class Signup extends Component {
   render() {
     return (
       <div>
-        <NavbarBrand />
-        
         <div className="centered-col-container">
           <h1 className="title">Sign up</h1>
 

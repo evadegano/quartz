@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { login } from "./auth-service";
-import NavbarBrand from "../navbar/NavbarBrand";
 
 
 class Login extends Component {
@@ -41,8 +40,6 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <NavbarBrand />
-
         <div className="centered-col-container">
           <h1 className="title">Log in</h1>
 

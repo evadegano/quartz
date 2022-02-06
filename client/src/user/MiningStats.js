@@ -4,7 +4,7 @@ import { UilShovel, UilTrophy } from '@iconscout/react-unicons'
 function MiningStats(props) {
   return(
     <div>
-      <h2 className="title">Balance</h2>
+      <h2 className="title">Mining stats</h2>
 
       <div>
         <div>

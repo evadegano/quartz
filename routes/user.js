@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const router = require("express").Router();
 const passport = require("passport");
 
+// package used for password hashing
+const bcrypt = require("bcryptjs");
+const saltRounds = 10;
+
 // function to cryptographically sign transactions
 const { signTransac } = require("../helpers/blockchain");
 
@@ -151,6 +155,13 @@ router.put("/user/:userId", (req, res, next) => {
   const { email, password, passwordConfirm } = req.body;
   const userId = req.params.userId;
 
+  // verify email address format
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  if (!emailRegex.test(email)) {
+    res.status(400).json({ message: "Please enter a valid email address."});
+    return;
+  }
+
   // make sure that passwords match
   if (password !== passwordConfirm) {
     res.status(400).json({ message: "Confirmation password doesn't match password." });
@@ -164,18 +175,21 @@ router.put("/user/:userId", (req, res, next) => {
     return;
   }
 
-  // verify email address format
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-  if (!emailRegex.test(email)) {
-    res.status(400).json({ message: "Please enter a valid email address."});
-    return;
-  }
+  // hash password
+  const salt = bcrypt.genSaltSync(bcryptSalt);
+  const hashedPwd = bcrypt.hashSync(password, salt);
 
+  
   // get user by _id and update
-  User.findByIdAndUpdate(userId, {
-    email,
-    password
-  })
+  User.findByIdAndUpdate(
+    userId, 
+    {
+      email,
+      password: hashedPwd
+    },
+    { 
+      new: true 
+    })
     .then((user) => res.status(200).json(user))
     .catch(() => res.status(500).json({ message: "Something went wrong." }))
 });

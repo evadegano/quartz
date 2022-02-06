@@ -20,7 +20,7 @@ class Blocks extends Component {
       <div>
         <h1 className="title">Blocks</h1>
 
-        <input type="text" name="query" onChange={handleChange} />
+        <input type="text" name="query" onChange={this.handleChange} />
 
         <Block />
       </div>

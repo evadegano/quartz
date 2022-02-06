@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { Switch, Route } from "react-router-dom";
 import { loggedIn } from './auth/auth-service';
+import { getTransactions, getBlocks, getWallets } from './blockchain/blockchain-service';
 import Homepage from './homepage/Homepage';
 import Auth from './auth/Auth';
 import UserSpace from './UserSpace';
@@ -39,8 +40,41 @@ class App extends Component {
     }
   }
 
+  fetchWallets() {
+    getWallets()
+      .then(response => {
+        this.setState({
+          wallets: response
+        })
+      })
+      .catch(() => console.log("Something went wrong when retrieving wallets."))
+  }
+
+  fetchBlocks() {
+    getBlocks()
+      .then(response => {
+        this.setState({
+          blocks: response
+        })
+      })
+      .catch(() => console.log("Something went wrong when retrieving blocks."))
+  }
+
+  fetchTransactions() {
+    getTransactions()
+      .then(response => {
+        this.setState({
+          transactions: response
+        })
+      })
+      .catch(() => console.log("Something went wrong when retrieving transactions."))
+  }
+
   componentDidMount() {
     this.fetchUser();
+    this.fetchWallets();
+    this.fetchBlocks();
+    this.fetchTransactions();
   }
 
   render() {

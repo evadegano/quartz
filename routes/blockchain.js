@@ -40,6 +40,7 @@ router.post("/blocks", (req, res, next) => {
   // update transactions statuses
 
   // send reward
+  return;
 })
 
 

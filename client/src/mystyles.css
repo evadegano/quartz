@@ -168,7 +168,7 @@ th:not([align]) {
   text-align: inherit; }
 
 html {
-  background-color: #EFF0EB;
+  background-color: white;
   font-size: 16px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -202,7 +202,7 @@ pre {
   font-family: monospace; }
 
 body {
-  color: #757763;
+  color: #222222;
   font-size: 1em;
   font-weight: 400;
   line-height: 1.5; }
@@ -216,7 +216,7 @@ a strong {
   color: currentColor; }
 
 a:hover {
-  color: #363636; }
+  color: #222222; }
 
 code {
   background-color: whitesmoke;
@@ -1544,10 +1544,10 @@ fieldset[disabled] .button {
 
 /* Bulma Form */
 .input, .textarea, .select select {
-  background-color: white;
-  border-color: transparent;
+  background-color: #ffffff;
+  border: 2px solid #222222;
   border-radius: 4px;
-  color: #363636; }
+  color: #222222; }
 
 .input::-moz-placeholder, .textarea::-moz-placeholder, .select select::-moz-placeholder {
   color: rgba(54, 54, 54, 0.3); }
@@ -3182,7 +3182,7 @@ body.has-navbar-fixed-bottom {
 
 .navbar-item,
 .navbar-link {
-  color: #757763;
+  color: #222222;
   display: block;
   line-height: 1.5;
   padding: 0.5rem 0.75rem;
