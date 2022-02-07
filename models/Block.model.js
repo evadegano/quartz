@@ -1,29 +1,22 @@
 const { Schema, model } = require("mongoose");
 
 const blockSchema = new Schema({
-    nonce: {
-      type: Number,
-      required: [true, "Nonce required."]
-    },
-    merkleRoot: String,
-    prevHash: {
-      type: String,
-      required: [true, "Prev hash required."],
-      unique: [true, "Hashing error."]
+    header: {
+      nonce: Number,
+      merkleRoot: String,
+      prevHash: String,
+      timestamps: true
     },
     transactions: {
       type: [Schema.Types.ObjectId],
       ref: "Transaction"
     },
+    transactionCounter: Number,
     miner: {
-      type: String,
-      required: [true, "Miner required."]
+      type: [Schema.Types.ObjectId],
+      ref: "Wallet"
     },
     miningReward: Number,
-    miningDuration: Number
-  },
-  {
-    timestamps: true
   }
 )
 

@@ -1,6 +1,22 @@
 import Block from "./block";
 import Transaction from "./transaction";
 
+// on the blockchain page, display a message with the integrity of the bc
+
+// return unspent outputs of a wallet
+// # It returns a JSON object with a list "unspent_outputs", containing UTXO, like this:
+// #{      "unspent_outputs":[
+// #   {
+// #     "tx_hash":"ebadfaa92f1fd29e2fe296eda702c48bd11ffd52313e986e99ddad9084062167",
+// #     "tx_index":51919767,
+// #     "tx_output_n": 1,
+// #     "script":"76a9148c7e252f8d64b0b6e313985915110fcfefcf4a2d88ac",
+// #     "value": 8000000,
+// #     "value_hex": "7a1200",
+// #     "confirmations":28691
+// #   },
+// # ...
+// #]}
 
 class Blockchain {
   public static instance = new Blockchain(); // singleton instance
@@ -10,7 +26,7 @@ class Blockchain {
   public miningReward: number = 100;
 
   createGenesisBlock () {
-    return new Block(null, []);
+    return new Block(null, null, []);
   }
 
   // get last of the ledger
@@ -37,7 +53,12 @@ class Blockchain {
   }
 
   minePendingTransactions(miningRewardAddress: string) {
-    const newBlock = new Block(this.getLastBlock.hash, this.pendingTransactions);
+    // get transactions merkle hashes
+
+    // hash them into a merkle root
+    const merkleRoot = "to be modified";
+    // create and mine new block
+    const newBlock = new Block(this.getLastBlock.hash, merkleRoot, this.pendingTransactions);
     newBlock.mine(this.difficulty);
 
     // make sure that the ledger is valid
@@ -74,7 +95,7 @@ class Blockchain {
       }
 
       // make sure that there is no broken link between blocks
-      if (currentBlock.prevHash !== prevBlock.hash) {
+      if (currentBlock.header.prevHash !== prevBlock.hash) {
         console.log(`Error: block ${prevBlock.hash} has been tampered with.`);
         return false;
       }

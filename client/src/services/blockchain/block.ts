@@ -3,23 +3,35 @@ import Transaction from "./transaction"
 
 
 class Block {
-  public prevHash: string;
+  public header: {
+    prevHash: string;
+    nonce: number;
+    merkelRoot: string;
+    timestamps: number;
+  };
   public transactions: Transaction[];
+  public transactionCounter: number;
+  public miner: string;
+  public miningReward: number;
   public hash: string;
-  public nonce: number = Math.round(Math.random() * 999999999);
-  public timestamps: number = Date.now();
-
-  constructor(prevHash: string, transactions: Transaction[]) {
-    this.prevHash = prevHash;
+  
+  constructor(prevHash: string, merkelRoot: string, transactions: Transaction[]) {
+    this.header = {
+      prevHash: prevHash,
+      nonce: Math.round(Math.random() * 999999999),
+      merkelRoot: merkelRoot,
+      timestamps: Date.now()
+    }
+    
     this.transactions = transactions;
+    this.transactionCounter = this.transactions.length;
     this.hash = this.getHash();
   }
 
   // hash block's content
   getHash() {
     // convert object to a JSON string for hashing
-    const blockData = [this.prevHash, this.transactions, this.timestamps];
-    const str = JSON.stringify(blockData);
+    const str = JSON.stringify(this.header);
 
     // hash block
     const hasher = crypto.createHash("SHA256");
@@ -36,7 +48,7 @@ class Block {
 
     while (true) {
       const hasher = crypto.createHash("MD5"); // use MD5 because 128 bits hence faster to compute than SHA256
-      hasher.update((this.nonce).toString()).end();
+      hasher.update((this.header.nonce).toString()).end();
 
       const attempt = hasher.digest("hex");
       const substToMatch = new Array(difficulty).fill(0).join("");
@@ -48,7 +60,7 @@ class Block {
       }
 
       // else, try another solution
-      this.nonce ++;
+      this.header.nonce ++;
     }
   }
 

@@ -10,16 +10,11 @@ const walletSchema = new Schema({
       required: [true, "Public key required."]
     },
     name: String,
-    balance: {
-      type: Number,
-      required: [true, "Balance is required."],
-      default: 0
-    },
     active: {
       type: Boolean,
       default: true
     },
-    lastActive: Date,
+    lastConnection: Date,
     deactivationDate: {
       type: Date,
       default: null

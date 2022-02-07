@@ -24,5 +24,16 @@ function signTransac(transactionData, privateKey) {
   return signature;
 }
 
+function getHash(data) {
+   // convert data object to a JSON string for hashing
+   const str = JSON.stringify(data);
 
-module.exports = { genKeys, signTransac };
+   // hash string
+   const hasher = crypto.createHash("SHA256");
+   hasher.update(str).end();
+
+   return hasher.digest("hex");
+}
+
+
+module.exports = { genKeys, signTransac, getHash };

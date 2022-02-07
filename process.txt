@@ -1,0 +1,17 @@
+- User signs up
+  OK -> Wallet is created
+  NOK -> Blocks headers are added to their dabatase
+- They GET their dashboard with wallet info
+- They add QRTZ
+  -> cf Payment Request API
+  -> This creates a new unspent TXO
+- They send QRTZ to a Wallet
+  -> This creates a new Transaction
+    -> The unspent TXO is turned into a TXI
+    -> 2 unspent TXO are created
+- The transaction is pending for validation
+- After x minute, all pending transactions are verified and added to a block
+- The block is mined
+- The block is verified
+- The block is added to the blockchain
+- All users' db are updated 

@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const bcryptSalt = 10;
 
 // wallet signature to sign and verify transactions
-const { genKeys } = require("../helpers/blockchain");
+const { genKeys, getHash } = require("../helpers/blockchainHelpers");
 
 // database models
 const User = require("../models/User.model");
@@ -47,59 +47,78 @@ router.post("/signup", (req, res, next) => {
 
   // search for email address in database
   User.findOne({ email }, (err, user) => {
-      // if found, return error
-      if (user) {
-        res.status(400).json({ message: "This email address is already linked to an account." });
-        return;
-      }
+    // if found, return error
+    if (user) {
+      res.status(400).json({ message: "This email address is already linked to an account." });
+      return;
+    }
+  })
 
-      // else, add user to database
-      const salt = bcrypt.genSaltSync(bcryptSalt);
-      const hashedPwd = bcrypt.hashSync(password, salt);
+  // else, add user to database
+  const salt = bcrypt.genSaltSync(bcryptSalt);
+  const hashedPwd = bcrypt.hashSync(password, salt);
 
-      const newUser = new User({
-        email,
-        password: hashedPwd
-      });
+  const newUser = new User({
+    email,
+    password: hashedPwd
+  });
 
-      newUser.save()
-        .then(() => {
-          req.login(newUser, (err) => {
-            if (err) {
-              res.status(500).json({ message: "Login error, please try again." });
-              return;
-            }
+  const p1 = newUser.save();
 
-            res.status(200).json(newUser);
-          })
-        })
-        .catch((err) => res.status(500).json({ message: "Something went wrong." }))
-    })
-});
-
-
-// POST wallet 
-// question: should I do it on the client side instead?
-router.post("/user/wallet", (req, res, next) => {
-  // generate new keypairs
+  // create a wallet for this user
   const keypair = genKeys();
-  // create new wallet
   const newWallet = new Wallet({
+    _id: getHash({
+      user_id: req.user._id,
+      publicKey: keypair.publicKey,
+    }),
     user_id: req.user._id,
     name: "",
     publicKey: keypair.publicKey,
     lastConnection: Date.now()
   })
+  const p2 = newWallet.save();
 
-  newWallet.save()
-    .then(() => {
-      res.status(200).json({
-        newWallet,
-        privateKey: keypair.privateKey
-      });
+  Promise.all([p1, p2])
+  .then((value) => {
+    const [ newUser, newWallet] = value;
+
+    // log user in
+    req.login(newUser, (err) => {
+      if (err) {
+        res.status(500).json({ message: "Login error, please try again." });
+        return;
+      }
+
+      res.status(200).json({ newUser, newWallet, privateKey: keypair.privateKey });
     })
-    .catch((err) => res.status(500).json({ message: "Something went wrong." }))
-})
+  })
+  .catch(() => res.status(500).json({ message: "Something went wrong." }))
+});
+
+
+// POST wallet 
+// question: should I do it on the client side instead?
+// router.post("/user/wallet", (req, res, next) => {
+//   // generate new keypairs
+//   const keypair = genKeys();
+//   // create new wallet
+//   const newWallet = new Wallet({
+//     user_id: req.user._id,
+//     name: "",
+//     publicKey: keypair.publicKey,
+//     lastConnection: Date.now()
+//   })
+
+//   newWallet.save()
+//     .then(() => {
+//       res.status(200).json({
+//         newWallet,
+//         privateKey: keypair.privateKey
+//       });
+//     })
+//     .catch((err) => res.status(500).json({ message: "Something went wrong." }))
+// })
 
 
 // POST login page

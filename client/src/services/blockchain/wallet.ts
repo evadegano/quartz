@@ -4,6 +4,7 @@ import Transaction from "./transaction";
 
 
 class Wallet {
+  public address: string;
   public publicKey: string; // to send money
   public privateKey: string; // to receive money
   public balance: number;

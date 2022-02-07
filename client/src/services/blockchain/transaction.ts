@@ -1,14 +1,19 @@
 import * as crypto from "crypto";
 import Wallet from "./wallet";
+import TransactionOutput from "./transactionOutput";
+import TransactionInput from "./transactionInput";
+
 
 class Transaction {
-    public amount: number;
-    public fromPublicKey: string;
-    public toPublicKey: string;
-    public status: string;
-    public signature: Buffer;
+    public header: {
+      inputCounter: number,
+      outputCounter: number,
+      merkleHash: string,
+      timestamps: number
+    };
+    public TransactionOutput: [TransactionOutput];
+    public TransactionInput: [TransactionInput];
     public hash: string;
-    public timestamps: number = Date.now();
 
   constructor(amount: number, fromPublicKey: string, toPublicKey: string,) 
   {
@@ -20,15 +25,8 @@ class Transaction {
 
   // hash transaction's content
   getHash() {
-    // convert object to a JSON string for hashing
-    const transacData = {
-      timestamps: this.timestamps,
-      amount: this.amount, 
-      fromPublicKey: this.fromPublicKey,
-      toPublicKey: this.toPublicKey,
-    };
-    
-    const str = JSON.stringify(transacData);
+    // convert object to a JSON string for hashing    
+    const str = JSON.stringify(this.header);
 
     // hash block
     const hasher = crypto.createHash("SHA256");
