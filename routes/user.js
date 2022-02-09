@@ -91,14 +91,14 @@ router.post("/:walletId/transaction", (req, res, next) => {
   Transaction.find({ fromPublicKey })
     .then((transactionsFromDB) => {
       // deduce debit from balance
-      balance = transactionsFromDB.reduce((sum, transac) => sum - transac.amount, balance);
+      balance -= transactionsFromDB.reduce((sum, transac) => sum + transac.amount, 0);
     })
     .catch(() => res.status(500).json({ message: "Something went wrong." }))
 
   Transaction.find({ toPublicKey: fromPublicKey })
   .then((transactionsFromDB) => {
     // add credit to balance
-    balance = transactionsFromDB.reduce((sum, transac) => sum + transac.amount, balance);
+    balance += transactionsFromDB.reduce((sum, transac) => sum + transac.amount, 0);
   })
   .catch(() => res.status(500).json({ message: "Something went wrong." }))
 
@@ -114,13 +114,13 @@ router.post("/:walletId/transaction", (req, res, next) => {
     fromPublicKey,
     toPublicKey
   }
-  const signature = signTransac(transacData, fromPrivateKey);
+  const signature = signTransac(transacData.toString(), fromPrivateKey);
 
   // hash transaction (is it needed?)
 
   // make sure it is valid (is it needed?)
 
-  // create a transaction
+  // create a transaction (modify with new models)
   const newTransaction = new Transaction({
     _id: signature,
     amount,

@@ -11,7 +11,7 @@ function Balance(props) {
         </div>
       </div>
       
-
+      <h3 className="subtitle">{props.balance}</h3>
 
     </div>
   );

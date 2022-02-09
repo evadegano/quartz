@@ -4,6 +4,7 @@ import TransferBtns from "./TransferBtns";
 import Transactions from "../transactions/Transactions";
 import Balance from "./Balance";
 import MiningStats from "./MiningStats";
+import { getWalletBalance } from "../services/blockchain-service";
 
 
 class Overview extends Component {
@@ -13,15 +14,18 @@ class Overview extends Component {
   }
 
   render() {
+    // get walle tkey from url instead
     const userTransactions = this.filterTransactions(this.props.userWallet.publicKey);
+    // modify function with output and input transactions
+    const userBalance = getWalletBalance(this.props.transactions, this.props.userWallet.publicKey);
 
     return (
       <main>
-        <Header title="Good morning!" subtitle={`Account: ${this.props.userWallet.publicKey}`} />
+        <Header title="Good morning!" subtitle={`Account: ${this.props.userWallet.publicKey}`} userId={this.props.user._id} />
 
         <div className="columns centered-row-container">
           <div className="column">
-            <Balance />
+            <Balance balance={userBalance} />
             <Transactions transactions={userTransactions} />
           </div>
 

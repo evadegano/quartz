@@ -2,6 +2,9 @@ const express = require("express");
 const router = require("express").Router();
 const passport = require("passport");
 
+// helper for decentralized databases
+const createOrbitDB = require("../helpers/orbitDB");
+ 
 // package for password encryption
 const bcrypt = require("bcryptjs");
 const bcryptSalt = 10;
@@ -12,7 +15,6 @@ const { genKeys, getHash } = require("../helpers/blockchainHelpers");
 // database models
 const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
-
 
 
 // POST signup page
@@ -58,9 +60,13 @@ router.post("/signup", (req, res, next) => {
   const salt = bcrypt.genSaltSync(bcryptSalt);
   const hashedPwd = bcrypt.hashSync(password, salt);
 
+  // create a new database for the user
+  const db = createOrbitDB();
+
   const newUser = new User({
     email,
-    password: hashedPwd
+    password: hashedPwd,
+    databaseAddress: db.address.toString()
   });
 
   const p1 = newUser.save();
@@ -81,16 +87,19 @@ router.post("/signup", (req, res, next) => {
 
   Promise.all([p1, p2])
   .then((value) => {
-    const [ newUser, newWallet] = value;
+    const [ newUser ] = value;
 
-    // log user in
+    // save user in session
     req.login(newUser, (err) => {
       if (err) {
         res.status(500).json({ message: "Login error, please try again." });
         return;
       }
 
-      res.status(200).json({ newUser, newWallet, privateKey: keypair.privateKey });
+      res.status(200).json({ 
+        newUser,
+        privateKey: keypair.privateKey,
+      });
     })
   })
   .catch(() => res.status(500).json({ message: "Something went wrong." }))

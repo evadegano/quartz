@@ -1,12 +1,12 @@
 - User signs up
-  OK -> Wallet is created
-  NOK -> Blocks headers are added to their dabatase
-- They GET their dashboard with wallet info
+  -> OK | Wallet is created
+  -> NOK (check YT tutorial) | Blocks headers are added to the client's own dabatase
+- OK | They GET their dashboard with wallet info
 - They add QRTZ
-  -> cf Payment Request API
+  -> NOK (check YT tutorial) | cf Payment Request API
   -> This creates a new unspent TXO
 - They send QRTZ to a Wallet
-  -> This creates a new Transaction
+  -> OK | This creates a new Transaction
     -> The unspent TXO is turned into a TXI
     -> 2 unspent TXO are created
 - The transaction is pending for validation

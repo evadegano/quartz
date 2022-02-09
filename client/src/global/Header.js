@@ -13,7 +13,7 @@ function Header(props) {
       <div>
         <button><UilSetting size="30" color="#000" /></button>
         <div id="setting-menu">
-          <Link to="/user/userId"><UilUser size="30" color="#000" />Profile</Link>
+          <Link to={`/user/${props.userId}`}><UilUser size="30" color="#000" />Profile</Link>
           <Link to="/logout"><UilSignout size="30" color="#000" />Log out</Link>
         </div>
         
