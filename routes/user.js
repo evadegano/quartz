@@ -1,14 +1,10 @@
-const express = require("express");
 const mongoose = require("mongoose");
 const router = require("express").Router();
-const passport = require("passport");
 
 // package used for password hashing
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 
-// function to cryptographically sign transactions
-const { signTransac } = require("../helpers/blockchainHelpers");
 
 // database models
 const User = require("../models/User.model");
@@ -18,134 +14,117 @@ const Transaction = require("../models/Transaction.model");
 
 
 // GET user wallet 
-// question: filtre à faire côté client ?
-router.get("/:walletId", (req, res, next) => {
-  // store wallet info
-  const walletId = req.params.walletId;
-  let walletPublicKey;
+// question: filtre à faire côté client ?;
+// router.get("/:walletId", (req, res, next) => {
+//   // store wallet info
+//   const walletId = req.params.walletId;
+//   let walletPublicKey;
 
-  // fetch wallet by wallet id
-  Wallet.findById(walletId)
-    .then((walletFromDB) => walletPublicKey = walletFromDB.publicKey)
-    .catch(() => res.status(500).json({ message: "Something went wrong." }))
+//   // fetch wallet by wallet id
+//   Wallet.findById(walletId)
+//     .then((walletFromDB) => walletPublicKey = walletFromDB.publicKey)
+//     .catch(() => res.status(500).json({ message: "Something went wrong." }))
 
-  // fetch transactions by wallet public key
-  const p1 = Transaction.find({ $or: [{ fromPublicKey: walletPublicKey }, { toPublicKey: walletPublicKey }]});
+//   // fetch transactions by wallet public key
+//   const p1 = Transaction.find({ $or: [{ fromPublicKey: walletPublicKey }, { toPublicKey: walletPublicKey }]});
 
-  // fetch blocks mined by this wallet public key
-  const p2 = Block.find({ miner: walletPublicKey });
+//   // fetch blocks mined by this wallet public key
+//   const p2 = Block.find({ miner: walletPublicKey });
 
-  Promise.all([p1, p2])
-    .then((values) => {
-      const [ transactionsFromDB, blocksFromDB ] = values;
+//   Promise.all([p1, p2])
+//     .then((values) => {
+//       const [ transactionsFromDB, blocksFromDB ] = values;
 
-      // calculate rank (is it needed?)
+//       // calculate rank (is it needed?)
 
-      // calculate block mined and rewards
-      let rewards = 0;
-      let blocksMined = 0;
+//       // calculate block mined and rewards
+//       let rewards = 0;
+//      for (let block of blocksFromDB) {
+//         rewards += block.miningReward;
+//         blocksMined++;
+//       }
 
-      for (let block of blocksFromDB) {
-        rewards += block.miningReward;
-        blocksMined++;
-      }
-
-      // return all data
-      res.status(200).json({
-        transactions: transactionsFromDB,
-        rewards,
-        blocksMined
-      })
-    })
-    .catch(() => res.status(500).json({ message: "Something went wrong." }))
-});
+//       // return all data
+//       res.status(200).json({
+//         transactions: transactionsFromDB,
+//         rewards,
+//         blocksMined
+//       })
+//     })
+//     .catch(() => res.status(500).json({ message: "Something went wrong." }))
+// });
 
 
 // POST a transaction 
 // question: is it ok to use private key like this?
-router.post("/:walletId/transaction", (req, res, next) => {
-  // get transaction data
-  const { amount, fromPublicKey, fromPrivateKey, toPublicKey } = req.body;
-  const walletId = req.params.walletId;
-  let balance = 0;
+// router.post("/:walletId/transaction", (req, res, next) => {
+//   // get transaction data
+//   const { amount, fromPublicKey, fromPrivateKey, toPublicKey } = req.body;
+//   const walletId = req.params.walletId;
+//   let balance = 0;
 
-  // make sure all data has been given
-  if (!amount || !fromPublicKey || !toPublicKey) {
-    res.status(400).json({ message: "Please fill in all fields." });
-    return;
-  }
+//   // make sure all data has been given
+//   if (!amount || !fromPublicKey || !toPublicKey) {
+//     res.status(400).json({ message: "Please fill in all fields." });
+//     return;
+//   }
 
-  // make sure wallet address and sender address are the same
-  Wallet.findById(walletId)
-    .then((walletFromDB) => {
-      const walletPublicKey = walletFromDB.publicKey;
+//   // make sure wallet address and sender address are the same
+//   Wallet.findById(walletId)
+//     .then((walletFromDB) => {
+//       const walletPublicKey = walletFromDB.publicKey;
 
-      if (walletPublicKey !== fromPublicKey) {
-        res.status(400).json({ message: "You cannot send coins from another account." });
-        return;
-      }
-    })
-    .catch(() => res.status(500).json({ message: "Something went wrong." }))
-  
-  // get total balance of this wallet by querying all transactions
-  Transaction.find({ fromPublicKey })
-    .then((transactionsFromDB) => {
-      // deduce debit from balance
-      balance -= transactionsFromDB.reduce((sum, transac) => sum + transac.amount, 0);
-    })
-    .catch(() => res.status(500).json({ message: "Something went wrong." }))
-
-  Transaction.find({ toPublicKey: fromPublicKey })
-  .then((transactionsFromDB) => {
-    // add credit to balance
-    balance += transactionsFromDB.reduce((sum, transac) => sum + transac.amount, 0);
-  })
-  .catch(() => res.status(500).json({ message: "Something went wrong." }))
-
-  // make sure the wallet has enough funds
-  if (balance < amount) {
-    res.status(400).json({ message: "Insufficient funds." });
-    return;
-  }
-
-  // sign the transaction
-  const transacData = {
-    amount,
-    fromPublicKey,
-    toPublicKey
-  }
-  const signature = signTransac(transacData.toString(), fromPrivateKey);
-
-  // hash transaction (is it needed?)
-
-  // make sure it is valid (is it needed?)
-
-  // create a transaction (modify with new models)
-  const newTransaction = new Transaction({
-    _id: signature,
-    amount,
-    fromPublicKey,
-    toPublicKey
-  })
-
-  // add to database
-  newTransaction.save()
-    .then(() => res.status(200).json(newTransaction))
-    .catch(() => res.status(500).json({ message: "Something went wrong." }))
-});
-
-
-// GET user profile
-// router.get("/user/:userId", (req, res, next) => {
-//   // get user id
-//   const userId = req.params.userId;
-
-//   // fetch user by _id
-//   User.findById(userId)
-//     .then((userFromDB) => {
-//       // return data
-//       res.status(200).json(userFromDB);
+//       if (walletPublicKey !== fromPublicKey) {
+//         res.status(400).json({ message: "You cannot send coins from another account." });
+//         return;
+//       }
 //     })
+//     .catch(() => res.status(500).json({ message: "Something went wrong." }))
+  
+//   // get total balance of this wallet by querying all transactions
+//   Transaction.find({ fromPublicKey })
+//     .then((transactionsFromDB) => {
+//       // deduce debit from balance
+//       balance -= transactionsFromDB.reduce((sum, transac) => sum + transac.amount, 0);
+//     })
+//     .catch(() => res.status(500).json({ message: "Something went wrong." }))
+
+//   Transaction.find({ toPublicKey: fromPublicKey })
+//   .then((transactionsFromDB) => {
+//     // add credit to balance
+//     balance += transactionsFromDB.reduce((sum, transac) => sum + transac.amount, 0);
+//   })
+//   .catch(() => res.status(500).json({ message: "Something went wrong." }))
+
+//   // make sure the wallet has enough funds
+//   if (balance < amount) {
+//     res.status(400).json({ message: "Insufficient funds." });
+//     return;
+//   }
+
+//   // sign the transaction
+//   const transacData = {
+//     amount,
+//     fromPublicKey,
+//     toPublicKey
+//   }
+//   const signature = signTransac(transacData.toString(), fromPrivateKey);
+
+//   // hash transaction (is it needed?)
+
+//   // make sure it is valid (is it needed?)
+
+//   // create a transaction (modify with new models)
+//   const newTransaction = new Transaction({
+//     _id: signature,
+//     amount,
+//     fromPublicKey,
+//     toPublicKey
+//   })
+
+//   // add to database
+//   newTransaction.save()
+//     .then(() => res.status(200).json(newTransaction))
 //     .catch(() => res.status(500).json({ message: "Something went wrong." }))
 // });
 
@@ -218,9 +197,20 @@ router.delete("/:userId", (req, res, next) => {
 
   Promise.all([p1, p2])
     .then(() => res.status(200).json({ message: "Your account has been removed successfully." }))
-    .catch(() => res.status(500).json({ message: "Something went wrong." }))    
+    .catch(() => res.status(500).json({ message: "Something went wrong, your account could not be deleted." }))    
 });
 
+
+// Get wallets
+router.get("/wallets", (req, res, next) => {
+  Wallet.find({})
+    .then(walletsFromDB => {
+      res.status(200).json(walletsFromDB)
+    })
+    .catch(() => {
+      res.status(500).json({ message: "Something went wrong when retrieving wallets." })
+    })
+});
 
 
 module.exports = router;

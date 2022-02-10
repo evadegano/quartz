@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { signup, createWallet } from "../services/auth-service";
+import { signup } from "../services/auth-service";
 
 
 class Signup extends Component {
@@ -39,9 +39,6 @@ class Signup extends Component {
 
         // update global user state
         this.props.updateUser(response.newUser);
-
-        // update global user wallet state
-        this.props.updateWallet(response.walletAddress);
 
         // redirect user to their dashboard
         this.props.history.push(`/user/${response.walletAddress}`)

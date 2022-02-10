@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const service = axios.create({
-  baseURL: process.env.API_URL || "http://localhost:5005/api",
+  baseURL: "http://localhost:5005/api",
   withCredentials: true
 });
 
@@ -22,9 +22,5 @@ function logout() {
   return service.post("logout", {}).then(response => response.data);
 }
 
-function createWallet(userid) {
-  return service.post("/wallet", {userid}).then(response => response.data);
-}
 
-
-export { signup, login, loggedIn, logout, createWallet };
+export { signup, login, loggedIn, logout };

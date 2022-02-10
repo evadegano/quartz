@@ -26,6 +26,9 @@ app.use("/api", mainRoutes);
 const authRoutes = require("./routes/auth");
 app.use("/api", authRoutes);
 
+const userRoutes = require("./routes/user");
+app.use("/api", userRoutes);
+
 const recoveryRoutes = require("./routes/recovery");
 app.use("/api", recoveryRoutes);
 

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { Switch, Route } from "react-router-dom";
 import { loggedIn } from './services/auth-service';
-import { getTransactions, getBlocks, getWallets } from './services/blockchain-service';
+import { getWallets } from './services/blockchain-service';
 import Gun from  "gun";
 import _ from "lodash";
 import Homepage from './homepage/Homepage';
@@ -22,10 +22,10 @@ class App extends Component {
 
   state = {
     loggedInUser: "",
-    userWalletAddress: "",
     wallets: [],
     transactions: [],
-    blocks: []
+    blocks: [],
+    error: ""
   }
 
   createTransac = () => {
@@ -53,10 +53,6 @@ class App extends Component {
     this.setState({ loggedInUser: userObj })
   }
 
-  updateUserWalletAddress = (walletAddress) => {
-    this.setState({ userWalletAddress: walletAddress })
-  }
-
   fetchUser() {
     if (this.state.loggedInUser === "") {
       loggedIn()
@@ -72,32 +68,20 @@ class App extends Component {
           wallets: response
         })
       })
-      .catch(() => console.log("Something went wrong when retrieving wallets."))
+      .catch(err => this.setState({ error: err.response.data.error}))
   }
 
   fetchBlocks() {
-    getBlocks()
-      .then(response => {
-        this.setState({
-          blocks: response
-        })
-      })
-      .catch(() => console.log("Something went wrong when retrieving blocks."))
+    return;
   }
 
   fetchTransactions() {
-    getTransactions()
-      .then(response => {
-        this.setState({
-          transactions: response
-        })
-      })
-      .catch(() => console.log("Something went wrong when retrieving transactions."))
+    return;
   }
 
   componentDidMount() {
     this.fetchUser();
-  // //   this.fetchWallets();
+    this.fetchWallets();
   // //   this.fetchBlocks();
   // //   this.fetchTransactions();
     const transactionsCopy = [];
@@ -116,15 +100,11 @@ class App extends Component {
     return (
       <div className="App">
         <button onClick={this.createTransac}>Create transac</button>
-
-        {this.state.transactions.map((transac, idx) => {
-          return <div key={idx}>{transac.amount}, {transac.fromPublicKey}, {transac.toPublicKey}</div>
-        })}
         
         <Switch>
           <Route exact path="/" render={() => <Homepage gun={this.gun} />} />
-          <Route path="/auth" render={() => <Auth updateUser={this.updateLoggedInUser} updateWallet={this.updateUserWalletAddress} />} />
-          <Route path="/user" render={() => <Private user={this.state.loggedInUser} userWallet={this.state.userWalletAddress} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
+          <Route path="/auth" render={() => <Auth updateUser={this.updateLoggedInUser} />} />
+          <Route path="/user" render={() => <Private user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
           <Route path="/legal" component={Legal} />
         </Switch>
       </div>
