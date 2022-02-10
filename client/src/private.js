@@ -29,7 +29,7 @@ class Private extends Component {
           <Route exact path="/user/:walletId" render={(routerProps) => <Overview {...routerProps} user={this.props.user} transactions={this.props.transactions} />} />
           <Route exact path="/user/:walletId/send-coins" render={(routerProps) => <SendCoins {...routerProps} />} />
           <Route exact path="/user/:userId" render={(routerProps) => <Profile {...routerProps} user={this.props.user} />} />
-          <Route exact path="/user/blockchain" render={() => <Blockchain />} />
+          <Route exact path="/user/blockchain" render={() => <Blockchain blocks={this.props.blocks} />} />
           <Route exact path="/user/transactions" render={() => <Transactions transactions={this.props.transactions} />} />
           <Route exact path="/user/blocks" render={() => <Blocks blocks={this.props.blocks} />} />
           <Route exact path="/user/blocks/:blockId" render={() => <BlockDetails blocks={this.props.blocks} />} />

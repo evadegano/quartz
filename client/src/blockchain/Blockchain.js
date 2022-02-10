@@ -1,7 +1,7 @@
 import { Link, Switch, Route } from "react-router-dom";
 import { Component } from "react";
 import Header from "../user/Header";
-import Blocks from "./Blocks";
+import Block from "./Block";
 import TransacVolumes from "./TransacVolumes";
 import BlockchainStats from "./BlockchainStats";
 
@@ -22,7 +22,9 @@ class Blockchain extends Component {
           </div>
         </div>
 
-        <Blocks />
+        {this.props.blocks.map(block => {
+          <Block key={block.hash} block={block} />
+        })}
       </div>
     );
   }
