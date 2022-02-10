@@ -8,9 +8,7 @@ const app = express();
 require("./config/index")(app);
 
 // import passport middlewares
-require("./config/passport")(passport);
-app.use(passport.initialize());
-app.use(passport.session());
+require('./passport')(app);
 
 // import routes
 const mainRoutes = require("./routes/index");

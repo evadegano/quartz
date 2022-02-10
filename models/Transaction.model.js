@@ -5,10 +5,14 @@ const transactionSchema = new Schema({
       inputCounter: Number,
       outputCounter: Number,
       merkleHash: String,
-      timestamps: true
+      //timestamps: true
     },
     inputs: [String],
-    outputs: [String]
+    outputs: [String],
+    confirmed: {
+      type: Boolean,
+      default: false
+    }
   }
 )
 

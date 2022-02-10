@@ -1,7 +1,6 @@
 import { Component } from "react";
 import { postTransaction } from "../services/blockchain-service";
 
-
 class SendCoins extends Component {
   state = {
     toPublicKey: "",

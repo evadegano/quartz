@@ -10,8 +10,12 @@
     -> The unspent TXO is turned into a TXI
     -> 2 unspent TXO are created
 - The transaction is pending for validation
+  -> The transaction list is updated in realtime
 - After x minute, all pending transactions are verified and added to a block
 - The block is mined
 - The block is verified
 - The block is added to the blockchain
 - All users' db are updated 
+
+
+faster than a blockchain, as secure and distributed

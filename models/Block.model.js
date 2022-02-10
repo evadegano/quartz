@@ -5,7 +5,7 @@ const blockSchema = new Schema({
       nonce: Number,
       merkleRoot: String,
       prevHash: String,
-      timestamps: true
+      //timestamps: true
     },
     transactions: {
       type: [Schema.Types.ObjectId],

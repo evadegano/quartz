@@ -1,9 +1,6 @@
 const express = require("express");
 const router = require("express").Router();
 const passport = require("passport");
-
-// helper for decentralized databases
-const createOrbitDB = require("../helpers/orbitDB");
  
 // package for password encryption
 const bcrypt = require("bcryptjs");
@@ -60,74 +57,56 @@ router.post("/signup", (req, res, next) => {
   const salt = bcrypt.genSaltSync(bcryptSalt);
   const hashedPwd = bcrypt.hashSync(password, salt);
 
-  // create a new database for the user
-  const db = createOrbitDB();
-
   const newUser = new User({
     email,
     password: hashedPwd,
-    databaseAddress: db.address.toString()
   });
 
-  const p1 = newUser.save();
+  newUser.save()
+    .then(newUser => { 
+      // save user in session
+      req.login(newUser, (err) => {
+        if (err) {
+          res.status(500).json({ message: "Login error, please try again." });
+          return;
+        }
 
-  // create a wallet for this user
-  const keypair = genKeys();
-  const newWallet = new Wallet({
-    _id: getHash({
-      user_id: req.user._id,
-      publicKey: keypair.publicKey,
-    }),
-    user_id: req.user._id,
-    name: "",
-    publicKey: keypair.publicKey,
-    lastConnection: Date.now()
-  })
-  const p2 = newWallet.save();
-
-  Promise.all([p1, p2])
-  .then((value) => {
-    const [ newUser ] = value;
-
-    // save user in session
-    req.login(newUser, (err) => {
-      if (err) {
-        res.status(500).json({ message: "Login error, please try again." });
-        return;
-      }
-
-      res.status(200).json({ 
-        newUser,
-        privateKey: keypair.privateKey,
-      });
+        res.status(200).json(newUser);
+      })
     })
-  })
-  .catch(() => res.status(500).json({ message: "Something went wrong." }))
+    .catch(() => res.status(500).json({ message: "Something went wrong during sign up." }))
 });
 
 
 // POST wallet 
-// question: should I do it on the client side instead?
-// router.post("/user/wallet", (req, res, next) => {
-//   // generate new keypairs
-//   const keypair = genKeys();
-//   // create new wallet
-//   const newWallet = new Wallet({
-//     user_id: req.user._id,
-//     name: "",
-//     publicKey: keypair.publicKey,
-//     lastConnection: Date.now()
-//   })
+router.post("/wallet", (req, res, next) => {
+  // generate new keypairs
+  const keypair = genKeys();
 
-//   newWallet.save()
-//     .then(() => {
-//       res.status(200).json({
-//         newWallet,
-//         privateKey: keypair.privateKey
-//       });
-//     })
-//     .catch((err) => res.status(500).json({ message: "Something went wrong." }))
-// })
+  // generate wallet hash from its user id and publick key
+  const hash = getHash({
+    user_id: req.user._id,
+    publicKey: keypair.publicKey
+  });
+
+  // create new wallet
+  const newWallet = new Wallet({
+    user_id: req.user._id,
+    name: "",
+    active: true,
+    publicKey: keypair.publicKey,
+    lastConnection: Date.now()
+  })
+
+  newWallet.save()
+    .then(() => {
+      res.status(200).json({
+        newWallet,
+        privateKey: keypair.privateKey
+      });
+    })
+    .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
+});
 
 
 // POST login page

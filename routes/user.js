@@ -8,7 +8,7 @@ const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 
 // function to cryptographically sign transactions
-const { signTransac } = require("../helpers/blockchain");
+const { signTransac } = require("../helpers/blockchainHelpers");
 
 // database models
 const User = require("../models/User.model");
