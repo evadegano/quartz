@@ -1,11 +1,22 @@
 import { Component } from "react";
-import { postTransaction } from "../services/blockchain-service";
+import Gun from  "gun";
+import _ from "lodash";
+
 
 class SendCoins extends Component {
+  constructor() {
+    super();
+      this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
+      window.gun = this.gun; //To have access to gun object in browser console
+      this.transacsRef = this.gun.get("transactions");
+  }
+
   state = {
     toPublicKey: "",
     amount: "",
-    privateKey: ""
+    privateKey: "",
+    error: "",
+    success: ""
   }
 
   handleChange = (event) => {
@@ -21,57 +32,63 @@ class SendCoins extends Component {
     event.preventDefault();
 
     // post data
-    const { toPublicKey, amount, privateKey } = this.state;
+    const { fromPublicKey, toPublicKey, amount } = this.state;
     const { walletId } = this.props.match.params.walletId;
 
+    const newTransaction = {
+      fromPublicKey,
+      toPublicKey,
+      amount
+    }
+
     // create transaction
-    postTransaction(walletId, amount, this.props.walletKey, privateKey, toPublicKey)
+    this.transacsRef.set(newTransaction);
 
     // reset state
     this.setState({
+      fromPublicKey: "",
       toPublicKey: "",
       amount: "",
-      privateKey: ""
+      error: ""
     })
   }
 
   render() {
     return (
-      <div className="modal">
-        <div className="modal-background"></div>
+      <div>
+        <div className="centered-col-container">
+          <h1 className="title">Send QRTZ</h1>
 
-        <div class="modal-content">
-          <div className="centered-col-container">
-            <h1 className="title">Send QRTZ</h1>
-
-            <form className="box s-container" onSubmit={this.handleSubmit}>
-              <div className="field">
-                <label className="label">Send to</label>
-                <div className="control">
-                  <input name="toPublickKey" value={this.state.toPublicKey} className="input" type="text" placeholder="e.g. alex@example.com" onChange={this.handleChange} />
-                </div>
+          <form className="box s-container" onSubmit={this.handleSubmit}>
+            <div className="field">
+              <label className="label">From wallet</label>
+              <div className="control">
+                <input name="fromPublicKey" value={this.state.fromPublicKey} className="input" type="text" placeholder="your wallet address" onChange={this.handleChange} />
               </div>
+            </div>
 
-              <div className="field">
-                <label className="label">Amount</label>
-                <div className="control">
-                  <input name="amount" value={this.state.amount} className="input" type="number" placeholder="300" onChange={this.handleChange} />
-                </div>
+            <div className="field">
+              <label className="label">To wallet</label>
+              <div className="control">
+                <input name="toPublicKey" value={this.state.password} className="input" type="text" placeholder="the wallet you are sending coins to" onChange={this.handleChange} />
               </div>
+            </div>
 
-              <div className="field">
-                <label className="label">Private key</label>
-                <div className="control">
-                  <input name="privateKey" value={this.state.privateKey} className="input" type="password" placeholder="*********" onChange={this.handleChange} />
-                </div>
+            <div className="field">
+              <label className="label">Amount</label>
+              <div className="control">
+                <input name="amount" value={this.state.amount} className="input" type="number" placeholder="300" onChange={this.handleChange} />
               </div>
+            </div>
 
-              <button className="button is-primary">Send</button>
-            </form>
-          </div>
+            <button className="button is-primary">Send</button>
+          </form>
+
+          {this.state.error && (
+            <div className="error">{this.state.error}</div>
+          )}
+
         </div>
-
-        <button className="modal-close is-large" aria-label="close"></button>
       </div>
     );
   }

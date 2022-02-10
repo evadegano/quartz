@@ -17,7 +17,7 @@ app.use(
 );
 
 // import passport middlewares
-require('./passport')(app);
+require('./passport/index')(app);
 
 // import routes
 const mainRoutes = require("./routes/index");

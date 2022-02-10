@@ -130,6 +130,7 @@ router.post("/wallet", (req, res, next) => {
 
 // POST login page
 router.post("/login", (req, res, next) => {
+  
   passport.authenticate("local", (err, user, failureDetails) => {
     // return error if any
     if (err) {
@@ -152,7 +153,7 @@ router.post("/login", (req, res, next) => {
 
       res.status(200).json(user);
     })
-  })
+  })(req, res, next);
 });
 
 

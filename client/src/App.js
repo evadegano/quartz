@@ -76,15 +76,7 @@ class App extends Component {
   }
 
   fetchTransactions() {
-    return;
-  }
-
-  componentDidMount() {
-    this.fetchUser();
-    this.fetchWallets();
-  // //   this.fetchBlocks();
-  // //   this.fetchTransactions();
-    const transactionsCopy = [];
+    let transactionsCopy = [];
 
     this.transacsRef.map().once(function(transac) {
       let data = _.pick(transac, ["amount", "fromPublicKey", "toPublicKey"]);
@@ -96,10 +88,22 @@ class App extends Component {
     }) 
   }
 
+  componentDidMount() {
+    this.fetchUser();
+    this.fetchWallets();
+  // //   this.fetchBlocks();
+    this.fetchTransactions();
+    
+  }
+
   render() {
+    if (this.state.transactions.length === 0) return 'loading...' 
+
     return (
       <div className="App">
         <button onClick={this.createTransac}>Create transac</button>
+
+        {this.state.transactions.map((transac, idx) => <div key={idx}>{transac.amount}, {transac.fromPublicKey}, {transac.toPublicKey}</div>)}
         
         <Switch>
           <Route exact path="/" render={() => <Homepage gun={this.gun} />} />

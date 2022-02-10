@@ -1,6 +1,6 @@
 import { Link, Switch, Route } from "react-router-dom";
 import { Component } from "react";
-import Header from "../global/Header";
+import Header from "../user/Header";
 import Blocks from "./Blocks";
 import TransacVolumes from "./TransacVolumes";
 import BlockchainStats from "./BlockchainStats";

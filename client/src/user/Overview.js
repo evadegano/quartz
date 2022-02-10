@@ -1,5 +1,5 @@
 import { Component } from "react";
-import Header from "../global/Header";
+import Header from "./Header";
 import TransferBtns from "./TransferBtns";
 import Transactions from "../transactions/Transactions";
 import Balance from "./Balance";
