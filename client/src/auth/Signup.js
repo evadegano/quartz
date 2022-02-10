@@ -1,12 +1,13 @@
 import { Component } from "react";
-import { signup } from "../services/auth-service";
+import { signup, createWallet } from "../services/auth-service";
 
 
 class Signup extends Component {
   state = {
     email: "",
     password: "",
-    passwordConfirm: ""
+    passwordConfirm: "",
+    error: ""
   }
 
   handleChange = (event) => {
@@ -25,17 +26,27 @@ class Signup extends Component {
     const { email, password, passwordConfirm } = this.state;
 
     signup(email, password, passwordConfirm)
-      .then((response) => {
+      .then(response => {
         // reset state
         this.setState({
           email: "",
           password: "",
-          passwordConfirm: ""
+          passwordConfirm: "",
+          error: ""
         });
 
-        this.props.updateUser(response);
+        console.log("response ==>", response)
+
+        // update global user state
+        this.props.updateUser(response.newUser);
+
+        // update global user wallet state
+        this.props.updateWallet(response.walletAddress);
+
+        // redirect user to their dashboard
+        this.props.history.push(`/user/${response.walletAddress}`)
       })
-      .catch(err => console.log(err))
+      .catch(err => this.setState({ error: err.response.data.message }))
   }
 
   render() {
@@ -69,6 +80,11 @@ class Signup extends Component {
 
             <button className="button is-primary">Sign up</button>
           </form>
+
+          {this.state.error && (
+            <div className="error">{this.state.error}</div>
+          )}
+
         </div>
       </div>
     );

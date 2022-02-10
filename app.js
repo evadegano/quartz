@@ -3,9 +3,18 @@ require("./db"); // connects to the database
 const passport = require("passport"); // handles authentication and authorization
 const express = require("express"); // node framework to handle http requests
 const app = express();
+const cors = require("cors");
 
 // import app middlewares
 require("./config/index")(app);
+
+// controls a very specific header to pass headers from the frontend
+app.use(
+  cors({
+    credentials: true,
+    origin: [process.env.ORIGIN || "http://localhost:3000"],
+  })
+);
 
 // import passport middlewares
 require('./passport')(app);
@@ -16,9 +25,6 @@ app.use("/api", mainRoutes);
 
 const authRoutes = require("./routes/auth");
 app.use("/api", authRoutes);
-
-const userRoutes = require("./routes/user");
-app.use("/api", userRoutes);
 
 const recoveryRoutes = require("./routes/recovery");
 app.use("/api", recoveryRoutes);

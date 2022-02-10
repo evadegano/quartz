@@ -1,6 +1,6 @@
 - User signs up
   -> OK | Wallet is created
-  -> NOK (check YT tutorial) | Blocks headers are added to the client's own dabatase
+  -> They get their copy of the database
 - OK | They GET their dashboard with wallet info
 - They add QRTZ
   -> NOK (check YT tutorial) | cf Payment Request API

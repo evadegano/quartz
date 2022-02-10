@@ -6,8 +6,9 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const bcryptSalt = 10;
 
-// wallet signature to sign and verify transactions
-const { genKeys, getHash } = require("../helpers/blockchainHelpers");
+// helpers for wallet keys and address
+const genKeys = require("../helpers/keygenerator");
+const getHash = require("../helpers/getHash");
 
 // database models
 const User = require("../models/User.model");
@@ -71,7 +72,28 @@ router.post("/signup", (req, res, next) => {
           return;
         }
 
-        res.status(200).json(newUser);
+        // generate new keypairs
+        const [ publicKey, privateKey ] = genKeys();
+        // hash public key into a wallet address
+        const address = getHash(publicKey);
+
+        // create new wallet
+        const newWallet = new Wallet({
+          user_id: req.user._id,
+          address,
+          lastConnection: Date.now()
+        })
+
+        newWallet.save()
+          .then(() => {
+            res.status(200).json({
+              newUser: req.user,
+              walletAddress: newWallet.address,
+              publicKey,
+              privateKey
+            });
+          })
+          .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
       })
     })
     .catch(() => res.status(500).json({ message: "Something went wrong during sign up." }))
@@ -80,29 +102,26 @@ router.post("/signup", (req, res, next) => {
 
 // POST wallet 
 router.post("/wallet", (req, res, next) => {
+  const { userId } = req.body;
+  
   // generate new keypairs
-  const keypair = genKeys();
-
-  // generate wallet hash from its user id and publick key
-  const hash = getHash({
-    user_id: req.user._id,
-    publicKey: keypair.publicKey
-  });
+  const [ publicKey, privateKey ] = genKeys();
+  // hash public key into a wallet address
+  const address = getHash(publicKey);
 
   // create new wallet
   const newWallet = new Wallet({
     user_id: req.user._id,
-    name: "",
-    active: true,
-    publicKey: keypair.publicKey,
+    address,
     lastConnection: Date.now()
   })
 
   newWallet.save()
     .then(() => {
       res.status(200).json({
-        newWallet,
-        privateKey: keypair.privateKey
+        walletAddress: newWallet.address,
+        publicKey,
+        privateKey
       });
     })
     .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))

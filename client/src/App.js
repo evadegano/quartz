@@ -21,7 +21,8 @@ class App extends Component {
   }
 
   state = {
-    loggedInUser: null,
+    loggedInUser: "",
+    userWalletAddress: "",
     wallets: [],
     transactions: [],
     blocks: []
@@ -38,7 +39,7 @@ class App extends Component {
 
     const transactionsCopy = [];
 
-    this.transacsRef.map().on(function(transac) {
+    this.transacsRef.map().once(function(transac) {
       let data = _.pick(transac, ["amount", "fromPublicKey", "toPublicKey"]);
       transactionsCopy.push(data);
     })
@@ -49,24 +50,18 @@ class App extends Component {
   } 
 
   updateLoggedInUser = (userObj) => {
-    this.setState({
-      loggedInUser: userObj
-    })
+    this.setState({ loggedInUser: userObj })
+  }
+
+  updateUserWalletAddress = (walletAddress) => {
+    this.setState({ userWalletAddress: walletAddress })
   }
 
   fetchUser() {
-    if (this.state.loggedInUser === null) {
+    if (this.state.loggedInUser === "") {
       loggedIn()
-        .then(response => {
-          this.setState({
-            loggedInUser: response
-          })
-        })
-        .catch((err) => {
-          this.setState({
-            loggedInUser: false
-          })
-        })
+        .then(response => this.setState({ loggedInUser: response }))
+        .catch(() => this.setState({ loggedInUser: false }))
     }
   }
 
@@ -101,13 +96,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-  // //   this.fetchUser();
+    this.fetchUser();
   // //   this.fetchWallets();
   // //   this.fetchBlocks();
   // //   this.fetchTransactions();
     const transactionsCopy = [];
 
-    this.transacsRef.map().on(function(transac) {
+    this.transacsRef.map().once(function(transac) {
       let data = _.pick(transac, ["amount", "fromPublicKey", "toPublicKey"]);
       transactionsCopy.push(data);
     })
@@ -128,8 +123,8 @@ class App extends Component {
         
         <Switch>
           <Route exact path="/" render={() => <Homepage gun={this.gun} />} />
-          <Route path="/auth" render={() => <Auth updateUser={this.updateLoggedInUser} />} />
-          <Route path="/user" render={() => <Private user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
+          <Route path="/auth" render={() => <Auth updateUser={this.updateLoggedInUser} updateWallet={this.updateUserWalletAddress} />} />
+          <Route path="/user" render={() => <Private user={this.state.loggedInUser} userWallet={this.state.userWalletAddress} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
           <Route path="/legal" component={Legal} />
         </Switch>
       </div>

@@ -15,13 +15,13 @@ class Overview extends Component {
 
   render() {
     // get walle tkey from url instead
-    const userTransactions = this.filterTransactions(this.props.userWallet.publicKey);
+    const userTransactions = this.filterTransactions(this.props.userWallet);
     // modify function with output and input transactions
-    const userBalance = getWalletBalance(this.props.transactions, this.props.userWallet.publicKey);
+    const userBalance = getWalletBalance(this.props.transactions, this.props.userWallet);
 
     return (
       <main>
-        <Header title="Good morning!" subtitle={`Account: ${this.props.userWallet.publicKey}`} userId={this.props.user._id} />
+        <Header title="Good morning!" subtitle={`Account: ${this.props.userWallet}`} userId={this.props.user} />
 
         <div className="columns centered-row-container">
           <div className="column">

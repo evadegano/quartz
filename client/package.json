@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.25.0",
     "bulma": "^0.9.3",
+    "cors": "^2.8.5",
     "dotenv": "^15.0.0",
     "gun": "^0.2020.1235",
     "lodash": "^4.17.21",

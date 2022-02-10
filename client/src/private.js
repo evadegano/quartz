@@ -13,22 +13,14 @@ import WalletDetails from "./wallets/WalletDetails";
 
 
 class Private extends Component {
-  // find the wallet of the logged in user
-  getUserWallet = (userId) => {
-    const userWallet = this.props.wallets.find(wallet => wallet.user_id === userId);
-    return userWallet;
-  }
-
   render() {
-    const userWallet = this.getUserWallet(this.props.user._id);
-
     return (
       <div>
         <SideNavbar />
 
         <Switch>
-          <Route exact path="/user/walletId" render={() => <Overview userWallet={userWallet} transactions={this.props.transactions} />} />
-          <Route exact path="/user/:walletId/send-coins" render={(routerProps) => <SendCoins {...routerProps} walletKey={userWallet.publicKey} />} />
+          <Route exact path="/user/:walletId" render={() => <Overview userWallet={this.props.userWallet} transactions={this.props.transactions} />} />
+          <Route exact path="/user/:walletId/send-coins" render={(routerProps) => <SendCoins {...routerProps} userWallet={this.props.userWallet} />} />
           <Route exact path="/user/:userId" render={(routerProps) => <Profile {...routerProps} user={this.props.user} />} />
           <Route exact path="/user/blockchain" render={() => <Blockchain />} />
           <Route exact path="/user/transactions" render={() => <Transactions transactions={this.props.transactions} />} />

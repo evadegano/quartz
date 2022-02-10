@@ -4,10 +4,6 @@ const MongoStore = require("connect-mongo"); // to store session in Mongo
 const logger = require("morgan"); // for messages in the terminal as requests are coming in
 const cookieParser = require("cookie-parser"); // deals with cookies
 
-// needed to accept from requests from 'the outside'. CORS stands for cross origin resource sharing
-// unless the request if from the same domain, by default express wont accept POST requests
-const cors = require("cors");
-
 // handles decentralized databases
 const Gun = require("gun");
 
@@ -16,14 +12,6 @@ module.exports = (app) => {
   // Because this is a server that will accept requests from outside and it will be hosted ona server with a `proxy`, express needs to know that it should trust that setting.
   // Services like heroku use something called a proxy and you need to add this to your server
   app.set("trust proxy", 1);
-
-  // controls a very specific header to pass headers from the frontend
-  app.use(
-    cors({
-      credentials: true,
-      origin: process.env.ORIGIN || "http://localhost:3000",
-    })
-  );
 
   // enables authentication using session + passport
   app.use(session({

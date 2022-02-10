@@ -5,11 +5,14 @@ const walletSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: "User"
     },
-    publicKey: {
+    address: {
       type: String,
       required: [true, "Public key required."]
     },
-    name: String,
+    name: {
+      type: String,
+      default: null
+    },
     active: {
       type: Boolean,
       default: true
