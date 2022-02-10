@@ -14,23 +14,24 @@ class Overview extends Component {
   }
 
   render() {
-    // get walle tkey from url instead
-    const userTransactions = this.filterTransactions(this.props.userWallet);
+    const walletAddress = this.props.match.params.walletId;
+    // get wallet key from url instead
+    const userTransactions = this.filterTransactions(walletAddress);
     // modify function with output and input transactions
-    const userBalance = getWalletBalance(this.props.transactions, this.props.userWallet);
+    //const userBalance = getWalletBalance(this.props.transactions, this.props.userWallet);
 
     return (
       <main>
-        <Header title="Good morning!" subtitle={`Account: ${this.props.userWallet}`} userId={this.props.user} />
+        <Header title="Good morning!" subtitle={`Account: ${walletAddress}`} userId={this.props.user._id} />
 
         <div className="columns centered-row-container">
           <div className="column">
-            <Balance balance={userBalance} />
+            <Balance balance="" />
             <Transactions transactions={userTransactions} />
           </div>
 
           <div className="column">
-            <TransferBtns />
+            <TransferBtns walletAddress={walletAddress} />
             <MiningStats />
           </div>
         </div>
