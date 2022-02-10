@@ -7,10 +7,6 @@ import BlockchainStats from "./BlockchainStats";
 
 
 class Blockchain extends Component {
-  state = {
-    blocks: []
-  }
-
   render() {
     return (
       <div>

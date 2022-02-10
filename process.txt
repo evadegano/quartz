@@ -1,7 +1,7 @@
 - User signs up
   -> OK | Wallet is created
   -> store keys in the local storage
-  -> They get their copy of the database
+  -> OK | They get their copy of the database
 - OK | They GET their dashboard with wallet info
 - They add QRTZ
   -> NOK (check YT tutorial) | cf Payment Request API

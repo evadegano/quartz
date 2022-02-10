@@ -18,6 +18,7 @@ class App extends Component {
       this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
       window.gun = this.gun; //To have access to gun object in browser console
       this.transacsRef = this.gun.get("transactions");
+      this.blocksRef = this.gun.get("blocks");
   }
 
   state = {
@@ -72,7 +73,14 @@ class App extends Component {
   }
 
   fetchBlocks() {
-    return;
+    let blocksCopy = [];
+
+    this.blocksRef.map().once(function(block) {
+      let data = _.pick(block, ["header", "transactionCounter", "miner", "miningReward", "hash"]);
+      blocksCopy.push(data);
+    })
+
+    this.setState({ blocks: blocksCopy })
   }
 
   fetchTransactions() {
@@ -83,30 +91,21 @@ class App extends Component {
       transactionsCopy.push(data);
     })
 
-    this.setState({
-      transactions: transactionsCopy
-    }) 
+    this.setState({ transactions: transactionsCopy }) 
   }
 
   componentDidMount() {
     this.fetchUser();
     this.fetchWallets();
-  // //   this.fetchBlocks();
+    this.fetchBlocks();
     this.fetchTransactions();
-    
   }
 
   render() {
-    if (this.state.transactions.length === 0) return 'loading...' 
-
     return (
       <div className="App">
-        <button onClick={this.createTransac}>Create transac</button>
-
-        {this.state.transactions.map((transac, idx) => <div key={idx}>{transac.amount}, {transac.fromPublicKey}, {transac.toPublicKey}</div>)}
-        
         <Switch>
-          <Route exact path="/" render={() => <Homepage gun={this.gun} />} />
+          <Route exact path="/" render={() => <Homepage />} />
           <Route path="/auth" render={() => <Auth updateUser={this.updateLoggedInUser} />} />
           <Route path="/user" render={() => <Private user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
           <Route path="/legal" component={Legal} />
