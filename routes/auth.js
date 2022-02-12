@@ -151,11 +151,17 @@ router.post("/login", (req, res, next) => {
         return;
       }
 
-      res.status(200).json(user);
+      Wallet.find({ user_id: user._id }).sort({ lastConnection: "descending"})
+        .then(walletsFromDB => {
+          const walletAddresses = walletsFromDB.map(wallet => wallet.address);
+
+          res.status(200).json({ user, userWallets: walletAddresses });
+        })
+        .catch(() => res.status(500).json({ message: "Something went wrong when retrieving user wallets." }))
+
     })
   })(req, res, next);
 });
-
 
 // GET user is logged in
 router.get("/loggedin", (req, res, next) => {

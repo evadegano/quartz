@@ -6,7 +6,8 @@ import { login } from "../services/auth-service";
 class Login extends Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    error: ""
   }
 
   handleChange = (event) => {
@@ -29,12 +30,15 @@ class Login extends Component {
         // reset state
         this.setState({
           email: "",
-          password: ""
+          password: "",
+          error: ""
         });
+
+        console.log("response =>", response)
 
         this.props.updateUser(response);
       })
-      .catch(err => console.log(err))
+      .catch(err => this.setState({ error: err.response.data.message }))
   }
 
   render() {
@@ -61,7 +65,7 @@ class Login extends Component {
             <button className="button is-primary">Log in</button>
           </form>
 
-          <Link>I forgot my password</Link>
+          <Link to="" >I forgot my password</Link>
         </div>
       </div>
     );

@@ -7,7 +7,7 @@ const walletSchema = new Schema({
     },
     address: {
       type: String,
-      required: [true, "Public key required."]
+      required: [true, "Wallet address required."]
     },
     name: {
       type: String,

@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { Switch, Route } from "react-router-dom";
 import { loggedIn } from './services/auth-service';
+import { getWallets } from "./services/user-service";
 import Gun from  "gun";
 import _ from "lodash";
 import Homepage from './homepage/Homepage';
@@ -63,14 +64,9 @@ class App extends Component {
   }
 
   fetchWallets() {
-    let walletsCopy = [];
-
-    this.walletsRef.map().once(function(wallet) {
-      let data = _.pick(wallet, ["address", "creationDate", "lastActive"]);
-      walletsCopy.push(data);
-    });
-
-    this.setState({ wallets: walletsCopy });
+    getWallets()
+      .then(response => this.setState({ wallets: response.data}))
+      .catch(err => this.setState({ error: err.response.data.message }) )
   }
 
   fetchBlocks() {
