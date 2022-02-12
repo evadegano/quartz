@@ -1,16 +1,15 @@
-// package to create keypairs using an elliptic algorithm
-const EC = require("elliptic").ec;
-const ec = new EC("secp256k1");
+const crypto = require("crypto");
 
 function genKeys() {
-  // generate a key pair
-  const key = ec.genKeyPair();
-  
-  // set keys to the right formats
-  const publickKey = key.getPublic("hex");
-  const privateKey = key.getPrivate("hex");
+  // digital signature to sign and verify hash
+  // used to prevent third party agents from modifying transaction
+  const keypair = crypto.generateKeyPairSync("rsa", {
+    modulusLength: 2048,
+    publicKeyEncoding: { type: "spki", format: "pem"},
+    privateKeyEncoding: { type: "pkcs8", format: "pem"},
+  });
 
-  return [publickKey, privateKey];
+  return [ keypair.publicKey, keypair.privateKey ];
 }
 
 module.exports = genKeys;

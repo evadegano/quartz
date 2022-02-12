@@ -40,6 +40,12 @@ class Signup extends Component {
         // update global user state
         this.props.updateUser(response.newUser);
 
+        // store wallet signing keys in local storage
+        localStorage.setItem(response.walletAddress, {
+          publicKey: response.publicKey,
+          privateKey: response.privateKey
+        })
+
         // redirect user to their dashboard
         this.props.history.push(`/user/${response.walletAddress}`)
       })

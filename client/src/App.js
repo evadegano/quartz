@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import { Switch, Route } from "react-router-dom";
 import { loggedIn } from './services/auth-service';
-import { getWallets } from './services/blockchain-service';
 import Gun from  "gun";
 import _ from "lodash";
 import Homepage from './homepage/Homepage';
@@ -19,6 +18,7 @@ class App extends Component {
       window.gun = this.gun; //To have access to gun object in browser console
       this.transacsRef = this.gun.get("transactions");
       this.blocksRef = this.gun.get("blocks");
+      this.walletsRef = this.gun.get("wallets");
   }
 
   state = {
@@ -63,13 +63,14 @@ class App extends Component {
   }
 
   fetchWallets() {
-    getWallets()
-      .then(response => {
-        this.setState({
-          wallets: response
-        })
-      })
-      .catch(err => this.setState({ error: err.response.data.error}))
+    let walletsCopy = [];
+
+    this.walletsRef.map().once(function(wallet) {
+      let data = _.pick(wallet, ["address", "creationDate", "lastActive"]);
+      walletsCopy.push(data);
+    });
+
+    this.setState({ wallets: walletsCopy });
   }
 
   fetchBlocks() {
@@ -78,9 +79,9 @@ class App extends Component {
     this.blocksRef.map().once(function(block) {
       let data = _.pick(block, ["header", "transactionCounter", "miner", "miningReward", "hash"]);
       blocksCopy.push(data);
-    })
+    });
 
-    this.setState({ blocks: blocksCopy })
+    this.setState({ blocks: blocksCopy });
   }
 
   fetchTransactions() {
@@ -89,9 +90,9 @@ class App extends Component {
     this.transacsRef.map().once(function(transac) {
       let data = _.pick(transac, ["amount", "fromPublicKey", "toPublicKey"]);
       transactionsCopy.push(data);
-    })
+    });
 
-    this.setState({ transactions: transactionsCopy }) 
+    this.setState({ transactions: transactionsCopy });
   }
 
   componentDidMount() {

@@ -101,31 +101,31 @@ router.post("/signup", (req, res, next) => {
 
 
 // POST wallet 
-router.post("/wallet", (req, res, next) => {
-  const { userId } = req.body;
+// router.post("/wallet", (req, res, next) => {
+//   const { userId } = req.body;
   
-  // generate new keypairs
-  const [ publicKey, privateKey ] = genKeys();
-  // hash public key into a wallet address
-  const address = getHash(publicKey);
+//   // generate new keypairs
+//   const [ publicKey, privateKey ] = genKeys();
+//   // hash public key into a wallet address
+//   const address = getHash(publicKey);
 
-  // create new wallet
-  const newWallet = new Wallet({
-    user_id: req.user._id,
-    address,
-    lastConnection: Date.now()
-  })
+//   // create new wallet
+//   const newWallet = new Wallet({
+//     user_id: req.user._id,
+//     address,
+//     lastConnection: Date.now()
+//   })
 
-  newWallet.save()
-    .then(() => {
-      res.status(200).json({
-        walletAddress: newWallet.address,
-        publicKey,
-        privateKey
-      });
-    })
-    .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
-});
+//   newWallet.save()
+//     .then(() => {
+//       res.status(200).json({
+//         walletAddress: newWallet.address,
+//         publicKey,
+//         privateKey
+//       });
+//     })
+//     .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
+// });
 
 
 // POST login page
