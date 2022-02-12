@@ -1,75 +1,80 @@
 import * as crypto from "crypto";
-import Wallet from "./wallet";
-import TransactionOutput from "./transactionOutput";
-import TransactionInput from "./transactionInput";
 
 
 class Transaction {
     public header: {
-      inputCounter: number,
-      outputCounter: number,
-      merkleHash: string,
+      amount: number,
+      fromAddress: string,
+      toAddress: string,
       timestamps: number
     };
-    public TransactionOutput: [TransactionOutput];
-    public TransactionInput: [TransactionInput];
+    public merkleHash: string;
+    public signature: Buffer;
+    public isConfirmed: boolean;
     public hash: string;
 
-  constructor(amount: number, fromPublicKey: string, toPublicKey: string,) 
+  constructor(amount: number, fromAddress: string, toAddress: string,) 
   {
-    this.amount = amount;
-    this.fromPublicKey = fromPublicKey;
-    this.toPublicKey = toPublicKey;
-    this.status = "Sent";
+    this.header = {
+      amount: amount,
+      fromAddress: fromAddress,
+      toAddress: toAddress,
+      timestamps: Date.now()
+    }
   }
 
-  // hash transaction's content
+  // hash transaction's header
   getHash() {
     // convert object to a JSON string for hashing    
     const str = JSON.stringify(this.header);
-
-    // hash block
+    
+    // hash transaction's header
     const hasher = crypto.createHash("SHA256");
     hasher.update(str).end();
-
     return hasher.digest("hex");
   }
 
-  signTransaction(wallet: Wallet) {
-    // make sure that the wallet is valid
-    if (wallet.publicKey !== this.fromPublicKey) {
-      throw new Error("You cannot sign transactions from other wallets.");
+  // sign transaction with the sender's private and public keys
+  signTransaction(walletAddress: string, signingKeyPair: any) {
+    // make sure the public key matches the sender wallet's address
+    if (!this.isSenderValid(signingKeyPair.publicKey, walletAddress)) {
+      throw new Error("This public key doesn't belong to this wallet.");
     }
+
+    // get transaction's hash
+    this.hash = this.getHash();
 
     // create signature
-    const sign = crypto.createSign("SHA256");
-    // sign transaction
-    sign.update(JSON.stringify(this)).end();
-    const signature = sign.sign(wallet.privateKey);
+    const signer = crypto.createSign("SHA256");
+    signer.update(this.hash).end();
 
+    const signature = signer.sign(signingKeyPair.privateKey);
     this.signature = signature;
-    this.hash = this.getHash();
   }
 
-  isValid() {
-    const transacData = {
-      timestamps: this.timestamps,
-      amount: this.amount, 
-      fromPublicKey: this.fromPublicKey,
-      toPublicKey: this.toPublicKey,
-    };
+  // check whether the sender's public key belongs to their wallet address
+  isSenderValid(publicKey: string, walletAddress: string) {
+    // hash public key
+    const hasher = crypto.createHash("SHA256");
+    hasher.update(publicKey).end();
+    const hashedKey = hasher.digest("hex");
 
-    // create transaction verifier
-    const verifier = crypto.createVerify("SHA256");
-    verifier.update(JSON.stringify(transacData));
-    // verify that address and signature are valid
-    const isValid = verifier.verify(this.fromPublicKey, this.signature);
+    if (hashedKey !== walletAddress) return false;
+    return true;
+  }
 
-    if (isValid) {
-      return true;
+  // check whether the transaction has been signed correctly
+  isSigatureValid(publicKey: string) {
+    // mining rewards
+    if (this.header.fromAddress === null) return true;
+
+    if (!this.signature || this.signature.length === 0) {
+      return false;
     }
 
-    return false;
+    // check whether the singing key pair is valid
+
+    return true;
   }
 }
 

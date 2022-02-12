@@ -1,15 +1,12 @@
-const crypto = require("crypto");
+const SHA256 = require("crypto-js/sha256");
 
-
+// user crypto-js instead
 function getHash(data) {
   // convert data to a JSON string for hashing
   const str = JSON.stringify(data);
 
-  // hash string
-  const hasher = crypto.createHash("SHA256");
-  hasher.update(str).end();
-
-  return hasher.digest("hex");
+  // return hash
+  return SHA256(str).toString();
 }
 
 

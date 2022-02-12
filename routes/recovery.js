@@ -71,7 +71,7 @@ router.post("/reset-password/:userId", (req, res, next) => {
   }
 
   // hash password
-  const salt = bcrypt.genSaltSync(bcryptSalt);
+  const salt = bcrypt.genSaltSync(saltRounds);
   const hashedPwd = bcrypt.hashSync(password, salt);
 
   // update user profile

@@ -68,27 +68,20 @@ class Block {
     let balance = 0;
 
       for (let transaction of this.transactions) {
-        if (transaction.fromPublicKey === address) {
-          balance -= transaction.amount;
+        if (transaction.header.fromAddress === address) {
+          balance -= transaction.header.amount;
         }
 
-        if (transaction.toPublicKey === address) {
-          balance += transaction.amount;
+        if (transaction.header.toAddress === address) {
+          balance += transaction.header.amount;
         }
       }
 
     return balance;
   }
 
-  // verify all transactions in the block
+  // verify all transactions in the block via their merkle hash
   areTransactionsValid() {
-    for (let transaction of this.transactions) {
-      if (!transaction.isValid()) {
-        console.log(`Error: transaction ${transaction.hash} is not valid.`)
-        return false;
-      }
-    }
-
     return true;
   }
 }

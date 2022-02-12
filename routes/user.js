@@ -9,8 +9,6 @@ const saltRounds = 10;
 // database models
 const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
-const Block = require("../models/Block.model");
-const Transaction = require("../models/Transaction.model");
 
 
 // PUT user data
@@ -40,7 +38,7 @@ router.put("/:userId", (req, res, next) => {
   }
 
   // hash password
-  const salt = bcrypt.genSaltSync(bcryptSalt);
+  const salt = bcrypt.genSaltSync(saltRounds);
   const hashedPwd = bcrypt.hashSync(password, salt);
 
   

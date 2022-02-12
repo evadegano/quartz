@@ -1,7 +1,25 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var block_1 = require("./block");
-var transaction_1 = require("./transaction");
+var block_1 = __importDefault(require("./block"));
+var transaction_1 = __importDefault(require("./transaction"));
+// on the blockchain page, display a message with the integrity of the bc
+// return unspent outputs of a wallet
+// # It returns a JSON object with a list "unspent_outputs", containing UTXO, like this:
+// #{      "unspent_outputs":[
+// #   {
+// #     "tx_hash":"ebadfaa92f1fd29e2fe296eda702c48bd11ffd52313e986e99ddad9084062167",
+// #     "tx_index":51919767,
+// #     "tx_output_n": 1,
+// #     "script":"76a9148c7e252f8d64b0b6e313985915110fcfefcf4a2d88ac",
+// #     "value": 8000000,
+// #     "value_hex": "7a1200",
+// #     "confirmations":28691
+// #   },
+// # ...
+// #]}
 var Blockchain = /** @class */ (function () {
     function Blockchain() {
         this.ledger = [this.createGenesisBlock()];
@@ -10,7 +28,7 @@ var Blockchain = /** @class */ (function () {
         this.miningReward = 100;
     }
     Blockchain.prototype.createGenesisBlock = function () {
-        return new block_1.default(null, []);
+        return new block_1.default(null, null, []);
     };
     Object.defineProperty(Blockchain.prototype, "getLastBlock", {
         // get last of the ledger
@@ -23,27 +41,23 @@ var Blockchain = /** @class */ (function () {
     // add transaction to pending transactions
     Blockchain.prototype.addPendingTransaction = function (transaction) {
         // make sure that transaction has
-        if (!transaction.fromPublicKey || !transaction.toPublicKey) {
+        if (!transaction.header.fromAddress || !transaction.header.toAddress) {
             throw new Error("Transaction must include a from and to address.");
-        }
-        // make sure that transaction is valid
-        if (!transaction.isValid()) {
-            throw new Error("Cannot add an invalid transaction to the ledger.");
         }
         // add transaction to pending transactions
         this.pendingTransactions.push(transaction);
-        // update transaction's status
-        transaction.status = "pending";
     };
     Blockchain.prototype.minePendingTransactions = function (miningRewardAddress) {
-        var newBlock = new block_1.default(this.getLastBlock.hash, this.pendingTransactions);
+        // get transactions merkle hashes
+        // hash them into a merkle root
+        var merkleRoot = "to be modified";
+        // create and mine new block
+        var newBlock = new block_1.default(this.getLastBlock.hash, merkleRoot, this.pendingTransactions);
         newBlock.mine(this.difficulty);
         // make sure that the ledger is valid
         if (this.isValid()) {
             // add block to ledger
             this.ledger.push(newBlock);
-            // update transactions status
-            newBlock.transactions.map(function (transaction) { return transaction.status = "mined"; });
             // empty pending transactions array and add reward transaction
             this.pendingTransactions = [
                 new transaction_1.default(this.miningReward, null, miningRewardAddress)
@@ -66,7 +80,7 @@ var Blockchain = /** @class */ (function () {
                 return false;
             }
             // make sure that there is no broken link between blocks
-            if (currentBlock.prevHash !== prevBlock.hash) {
+            if (currentBlock.header.prevHash !== prevBlock.hash) {
                 console.log("Error: block ".concat(prevBlock.hash, " has been tampered with."));
                 return false;
             }

@@ -1,57 +1,77 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var crypto = require("crypto");
+var crypto = __importStar(require("crypto"));
 var Transaction = /** @class */ (function () {
-    function Transaction(amount, fromPublicKey, toPublicKey) {
-        this.timestamps = Date.now();
-        this.amount = amount;
-        this.fromPublicKey = fromPublicKey;
-        this.toPublicKey = toPublicKey;
-    }
-    // hash transaction's content
-    Transaction.prototype.getHash = function () {
-        // convert object to a JSON string for hashing
-        var transacData = {
-            timestamps: this.timestamps,
-            amount: this.amount,
-            fromPublicKey: this.fromPublicKey,
-            toPublicKey: this.toPublicKey,
+    function Transaction(amount, fromAddress, toAddress) {
+        this.header = {
+            amount: amount,
+            fromAddress: fromAddress,
+            toAddress: toAddress,
+            timestamps: Date.now()
         };
-        var str = JSON.stringify(transacData);
-        // hash block
+    }
+    // hash transaction's header
+    Transaction.prototype.getHash = function () {
+        // convert object to a JSON string for hashing    
+        var str = JSON.stringify(this.header);
+        // hash transaction's header
         var hasher = crypto.createHash("SHA256");
         hasher.update(str).end();
         return hasher.digest("hex");
     };
-    Transaction.prototype.signTransaction = function (wallet) {
-        // make sure that the wallet is valid
-        if (wallet.publicKey !== this.fromPublicKey) {
-            throw new Error("You cannot sign transactions from other wallets.");
+    // sign transaction with the sender's private and public keys
+    Transaction.prototype.signTransaction = function (walletAddress, signingKeyPair) {
+        // make sure the public key matches the sender wallet's address
+        if (!this.isSenderValid(signingKeyPair.publicKey, walletAddress)) {
+            throw new Error("This public key doesn't belong to this wallet.");
         }
-        // create signature
-        var sign = crypto.createSign("SHA256");
-        // sign transaction
-        sign.update(JSON.stringify(this)).end();
-        var signature = sign.sign(wallet.privateKey);
-        this.signature = signature;
+        // get transaction's hash
         this.hash = this.getHash();
+        // create signature
+        var signer = crypto.createSign("SHA256");
+        signer.update(this.hash).end();
+        var signature = signer.sign(signingKeyPair.privateKey);
+        this.signature = signature;
     };
-    Transaction.prototype.isValid = function () {
-        var transacData = {
-            timestamps: this.timestamps,
-            amount: this.amount,
-            fromPublicKey: this.fromPublicKey,
-            toPublicKey: this.toPublicKey,
-        };
-        // create transaction verifier
-        var verifier = crypto.createVerify("SHA256");
-        verifier.update(JSON.stringify(transacData));
-        // verify that address and signature are valid
-        var isValid = verifier.verify(this.fromPublicKey, this.signature);
-        if (isValid) {
+    // check whether the sender's public key belongs to their wallet address
+    Transaction.prototype.isSenderValid = function (publicKey, walletAddress) {
+        // hash public key
+        var hasher = crypto.createHash("SHA256");
+        hasher.update(publicKey).end();
+        var hashedKey = hasher.digest("hex");
+        if (hashedKey !== walletAddress)
+            return false;
+        return true;
+    };
+    // check whether the transaction has been signed correctly
+    Transaction.prototype.isSigatureValid = function (publicKey) {
+        // mining rewards
+        if (this.header.fromAddress === null)
             return true;
+        if (!this.signature || this.signature.length === 0) {
+            return false;
         }
-        return false;
+        // check whether the singing key pair is valid
+        return true;
     };
     return Transaction;
 }());

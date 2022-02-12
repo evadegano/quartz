@@ -37,19 +37,12 @@ class Blockchain {
   // add transaction to pending transactions
   addPendingTransaction(transaction: Transaction) {
     // make sure that transaction has
-    if (!transaction.fromPublicKey || !transaction.toPublicKey) {
+    if (!transaction.header.fromAddress || !transaction.header.toAddress) {
       throw new Error("Transaction must include a from and to address.");
-    }
-
-    // make sure that transaction is valid
-    if (!transaction.isValid()) {
-      throw new Error("Cannot add an invalid transaction to the ledger.");
     }
 
     // add transaction to pending transactions
     this.pendingTransactions.push(transaction);
-    // update transaction's status
-    transaction.status = "Awaiting mining";
   }
 
   minePendingTransactions(miningRewardAddress: string) {
@@ -65,9 +58,6 @@ class Blockchain {
     if (this.isValid()) {
       // add block to ledger
       this.ledger.push(newBlock);
-
-      // update transactions status
-      newBlock.transactions.map(transaction => transaction.status = "Mined");
 
       // empty pending transactions array and add reward transaction
       this.pendingTransactions = [

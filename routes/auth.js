@@ -4,7 +4,7 @@ const passport = require("passport");
  
 // package for password encryption
 const bcrypt = require("bcryptjs");
-const bcryptSalt = 10;
+const saltRounds = 10;
 
 // helpers for wallet keys and address
 const genKeys = require("../helpers/keygenerator");
@@ -55,7 +55,7 @@ router.post("/signup", (req, res, next) => {
   })
 
   // else, add user to database
-  const salt = bcrypt.genSaltSync(bcryptSalt);
+  const salt = bcrypt.genSaltSync(saltRounds);
   const hashedPwd = bcrypt.hashSync(password, salt);
 
   const newUser = new User({

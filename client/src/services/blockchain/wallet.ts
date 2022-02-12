@@ -4,12 +4,12 @@ import Transaction from "./transaction";
 
 
 class Wallet {
-  public address: string;
-  public publicKey: string; // to send money
-  public privateKey: string; // to receive money
+  public address: string = this.genAddress();
   public balance: number;
+  public creationDate: number = Date.now();
+  public lastActive: number = Date.now();
 
-  constructor() {
+  genSigningKeys() {
     // digital signature to sign and verify hash
     // used to prevent third party agents from modifying transaction
     const keypair = crypto.generateKeyPairSync("rsa", {
@@ -18,15 +18,25 @@ class Wallet {
       privateKeyEncoding: { type: "pkcs8", format: "pem"},
     });
 
-    this.publicKey = keypair.publicKey;
-    this.privateKey = keypair.privateKey;
+    return keypair;
+  }
+
+  genAddress() {
+    // convert object to a JSON string for hashing
+    const publicKey = this.genSigningKeys().publicKey;
+
+    // hash public key
+    const hasher = crypto.createHash("SHA256");
+    hasher.update(publicKey).end();
+
+    return hasher.digest("hex");
   }
 
   updateBalance() {
-    this.balance = Blockchain.instance.getTotalBalanceOfAddress(this.publicKey);
+    this.balance = Blockchain.instance.getTotalBalanceOfAddress(this.address);
   }
 
-  sendMoney(amount: number, toPublicKey: string) {
+  sendMoney(amount: number, signingKeyPair: any, receiverAddress: string) {
     // update balance
     this.updateBalance();
 
@@ -36,14 +46,17 @@ class Wallet {
     }
 
     // create transaction
-    const transaction = new Transaction(amount, this.publicKey, toPublicKey);
+    const transaction = new Transaction(amount, this.address, receiverAddress);
     // sign transaction
-    transaction.signTransaction(this);
+    transaction.signTransaction(this.address, signingKeyPair);
 
     // add transaction to Ledger if valid
-    if (transaction.isValid()) {
-      Blockchain.instance.addPendingTransaction(transaction);
+    if (!transaction.isSigatureValid(signingKeyPair.publicKey)) {
+      throw new Error("Invalid transaction.")
     }
+    
+    // else, add transaction to the blockchain
+    Blockchain.instance.addPendingTransaction(transaction);
   }
 }
 

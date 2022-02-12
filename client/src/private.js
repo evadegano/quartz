@@ -13,20 +13,27 @@ import WalletDetails from "./wallets/WalletDetails";
 
 
 class Private extends Component {
-  getUserWallet = () => {
-    const userWallet = this.props.wallets.find(wallet => wallet.user_id === this.props.user._id).address;
-    return userWallet;
+  getUserWallets = () => {
+    const userWallets = this.props.wallets.filter(wallet => wallet.user_id === this.props.user._id);
+    return userWallets;
   }
 
   render() {
-    //const userWallet = this.getUserWallet();
+    // let userWallets
+
+    // while (!userWallets) {
+    //   userWallets = this.getUserWallets();
+    //   console.log("yo")
+    // }
+    
+    // console.log("userWallets", userWallets)
 
     return (
       <div>
         <SideNavbar />
 
         <Switch>
-          <Route exact path="/user/:walletId" render={(routerProps) => <Overview {...routerProps} user={this.props.user} transactions={this.props.transactions} />} />
+          <Route exact path="/user/:walletId" render={(routerProps) => <Overview {...routerProps} user={this.props.user} userWallets={""} transactions={this.props.transactions} />} />
           <Route exact path="/user/:walletId/send-coins" render={(routerProps) => <SendCoins {...routerProps} />} />
           <Route exact path="/user/:userId" render={(routerProps) => <Profile {...routerProps} user={this.props.user} />} />
           <Route exact path="/user/blockchain" render={() => <Blockchain blocks={this.props.blocks} />} />

@@ -4,7 +4,6 @@ import TransferBtns from "./TransferBtns";
 import Transactions from "../transactions/Transactions";
 import Balance from "./Balance";
 import MiningStats from "./MiningStats";
-import { getWalletBalance } from "../services/blockchain-service";
 
 
 class Overview extends Component {
@@ -22,7 +21,14 @@ class Overview extends Component {
 
     return (
       <main>
-        <Header title="Good morning!" subtitle={`Account: ${walletAddress}`} userId={this.props.user._id} />
+        <Header title="Good morning!" userId={this.props.user._id} />
+        <div>
+          <h2 className="subtitle">Wallet: {walletAddress}</h2>
+          <select name="wallets">
+            {this.props.userWallets.map(wallet => <option key={wallet} value={wallet}>{wallet}</option>)}
+          </select>
+          <button>ADD WALLET</button>
+        </div>
 
         <div className="columns centered-row-container">
           <div className="column">
