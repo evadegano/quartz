@@ -33,7 +33,7 @@ class Private extends Component {
         <SideNavbar />
 
         <Switch>
-          <Route exact path="/user/:walletId" render={(routerProps) => <Overview {...routerProps} user={this.props.user} userWallets={""} transactions={this.props.transactions} />} />
+          <Route exact path="/user/:walletId" render={(routerProps) => <Overview {...routerProps} user={this.props.user} userWallets={[]} transactions={this.props.transactions} />} />
           <Route exact path="/user/:walletId/send-coins" render={(routerProps) => <SendCoins {...routerProps} />} />
           <Route exact path="/user/:userId" render={(routerProps) => <Profile {...routerProps} user={this.props.user} />} />
           <Route exact path="/user/blockchain" render={() => <Blockchain blocks={this.props.blocks} />} />

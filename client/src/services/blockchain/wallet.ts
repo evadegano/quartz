@@ -31,33 +31,6 @@ class Wallet {
 
     return hasher.digest("hex");
   }
-
-  updateBalance() {
-    this.balance = Blockchain.instance.getTotalBalanceOfAddress(this.address);
-  }
-
-  sendMoney(amount: number, signingKeyPair: any, receiverAddress: string) {
-    // update balance
-    this.updateBalance();
-
-    // make sure the wallet has enough funds
-    if (amount > this.balance) {
-      throw new Error("Not enough funds.");
-    }
-
-    // create transaction
-    const transaction = new Transaction(amount, this.address, receiverAddress);
-    // sign transaction
-    transaction.signTransaction(this.address, signingKeyPair);
-
-    // add transaction to Ledger if valid
-    if (!transaction.isSigatureValid(signingKeyPair.publicKey)) {
-      throw new Error("Invalid transaction.")
-    }
-    
-    // else, add transaction to the blockchain
-    Blockchain.instance.addPendingTransaction(transaction);
-  }
 }
 
 

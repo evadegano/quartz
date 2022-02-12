@@ -103,7 +103,7 @@ class App extends Component {
       <div className="App">
         <Switch>
           <Route exact path="/" render={() => <Homepage />} />
-          <Route path="/auth" render={() => <Auth updateUser={this.updateLoggedInUser} />} />
+          <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
           <Route path="/user" render={() => <Private user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
           <Route path="/legal" component={Legal} />
         </Switch>

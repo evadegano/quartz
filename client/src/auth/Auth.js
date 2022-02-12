@@ -12,8 +12,8 @@ class Auth extends Component {
         <NavbarBrand />
 
         <Switch>
-          <Route path="/auth/login" component={Login} />
-          <Route path="/auth/signup" component={Signup} />
+          <Route path="/auth/login" render={(routerProps) => <Login {...routerProps} />} />
+          <Route path="/auth/signup" render={(routerProps) => <Signup {...routerProps} />} />
         </Switch>
       </div>
   );}

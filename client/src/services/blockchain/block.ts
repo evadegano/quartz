@@ -64,22 +64,6 @@ class Block {
     }
   }
 
-  getBalanceOfAddress(address: string) {
-    let balance = 0;
-
-      for (let transaction of this.transactions) {
-        if (transaction.header.fromAddress === address) {
-          balance -= transaction.header.amount;
-        }
-
-        if (transaction.header.toAddress === address) {
-          balance += transaction.header.amount;
-        }
-      }
-
-    return balance;
-  }
-
   // verify all transactions in the block via their merkle hash
   areTransactionsValid() {
     return true;

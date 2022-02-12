@@ -14,7 +14,6 @@ class Overview extends Component {
 
   render() {
     const walletAddress = this.props.match.params.walletId;
-    // get wallet key from url instead
     const userTransactions = this.filterTransactions(walletAddress);
     // modify function with output and input transactions
     //const userBalance = getWalletBalance(this.props.transactions, this.props.userWallet);

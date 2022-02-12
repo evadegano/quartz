@@ -35,7 +35,7 @@ class Signup extends Component {
           error: ""
         });
 
-        console.log("response ==>", response)
+        console.log("response ==>", response);
 
         // update global user state
         this.props.updateUser(response.newUser);
@@ -44,10 +44,10 @@ class Signup extends Component {
         localStorage.setItem(response.walletAddress, {
           publicKey: response.publicKey,
           privateKey: response.privateKey
-        })
+        });
 
         // redirect user to their dashboard
-        this.props.history.push(`/user/${response.walletAddress}`)
+        this.props.history.push(`/user/${response.walletAddress}`);
       })
       .catch(err => this.setState({ error: err.response.data.message }))
   }

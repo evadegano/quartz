@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsc --target ES5 -w",
-    "ts": "tsc index.ts --target ES5",
+    "dev": "tsc --target ES6 -w",
+    "ts": "tsc index.ts --target ES6",
     "js": "node index.js"
   },
   "keywords": [],

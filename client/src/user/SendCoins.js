@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Gun from  "gun";
-import _ from "lodash";
+import { createTransac } from "../services/blockchain-service";
 
 
 class SendCoins extends Component {
@@ -12,9 +12,8 @@ class SendCoins extends Component {
   }
 
   state = {
-    toPublicKey: "",
+    toAddress: "",
     amount: "",
-    privateKey: "",
     error: "",
     success: ""
   }
@@ -31,25 +30,26 @@ class SendCoins extends Component {
     // prevent page from reloading
     event.preventDefault();
 
-    // post data
-    const { fromPublicKey, toPublicKey, amount } = this.state;
-    const { walletId } = this.props.match.params.walletId;
+    // get data
+    const { toAddress, amount } = this.state;
+    const { walletAddress } = this.props.match.params.walletId;
+    const signingKeyPair = localStorage.getItem(walletAddress);
 
-    const newTransaction = {
-      fromPublicKey,
-      toPublicKey,
-      amount
+    // create new transaction
+    // how can I get the error message?
+    const newTransaction = createTransac(amount, signingKeyPair, walletAddress, toAddress);
+
+    // add transaction to the decentralized database
+    if (newTransaction) {
+      this.transacsRef.set(newTransaction);
     }
-
-    // create transaction
-    this.transacsRef.set(newTransaction);
-
+    
     // reset state
     this.setState({
-      fromPublicKey: "",
-      toPublicKey: "",
+      toAddress: "",
       amount: "",
-      error: ""
+      error: "",
+      success: "Your transaction was sent to the blockchain for validation."
     })
   }
 
@@ -61,16 +61,9 @@ class SendCoins extends Component {
 
           <form className="box s-container" onSubmit={this.handleSubmit}>
             <div className="field">
-              <label className="label">From wallet</label>
-              <div className="control">
-                <input name="fromPublicKey" value={this.state.fromPublicKey} className="input" type="text" placeholder="your wallet address" onChange={this.handleChange} />
-              </div>
-            </div>
-
-            <div className="field">
               <label className="label">To wallet</label>
               <div className="control">
-                <input name="toPublicKey" value={this.state.password} className="input" type="text" placeholder="the wallet you are sending coins to" onChange={this.handleChange} />
+                <input name="toAddress" value={this.state.password} className="input" type="text" placeholder="the wallet you are sending coins to" onChange={this.handleChange} />
               </div>
             </div>
 
@@ -86,6 +79,10 @@ class SendCoins extends Component {
 
           {this.state.error && (
             <div className="error">{this.state.error}</div>
+          )}
+
+          {this.state.success && (
+            <div className="success">{this.state.success}</div>
           )}
 
         </div>

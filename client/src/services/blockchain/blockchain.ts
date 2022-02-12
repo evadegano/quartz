@@ -94,16 +94,6 @@ class Blockchain {
     console.log("Blockchain is valid.");
     return true;
   }
-
-  getTotalBalanceOfAddress(address: string) {
-    let balance = 0;
-
-    for (let block of this.ledger) {
-      balance += block.getBalanceOfAddress(address);
-    }
-
-    return balance;
-  }
 }
 
 

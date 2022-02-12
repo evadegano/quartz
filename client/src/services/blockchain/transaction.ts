@@ -1,4 +1,5 @@
-import * as crypto from "crypto";
+//import * as crypto from "crypto";
+import SHA256 from "crypto-js/sha256";
 
 
 class Transaction {
@@ -10,7 +11,8 @@ class Transaction {
     };
     public merkleHash: string;
     public signature: Buffer;
-    public isConfirmed: boolean;
+    public isValid: boolean = false;
+    public isConfirmed: boolean = false;
     public hash: string;
 
   constructor(amount: number, fromAddress: string, toAddress: string,) 
@@ -26,12 +28,14 @@ class Transaction {
   // hash transaction's header
   getHash() {
     // convert object to a JSON string for hashing    
-    const str = JSON.stringify(this.header);
+    const transacHeader = JSON.stringify(this.header);
     
     // hash transaction's header
-    const hasher = crypto.createHash("SHA256");
-    hasher.update(str).end();
-    return hasher.digest("hex");
+    // const hasher = crypto.createHash("SHA256");
+    // hasher.update(str).end();
+    // return hasher.digest("hex");
+
+    return SHA256(transacHeader).toString();
   }
 
   // sign transaction with the sender's private and public keys
@@ -41,24 +45,34 @@ class Transaction {
       throw new Error("This public key doesn't belong to this wallet.");
     }
 
+    // update transaction status to valid
+    this.isValid = true;
+
     // get transaction's hash
     this.hash = this.getHash();
 
     // create signature
-    const signer = crypto.createSign("SHA256");
-    signer.update(this.hash).end();
+    // const signer = crypto.createSign("SHA256");
+    // signer.update(this.hash).end();
+    // const signature = signer.sign(signingKeyPair.privateKey);
 
-    const signature = signer.sign(signingKeyPair.privateKey);
-    this.signature = signature;
+    const signature = signingKeyPair.sign(this.hash, "base64");
+    this.signature = signature.toDER("hex");
   }
 
   // check whether the sender's public key belongs to their wallet address
   isSenderValid(publicKey: string, walletAddress: string) {
+    // make sure that the key pair is valid: derive public from private key
+    
+    
     // hash public key
-    const hasher = crypto.createHash("SHA256");
-    hasher.update(publicKey).end();
-    const hashedKey = hasher.digest("hex");
+    // const hasher = crypto.createHash("SHA256");
+    // hasher.update(publicKey).end();
+    // const hashedKey = hasher.digest("hex");
 
+    const hashedKey = SHA256(publicKey).toString()
+
+    // compare hashed key and wallet address
     if (hashedKey !== walletAddress) return false;
     return true;
   }
@@ -69,10 +83,9 @@ class Transaction {
     if (this.header.fromAddress === null) return true;
 
     if (!this.signature || this.signature.length === 0) {
+      this.isValid = false;
       return false;
     }
-
-    // check whether the singing key pair is valid
 
     return true;
   }
