@@ -1,4 +1,4 @@
-- User signs up
+- OK | User signs up
   -> OK | Wallet is created
   -> OK | store keys in the local storage
   -> OK | They get their copy of the database
@@ -6,17 +6,22 @@
 - They add QRTZ
   -> NOK (check YT tutorial) | cf Payment Request API
   -> This creates a new unspent TXO
-- They send QRTZ to a Wallet
+- OK | They send QRTZ to a Wallet
   -> OK | This creates a new Transaction
-    -> The unspent TXO is turned into a TXI
-    -> 2 unspent TXO are created
 - The transaction is pending for validation
+  -> NOK | Transactions are validated by the network: right now, by the user themselves
   -> The transaction list is updated in realtime
 - After x minute, all pending transactions are verified and added to a block
 - The block is mined
 - The block is verified
 - The block is added to the blockchain
 - All users' db are updated 
+
+Add:
+- Gun passed as prop from App.js instead of init in each file?
+- Error messages
+- Redirections
+- Other type of transactions that have no sender
 
 
 faster than a blockchain, as secure and distributed

@@ -3,17 +3,17 @@ import SHA256 from "crypto-js/sha256";
 
 
 class Transaction {
-    public header: {
-      amount: number,
-      fromAddress: string,
-      toAddress: string,
-      timestamps: number
-    };
-    public merkleHash: string;
-    public signature: Buffer;
-    public isValid: boolean = false;
-    public isConfirmed: boolean = false;
-    public hash: string;
+  public header: {
+    amount: number,
+    fromAddress: string,
+    toAddress: string,
+    timestamps: number
+  };
+  public merkleHash: string;
+  public signature: Buffer;
+  public isValid: boolean = false;
+  public isConfirmed: boolean = false;
+  public hash: string;
 
   constructor(amount: number, fromAddress: string, toAddress: string,) 
   {
@@ -31,10 +31,6 @@ class Transaction {
     const transacHeader = JSON.stringify(this.header);
     
     // hash transaction's header
-    // const hasher = crypto.createHash("SHA256");
-    // hasher.update(str).end();
-    // return hasher.digest("hex");
-
     return SHA256(transacHeader).toString();
   }
 
@@ -52,10 +48,6 @@ class Transaction {
     this.hash = this.getHash();
 
     // create signature
-    // const signer = crypto.createSign("SHA256");
-    // signer.update(this.hash).end();
-    // const signature = signer.sign(signingKeyPair.privateKey);
-
     const signature = signingKeyPair.sign(this.hash, "base64");
     this.signature = signature.toDER("hex");
   }
@@ -66,10 +58,6 @@ class Transaction {
     
     
     // hash public key
-    // const hasher = crypto.createHash("SHA256");
-    // hasher.update(publicKey).end();
-    // const hashedKey = hasher.digest("hex");
-
     const hashedKey = SHA256(publicKey).toString()
 
     // compare hashed key and wallet address

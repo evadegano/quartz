@@ -24,7 +24,7 @@ function getWalletBalance(walletAddress) {
 }
 
 
-function createTransac(amount, signingKeyPair, senderAddress, receiverAddress) {
+function sendCoins(amount, signingKeyPair, senderAddress, receiverAddress) {
   // make sure this wallet has enough funds
   const walletBalance = getWalletBalance(senderAddress);
   if (walletBalance < amount) {
@@ -44,5 +44,19 @@ function createTransac(amount, signingKeyPair, senderAddress, receiverAddress) {
   return transaction
 }
 
+function getCoins(amount, signingKeyPair, receiverAddress) {
+  // create transaction
+  const transaction = new Transaction(amount, receiverAddress, receiverAddress);
+  // sign transaction
+  transaction.signTransaction(receiverAddress, signingKeyPair);
 
-export { createTransac };
+  // verify signature validity
+  if (!transaction.isSigatureValid(signingKeyPair.publicKey)) {
+    throw new Error("Invalid transaction.");
+  }
+  
+  return transaction
+}
+
+
+export { sendCoins, getCoins };

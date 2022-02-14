@@ -1,14 +1,14 @@
 import { Component } from "react";
 import Gun from  "gun";
-import { createTransac } from "../services/blockchain-service";
+import { sendCoins } from "../services/blockchain-service";
 
 
 class SendCoins extends Component {
   constructor() {
     super();
-      this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
-      window.gun = this.gun; //To have access to gun object in browser console
-      this.transacsRef = this.gun.get("transactions");
+    this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
+    window.gun = this.gun; //To have access to gun object in browser console
+    this.transacsRef = this.gun.get("transactions");
   }
 
   state = {
@@ -32,12 +32,12 @@ class SendCoins extends Component {
 
     // get data
     const { toAddress, amount } = this.state;
-    const { walletAddress } = this.props.match.params.walletId;
+    const walletAddress = this.props.match.params.walletId;
     const signingKeyPair = localStorage.getItem(walletAddress);
 
     // create new transaction
     // how can I get the error message?
-    const newTransaction = createTransac(amount, signingKeyPair, walletAddress, toAddress);
+    const newTransaction = sendCoins(amount, signingKeyPair, walletAddress, toAddress);
 
     // add transaction to the decentralized database
     if (newTransaction) {
@@ -63,7 +63,7 @@ class SendCoins extends Component {
             <div className="field">
               <label className="label">To wallet</label>
               <div className="control">
-                <input name="toAddress" value={this.state.password} className="input" type="text" placeholder="the wallet you are sending coins to" onChange={this.handleChange} />
+                <input name="toAddress" value={this.state.toAddress} className="input" type="text" placeholder="the wallet you are sending coins to" onChange={this.handleChange} />
               </div>
             </div>
 
@@ -74,7 +74,7 @@ class SendCoins extends Component {
               </div>
             </div>
 
-            <button className="button is-primary">Send</button>
+            <button className="button is-primary">SEND</button>
           </form>
 
           {this.state.error && (

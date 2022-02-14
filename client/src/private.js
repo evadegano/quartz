@@ -4,6 +4,7 @@ import SideNavbar from "./navbar/SideNavbar";
 import Overview from './user/Overview';
 import Profile from './user/Profile';
 import SendCoins from "./user/SendCoins";
+import BuyCoins from "./user/BuyCoins";
 import Blockchain from "./blockchain/Blockchain";
 import Transactions from './transactions/Transactions';
 import Blocks from "./blockchain/Blocks";
@@ -35,6 +36,7 @@ class Private extends Component {
         <Switch>
           <Route exact path="/user/:walletId" render={(routerProps) => <Overview {...routerProps} user={this.props.user} userWallets={[]} transactions={this.props.transactions} />} />
           <Route exact path="/user/:walletId/send-coins" render={(routerProps) => <SendCoins {...routerProps} />} />
+          <Route exact path="/user/:walletId/get-coins" render={(routerProps) => <BuyCoins {...routerProps} />} />
           <Route exact path="/user/:userId" render={(routerProps) => <Profile {...routerProps} user={this.props.user} />} />
           <Route exact path="/user/blockchain" render={() => <Blockchain blocks={this.props.blocks} />} />
           <Route exact path="/user/transactions" render={() => <Transactions transactions={this.props.transactions} />} />
