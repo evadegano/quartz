@@ -1,11 +1,10 @@
 import Transaction from "./blockchain/transaction";
 import Gun from  "gun";
+const gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
+let transacsRef = gun.get("transactions");
 
 
 function getWalletBalance(walletAddress) {
-  const gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
-  const transacsRef = gun.get("transactions");
-
   let balance = 0;
 
   transacsRef.map().once(transac => {
@@ -40,8 +39,9 @@ function sendCoins(amount, signingKeyPair, senderAddress, receiverAddress) {
   if (!transaction.isSigatureValid(signingKeyPair.publicKey)) {
     throw new Error("Invalid transaction.");
   }
-  
-  return transaction
+
+  // add transaction to the decentralized database
+  transacsRef.set(transaction);
 }
 
 
@@ -56,8 +56,21 @@ function getCoins(amount, signingKeyPair, receiverAddress) {
     throw new Error("Invalid transaction.");
   }
   
-  return transaction
+  // add transaction to the decentralized database
+  transacsRef.set(transaction);
+}
+
+function mineBlock(transactions) {
+  // see what to do in blockchain class
+
+  
+  transactions.map(tx => {
+    // search for transaction in the database and update status
+    gun.get(tx["_"]["#"]).put({ isConfirmed: true })
+  })
+
+  return;
 }
 
 
-export { getWalletBalance, sendCoins, getCoins };
+export { getWalletBalance, sendCoins, getCoins, mineBlock };

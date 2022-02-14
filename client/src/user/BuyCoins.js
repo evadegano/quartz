@@ -32,20 +32,21 @@ class BuyCoins extends Component {
     const signingKeyPair = localStorage.getItem(walletAddress);
 
     // create new transaction
-    // how can I get the error message?
-    const newTransaction = getCoins(amount, signingKeyPair, walletAddress);
-
-    // add transaction to the decentralized database
-    if (newTransaction) {
-      this.transacsRef.set(newTransaction);
+    try {
+      getCoins(amount, signingKeyPair, walletAddress);
+      this.setState({
+        amount: "",
+        error: "",
+        success: "Your transaction was sent to the blockchain for validation."
+      });
     }
-
-    // reset state
-    this.setState({
-      amount: "",
-      error: "",
-      success: "Your transaction was sent to the blockchain for validation."
-    })
+    catch (err) {
+      this.setState({
+        amount: "",
+        error: err,
+        success: ""
+      });
+    }
   }
 
   render() {

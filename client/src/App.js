@@ -30,27 +30,6 @@ class App extends Component {
     error: ""
   }
 
-  createTransac = () => {
-    const newTransac = {
-      amount: Math.round(Math.random() * 100),
-      fromPublicKey: "Eva",
-      toPublicKey: "Santa"
-    };
-
-    this.transacsRef.set(newTransac);
-
-    const transactionsCopy = [];
-
-    this.transacsRef.map().once(function(transac) {
-      let data = _.pick(transac, ["amount", "fromPublicKey", "toPublicKey"]);
-      transactionsCopy.push(data);
-    })
-
-    this.setState({
-      transactions: transactionsCopy
-    }) 
-  } 
-
   updateLoggedInUser = (userObj) => {
     this.setState({ loggedInUser: userObj })
   }
@@ -73,7 +52,7 @@ class App extends Component {
     let blocksCopy = [];
 
     this.blocksRef.map().once(function(block) {
-      let data = _.pick(block, ["header", "transactionCounter", "miner", "miningReward", "hash"]);
+      let data = _.pick(block, ["#", "header", "transactionCounter", "miner", "miningReward", "hash"]);
       blocksCopy.push(data);
     });
 
@@ -84,7 +63,7 @@ class App extends Component {
     let transactionsCopy = [];
 
     this.transacsRef.map().once(function(transac) {
-      let data = _.pick(transac, ["amount", "fromPublicKey", "toPublicKey"]);
+      let data = _.pick(transac, ["_.#", "amount", "header"]);
       transactionsCopy.push(data);
     });
 
