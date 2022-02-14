@@ -28,7 +28,7 @@ class BuyCoins extends Component {
     event.preventDefault();
 
     const { amount } = this.state;
-    const walletAddress = this.props.match.walletId;
+    const walletAddress = this.props.match.params.walletId;
     const signingKeyPair = localStorage.getItem(walletAddress);
 
     // create new transaction

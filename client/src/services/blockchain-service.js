@@ -44,6 +44,7 @@ function sendCoins(amount, signingKeyPair, senderAddress, receiverAddress) {
   return transaction
 }
 
+
 function getCoins(amount, signingKeyPair, receiverAddress) {
   // create transaction
   const transaction = new Transaction(amount, receiverAddress, receiverAddress);
@@ -59,4 +60,4 @@ function getCoins(amount, signingKeyPair, receiverAddress) {
 }
 
 
-export { sendCoins, getCoins };
+export { getWalletBalance, sendCoins, getCoins };

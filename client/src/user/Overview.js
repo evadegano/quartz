@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { getWalletBalance } from "../services/blockchain-service";
 import Header from "./Header";
 import TransferBtns from "./TransferBtns";
 import Transactions from "../transactions/Transactions";
@@ -7,9 +8,24 @@ import MiningStats from "./MiningStats";
 
 
 class Overview extends Component {
+  state = {
+    balance: ""
+  }
+
+  fetchWalletBalance = () => {
+    const walletAddress = this.props.match.params.walletId;
+    const balance = getWalletBalance(walletAddress);
+
+    this.setState({ balance });
+  }
+
   filterTransactions = (walletKey) => {
     const userTransactions = this.props.transactions.filter(transac => transac.fromPublicKey === walletKey || transac.toPublicKey === walletKey);
     return userTransactions;
+  }
+
+  componentDidMount() {
+    this.fetchWalletBalance();
   }
 
   render() {
@@ -31,7 +47,7 @@ class Overview extends Component {
 
         <div className="columns centered-row-container">
           <div className="column">
-            <Balance balance="" />
+            <Balance balance={this.state.balance} />
             <Transactions transactions={userTransactions} />
           </div>
 

@@ -5,7 +5,6 @@
 - OK | They GET their dashboard with wallet info
 - They add QRTZ
   -> NOK (check YT tutorial) | cf Payment Request API
-  -> This creates a new unspent TXO
 - OK | They send QRTZ to a Wallet
   -> OK | This creates a new Transaction
 - The transaction is pending for validation
