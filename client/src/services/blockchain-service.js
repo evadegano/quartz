@@ -4,7 +4,7 @@ import Gun from  "gun";
 const gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
 let transacsRef = gun.get("transactions");
 let ledgerRef = gun.get("ledger");
-let blocksRef = gun.get("blocks");
+let blocksRef = ledgerRef.get("blocks");
 
 
 function getWalletBalance(walletAddress) {
@@ -106,13 +106,14 @@ function processTx(transactions, miningRewardAddress) {
   // create and mine a block
   const newBlock = new Block()
 
-  // verify block
+  // verify block?
 
   // add block to the blockchain
+  blocksRef.set(newBlock);
 
   // send reward to the miner
 
-  return;
+  return { confirmedTx, rejectedTx };
 }
 
 

@@ -14,6 +14,7 @@
   Independent verification of the new blocks by every node and assembly into a chain
   Independent selection, by every node, of the chain with the most cumulative computation demonstrated through proof of work
 => - When user clicks on a button, all pending transactions are verified and added to a block
+  -> The merkle tree is calculated
 - The block is mined
 - The block is verified
 - The block is added to the blockchain
