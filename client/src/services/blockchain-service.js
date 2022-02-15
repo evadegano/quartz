@@ -1,7 +1,10 @@
-import Transaction from "./blockchain/transaction";
+import Transaction from "./classes/transaction";
+import Block from "./classes/block";
 import Gun from  "gun";
 const gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
 let transacsRef = gun.get("transactions");
+let ledgerRef = gun.get("ledger");
+let blocksRef = gun.get("blocks");
 
 
 function getWalletBalance(walletAddress) {
@@ -60,14 +63,31 @@ function getCoins(amount, signingKeyPair, receiverAddress) {
   transacsRef.set(transaction);
 }
 
-function mineBlock(transactions) {
-  // see what to do in blockchain class
 
-  
+function getMerkleHash(transactions) {
+  return;
+}
+
+
+function mineBlock(transactions, miningRewardAddress) {
+  // verify transactions
+
+  // confirm transactions
   transactions.map(tx => {
-    // search for transaction in the database and update status
-    gun.get(tx["_"]["#"]).put({ isConfirmed: true })
+    // update those transactions' status as confirmed
+    return gun.get(tx["_"]["#"]).put({ isConfirmed: true })
   })
+
+  // build merkle tree
+  const merkleTree = getMerkleHash(transactions);
+
+  // create and mine a block
+
+  // verify block
+
+  // add block to the blockchain
+
+  // send reward to the miner
 
   return;
 }

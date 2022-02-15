@@ -26,11 +26,11 @@ class Blockchain {
   public miningReward: number = 100;
 
   createGenesisBlock () {
-    return new Block(null, null, []);
+    return new Block(null, null, [], this.difficulty);
   }
 
   // get last of the ledger
-  get getLastBlock () {
+  getLastBlock () {
     return this.ledger[this.ledger.length - 1];
   }
 
@@ -51,7 +51,7 @@ class Blockchain {
     // hash them into a merkle root
     const merkleRoot = "to be modified";
     // create and mine new block
-    const newBlock = new Block(this.getLastBlock.hash, merkleRoot, this.pendingTransactions);
+    const newBlock = new Block(this.getLastBlock.hash, merkleRoot, this.pendingTransactions, this.difficulty);
     newBlock.mine(this.difficulty);
 
     // make sure that the ledger is valid

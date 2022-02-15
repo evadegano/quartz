@@ -1,4 +1,5 @@
-import * as crypto from "crypto";
+import SHA256 from "crypto-js/sha256";
+import MD5 from "crypto-js/md5";
 import Transaction from "./transaction"
 
 
@@ -6,6 +7,8 @@ class Block {
   public header: {
     prevHash: string;
     nonce: number;
+    difficulty: number,
+    height: number;
     merkelRoot: string;
     timestamps: number;
   };
@@ -15,10 +18,12 @@ class Block {
   public miningReward: number;
   public hash: string;
   
-  constructor(prevHash: string, merkelRoot: string, transactions: Transaction[]) {
+  constructor(prevHash: string, merkelRoot: string, transactions: Transaction[], difficulty: number) {
     this.header = {
       prevHash: prevHash,
       nonce: Math.round(Math.random() * 999999999),
+      difficulty: difficulty,
+      height: this.calcHeight(),
       merkelRoot: merkelRoot,
       timestamps: Date.now()
     }
@@ -31,13 +36,14 @@ class Block {
   // hash block's content
   getHash() {
     // convert object to a JSON string for hashing
-    const str = JSON.stringify(this.header);
+    const blockHeader = JSON.stringify(this.header);
 
-    // hash block
-    const hasher = crypto.createHash("SHA256");
-    hasher.update(str).end();
+    // hash block's header
+    return SHA256(blockHeader).toString();
+  }
 
-    return hasher.digest("hex");
+  calcHeight() {
+    return 3;
   }
 
   // proof of work
@@ -47,10 +53,9 @@ class Block {
     console.log("⛏ mining...");
 
     while (true) {
-      const hasher = crypto.createHash("MD5"); // use MD5 because 128 bits hence faster to compute than SHA256
-      hasher.update((this.header.nonce).toString()).end();
-
-      const attempt = hasher.digest("hex");
+      // hash nonce
+      const attempt = MD5(String(this.header.nonce)).toString();
+      // solution to match based on difficulty
       const substToMatch = new Array(difficulty).fill(0).join("");
 
       // return solution if found

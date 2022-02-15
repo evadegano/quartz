@@ -9,7 +9,11 @@
   -> OK | This creates a new Transaction
 - The transaction is pending for validation
   -> NOK | Transactions are validated by the network: right now, by the user themselves
-- When user clicks on a button, all pending transactions are verified and added to a block
+  Independent verification of each transaction, by every full node, based on a comprehensive list of criteria
+  Independent aggregation of those transactions into new blocks by mining nodes, coupled with demonstrated computation through a proof-of-work algorithm
+  Independent verification of the new blocks by every node and assembly into a chain
+  Independent selection, by every node, of the chain with the most cumulative computation demonstrated through proof of work
+=> - When user clicks on a button, all pending transactions are verified and added to a block
 - The block is mined
 - The block is verified
 - The block is added to the blockchain

@@ -8,6 +8,7 @@ import Homepage from './homepage/Homepage';
 import Auth from './auth/Auth';
 import Private from './private';
 import Legal from "./legal/Legal";
+import Blockchain from "./services/classes/blockchain";
 import './styles/App.css';
 import "./mystyles.css";
 
@@ -20,6 +21,7 @@ class App extends Component {
       this.transacsRef = this.gun.get("transactions");
       this.blocksRef = this.gun.get("blocks");
       this.walletsRef = this.gun.get("wallets");
+      this.ledgerRef = this.gun.get(Blockchain.instance); // is it the right way to do it?
   }
 
   state = {
