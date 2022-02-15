@@ -21,7 +21,6 @@ import Transaction from "./transaction";
 class Blockchain {
   public static instance = new Blockchain(); // singleton instance
   public ledger: Block[] = [this.createGenesisBlock()];
-  public pendingTransactions: Transaction[] = [];
   public difficulty: number = 4;
   public miningReward: number = 100;
 
@@ -44,27 +43,6 @@ class Blockchain {
   //   // add transaction to pending transactions
   //   this.pendingTransactions.push(transaction);
   // }
-
-  minePendingTransactions(miningRewardAddress: string) {
-    // get transactions merkle hashes
-
-    // hash them into a merkle root
-    const merkleRoot = "to be modified";
-    // create and mine new block
-    const newBlock = new Block(this.getLastBlock.hash, merkleRoot, this.pendingTransactions, this.difficulty);
-    newBlock.mine(this.difficulty);
-
-    // make sure that the ledger is valid
-    if (this.isValid()) {
-      // add block to ledger
-      this.ledger.push(newBlock);
-
-      // empty pending transactions array and add reward transaction
-      this.pendingTransactions = [
-        new Transaction(this.miningReward, null, miningRewardAddress)
-      ];
-    }
-  }
 
   // make sure that the ledger hasn't been modified
   isValid() {

@@ -1,4 +1,3 @@
-//import * as crypto from "crypto";
 import SHA256 from "crypto-js/sha256";
 class Transaction {
     constructor(amount, fromAddress, toAddress) {
@@ -16,9 +15,6 @@ class Transaction {
         // convert object to a JSON string for hashing    
         const transacHeader = JSON.stringify(this.header);
         // hash transaction's header
-        // const hasher = crypto.createHash("SHA256");
-        // hasher.update(str).end();
-        // return hasher.digest("hex");
         return SHA256(transacHeader).toString();
     }
     // sign transaction with the sender's private and public keys
@@ -32,9 +28,6 @@ class Transaction {
         // get transaction's hash
         this.hash = this.getHash();
         // create signature
-        // const signer = crypto.createSign("SHA256");
-        // signer.update(this.hash).end();
-        // const signature = signer.sign(signingKeyPair.privateKey);
         const signature = signingKeyPair.sign(this.hash, "base64");
         this.signature = signature.toDER("hex");
     }
@@ -42,9 +35,6 @@ class Transaction {
     isSenderValid(publicKey, walletAddress) {
         // make sure that the key pair is valid: derive public from private key
         // hash public key
-        // const hasher = crypto.createHash("SHA256");
-        // hasher.update(publicKey).end();
-        // const hashedKey = hasher.digest("hex");
         const hashedKey = SHA256(publicKey).toString();
         // compare hashed key and wallet address
         if (hashedKey !== walletAddress)

@@ -1,5 +1,9 @@
 import SHA256 from "crypto-js/sha256";
-
+enum Status {
+  Pending = "pending",
+  Confirmed = "confirmed",
+  Rejected = "rejected"
+}
 
 class Transaction {
   public header: {
@@ -8,10 +12,9 @@ class Transaction {
     toAddress: string,
     timestamps: number
   };
-  public merkleHash: string;
   public signature: Buffer;
   public isValid: boolean = false;
-  public isConfirmed: boolean = false;
+  public status: Status;
   public hash: string;
 
   constructor(amount: number, fromAddress: string, toAddress: string,) 
@@ -21,7 +24,8 @@ class Transaction {
       fromAddress: fromAddress,
       toAddress: toAddress,
       timestamps: Date.now()
-    }
+    };
+    this.status = Status.Pending;
   }
 
   // hash transaction's header
@@ -39,9 +43,6 @@ class Transaction {
     if (!this.isSenderValid(signingKeyPair.publicKey, walletAddress)) {
       throw new Error("This public key doesn't belong to this wallet.");
     }
-
-    // update transaction status to valid
-    this.isValid = true;
 
     // get transaction's hash
     this.hash = this.getHash();
@@ -65,7 +66,7 @@ class Transaction {
   }
 
   // check whether the transaction has been signed correctly
-  isSigatureValid(publicKey: string) {
+  isSigatureValid() {
     // mining rewards
     if (this.header.fromAddress === null) return true;
 
@@ -74,6 +75,20 @@ class Transaction {
       return false;
     }
 
+    this.isValid = true;
+    return true;
+  }
+
+  // make sure the transaction's data hasen't been tampered with
+  isHeaderValid() {
+    const currentHash = this.getHash();
+
+    if (this.hash !== currentHash) {
+      this.isValid = false;
+      return false;
+    }
+
+    this.isValid = true;
     return true;
   }
 }

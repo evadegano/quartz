@@ -1,18 +1,22 @@
 import { Component } from "react";
 import Transaction from "./Transaction";
-import { mineBlock } from "../services/blockchain-service";
+import { processTx } from "../services/blockchain-service";
 
 
 class Transactions extends Component {
+  state = {
+    message: ""
+  }
+
   filterPendingTxs = () => {
-    return this.props.transactions.filter(tx => !tx.isConfirmed);
+    return this.props.transactions.filter(tx => tx.status === "pending");
   }
 
   handleClick = () => {
     const pendingTxs = this.filterPendingTxs();
 
     try {
-      mineBlock(pendingTxs);
+      processTx(pendingTxs);
     } catch(err) {
       console.log(err);
     }
@@ -33,7 +37,15 @@ class Transactions extends Component {
         })}
         <button onClick={this.handleClick}>MINE</button>
 
-        <Transaction />
+        {this.props.transactions.map(tx => {
+          return <Transaction
+                    key={tx["_"]["#"]}
+                    amount={tx.header.amount} 
+                    from={tx.header.fromAddress} 
+                    to={tx.header.toAddress}
+                    date={tx.header.timestamps}
+                    status={tx.status} />
+        })}
       </div>
     )
   ;}

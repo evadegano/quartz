@@ -1,5 +1,4 @@
 import Block from "./block";
-import Transaction from "./transaction";
 // on the blockchain page, display a message with the integrity of the bc
 // return unspent outputs of a wallet
 // # It returns a JSON object with a list "unspent_outputs", containing UTXO, like this:
@@ -18,43 +17,25 @@ import Transaction from "./transaction";
 class Blockchain {
     constructor() {
         this.ledger = [this.createGenesisBlock()];
-        this.pendingTransactions = [];
         this.difficulty = 4;
         this.miningReward = 100;
     }
     createGenesisBlock() {
-        return new Block(null, null, []);
+        return new Block(null, null, [], this.difficulty);
     }
     // get last of the ledger
-    get getLastBlock() {
+    getLastBlock() {
         return this.ledger[this.ledger.length - 1];
     }
-    // add transaction to pending transactions
-    addPendingTransaction(transaction) {
-        // make sure that transaction has
-        if (!transaction.header.fromAddress || !transaction.header.toAddress) {
-            throw new Error("Transaction must include a from and to address.");
-        }
-        // add transaction to pending transactions
-        this.pendingTransactions.push(transaction);
-    }
-    minePendingTransactions(miningRewardAddress) {
-        // get transactions merkle hashes
-        // hash them into a merkle root
-        const merkleRoot = "to be modified";
-        // create and mine new block
-        const newBlock = new Block(this.getLastBlock.hash, merkleRoot, this.pendingTransactions);
-        newBlock.mine(this.difficulty);
-        // make sure that the ledger is valid
-        if (this.isValid()) {
-            // add block to ledger
-            this.ledger.push(newBlock);
-            // empty pending transactions array and add reward transaction
-            this.pendingTransactions = [
-                new Transaction(this.miningReward, null, miningRewardAddress)
-            ];
-        }
-    }
+    // // add transaction to pending transactions
+    // addPendingTransaction(transaction: Transaction) {
+    //   // make sure that transaction has
+    //   if (!transaction.header.fromAddress || !transaction.header.toAddress) {
+    //     throw new Error("Transaction must include a from and to address.");
+    //   }
+    //   // add transaction to pending transactions
+    //   this.pendingTransactions.push(transaction);
+    // }
     // make sure that the ledger hasn't been modified
     isValid() {
         for (let i = 1; i < this.ledger.length; i++) {
