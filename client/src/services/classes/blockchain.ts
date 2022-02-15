@@ -33,16 +33,6 @@ class Blockchain {
     return this.ledger[this.ledger.length - 1];
   }
 
-  // // add transaction to pending transactions
-  // addPendingTransaction(transaction: Transaction) {
-  //   // make sure that transaction has
-  //   if (!transaction.header.fromAddress || !transaction.header.toAddress) {
-  //     throw new Error("Transaction must include a from and to address.");
-  //   }
-
-  //   // add transaction to pending transactions
-  //   this.pendingTransactions.push(transaction);
-  // }
 
   // make sure that the ledger hasn't been modified
   isValid() {

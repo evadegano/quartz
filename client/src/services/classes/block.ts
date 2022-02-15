@@ -5,32 +5,31 @@ import Transaction from "./transaction"
 
 class Block {
   public header: {
-    prevHash: string;
-    nonce: number;
+    prevHash: string,
+    nonce: number,
+    miner: string,
+    miningReward: number,
     difficulty: number,
-    height: number;
-    merkelRoot: string;
-    timestamps: number;
+    height: number,
+    merkleRoot: string,
+    timestamps: number,
   };
   public transactions: Transaction[];
-  public transactionCounter: number;
-  public miner: string;
-  public miningReward: number;
   public hash: string;
   
-  constructor(prevHash: string, merkelRoot: string, transactions: Transaction[], difficulty: number) {
+  constructor(prevHash: string, merkleRoot: string, transactions: Transaction[], difficulty: number, miningReward: number) {
     this.header = {
       prevHash: prevHash,
       nonce: Math.round(Math.random() * 999999999),
+      miner: null,
+      miningReward: miningReward,
       difficulty: difficulty,
-      height: this.calcHeight(),
-      merkelRoot: merkelRoot,
+      height: transactions.length,
+      merkleRoot: merkleRoot,
       timestamps: Date.now()
     }
     
     this.transactions = transactions;
-    this.transactionCounter = this.transactions.length;
-    this.hash = this.getHash();
   }
 
   // hash block's content
@@ -42,24 +41,25 @@ class Block {
     return SHA256(blockHeader).toString();
   }
 
-  calcHeight() {
-    return 3;
-  }
-
   // proof of work
   // find a number that, when added to the block's nonce
   // produces a hash that starts with a certain amount of 0
-  mine (difficulty: number) {
+  mine(minerWalletAddress: string) {
     console.log("⛏ mining...");
 
     while (true) {
       // hash nonce
       const attempt = MD5(String(this.header.nonce)).toString();
       // solution to match based on difficulty
-      const substToMatch = new Array(difficulty).fill(0).join("");
+      const substToMatch = new Array(this.header.difficulty).fill(0).join("");
 
       // return solution if found
-      if (attempt.substr(0, difficulty) === substToMatch) {
+      if (attempt.substr(0, this.header.difficulty) === substToMatch) {
+        // update miner's wallet address
+        this.header.miner = minerWalletAddress;
+        // calculate block header's hash
+        this.hash = this.getHash();
+
         console.log(`Block mined: ${this.hash}`);
         return;
       }
@@ -70,7 +70,7 @@ class Block {
   }
 
   // verify all transactions in the block via their merkle hash
-  areTransactionsValid() {
+  isValid() {
     return true;
   }
 }

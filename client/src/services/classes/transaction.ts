@@ -17,7 +17,7 @@ class Transaction {
   public status: Status;
   public hash: string;
 
-  constructor(amount: number, fromAddress: string, toAddress: string,) 
+  constructor(amount: number, fromAddress: string, toAddress: string) 
   {
     this.header = {
       amount: amount,
@@ -67,9 +67,6 @@ class Transaction {
 
   // check whether the transaction has been signed correctly
   isSigatureValid() {
-    // mining rewards
-    if (this.header.fromAddress === null) return true;
-
     if (!this.signature || this.signature.length === 0) {
       this.isValid = false;
       return false;
@@ -93,4 +90,31 @@ class Transaction {
   }
 }
 
+
+class RewardTransaction extends Transaction {
+  public header: {
+    amount: number,
+    fromAddress: string,
+    toAddress: string,
+    minedBlock: string,
+    timestamps: number
+  };
+
+  constructor(amount: number, toAddress: string, blockHash: string) {
+    super(amount, null, toAddress);
+    this.header.minedBlock = blockHash;
+  }
+
+  // sign transaction with the sender's private and public keys
+  signTransaction(signingKeyPair: any) {
+    // get transaction's hash
+    this.hash = this.getHash();
+
+    // create signature
+    const signature = signingKeyPair.sign(this.hash, "base64");
+    this.signature = signature.toDER("hex");
+  }
+}
+
 export default Transaction;
+export { RewardTransaction };

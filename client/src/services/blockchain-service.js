@@ -1,9 +1,15 @@
 import Transaction from "./classes/transaction";
+import { RewardTransaction } from "./classes/transaction";
+import Blockchain from "../blockchain/Blockchain";
 import Block from "./classes/block";
 import Gun from  "gun";
+import SHA256 from "crypto-js/sha256";
+import EC from "elliptic";
+const ec  = new EC("secp256k1");
 const gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
 let transacsRef = gun.get("transactions");
-let ledgerRef = gun.get("ledger");
+let blockchainRef = gun.get(Blockchain.instance);
+let ledgerRef = blockchainRef.get("ledger");
 let blocksRef = ledgerRef.get("blocks");
 
 
@@ -53,13 +59,18 @@ function getCoins(amount, signingKeyPair, receiverAddress) {
   transacsRef.set(transaction);
 }
 
+function hashPair(a, b = a) {
+  return SHA256(`${a}${b}`).toString();
+}
 
-function getMerkleHash(transactions) {
-  return;
+function getMerkleRoot(transactions) {
+  if (transactions.length === 1) return transactions.hash;
+
+  
 }
 
 
-function processTx(transactions, miningRewardAddress) {
+function processTx(transactions, minerAddress) {
   let rejectedTx = {};
   let confirmedTx = []
 
@@ -100,20 +111,29 @@ function processTx(transactions, miningRewardAddress) {
     }
   })
 
-  // build merkle tree
-  const merkleTree = getMerkleHash(confirmedTx);
+  // build merkle tree with confirmed transactions
+  const merkleRoot = getMerkleRoot(confirmedTx);
+
+  // get blockchain data
+  const difficulty = blockchainRef.get("difficulty");
+  const miningReward = blockchainRef.get("miningReward");
 
   // create and mine a block
-  const newBlock = new Block()
-
-  // verify block?
+  const newBlock = new Block("pevhash", merkleRoot, confirmedTx, difficulty, miningReward);
+  newBlock.mine(minerAddress);
 
   // add block to the blockchain
   blocksRef.set(newBlock);
 
-  // send reward to the miner
+  // create one-time signing key pair
+  const keypair = ec.genKeyPair();
 
-  return { confirmedTx, rejectedTx };
+  // add reward transaction to the blockchain
+  const rewardTx = new RewardTransaction(miningReward, blockchainRef.miningReward, newBlock.hash);
+  rewardTx.signTransaction(keypair);
+  transacsRef.set(rewardTx);
+
+  return { confirmedTx, rejectedTx, rewardTx };
 }
 
 

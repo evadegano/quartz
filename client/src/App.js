@@ -18,7 +18,8 @@ class App extends Component {
     super();
       this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
       window.gun = this.gun; //To have access to gun object in browser console
-      this.ledgerRef = this.gun.get(Blockchain.instance); // is it the right way to do it?
+      this.blockchainRef = this.gun.get(Blockchain.instance); // is it the right way to do it?
+      this.ledgerRef = this.blockchainRef.get("ledger");
       this.blocksRef = this.ledgerRef.get("blocks");
       this.transacsRef = this.gun.get("transactions");
       this.walletsRef = this.gun.get("wallets");
