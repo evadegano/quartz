@@ -1,5 +1,6 @@
 import { Component } from "react";
 import Wallet from "./Wallet";
+import { UilSearch } from "@iconscout/react-unicons";
 
 
 class Wallets extends Component {
@@ -25,22 +26,28 @@ class Wallets extends Component {
     const filteredWallets = this.filterWallets();
 
     return (
-    <div>
-      <input name="query" format="text" value={this.state.query} onChange={this.handleChange} />
+    <div className="inner-container">
+      
+      <div className="inner-container hollow-table">
+        <div className="search-container">
+          <UilSearch className="search-icon" />
+          <input className="search-bar" name="query" format="text" value={this.state.query} placeholder="Search..." onChange={this.handleChange} />
+        </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Address</th>
-            <th>Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredWallets.map(wallet => {
-            return <Wallet key={wallet.address} address={wallet.address} name={wallet.name} />
-          })}
-        </tbody>
-      </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Address</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredWallets.map(wallet => {
+              return <Wallet key={wallet.address} address={wallet.address} name={wallet.name} />
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
     );
   }
