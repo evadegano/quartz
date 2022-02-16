@@ -22,7 +22,6 @@ class App extends Component {
       this.ledgerRef = this.blockchainRef.get("ledger");
       this.blocksRef = this.ledgerRef.get("blocks");
       this.transacsRef = this.gun.get("transactions");
-      this.walletsRef = this.gun.get("wallets");
   }
 
   state = {
@@ -47,7 +46,7 @@ class App extends Component {
 
   fetchWallets() {
     getWallets()
-      .then(response => this.setState({ wallets: response.data}))
+      .then(response => this.setState({ wallets: response}))
       .catch(err => this.setState({ error: err.response.data.message }) )
   }
 

@@ -4,7 +4,8 @@ import Blockchain from "../blockchain/Blockchain";
 import Block from "./classes/block";
 import Gun from  "gun";
 import SHA256 from "crypto-js/sha256";
-import EC from "elliptic";
+import * as elliptic from "elliptic";
+const EC = elliptic.ec;
 const ec  = new EC("secp256k1");
 const gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
 let transacsRef = gun.get("transactions");
