@@ -1,5 +1,10 @@
 function Wallet(props) {
-  return;
+  return (
+    <tr>
+      <td>{props.address}</td>
+      <td>{props.name}</td>
+    </tr>
+  );
 }
 
 
