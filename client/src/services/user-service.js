@@ -7,7 +7,6 @@ const service = axios.create({
 })
 
 function getWallets() {
-  console.log("init")
   return service.get("/wallets", {}).then(response => response.data);
 }
 

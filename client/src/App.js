@@ -26,6 +26,7 @@ class App extends Component {
 
   state = {
     loggedInUser: "",
+    blockchain: "",
     wallets: [],
     transactions: [],
     blocks: [],
@@ -42,6 +43,12 @@ class App extends Component {
         .then(response => this.setState({ loggedInUser: response }))
         .catch(() => this.setState({ loggedInUser: false }))
     }
+  }
+
+  fetchBlockchainData() {
+    const blockchainData = _.pick(this.blockchainRef["_"]["lex"], ["difficulty", "miningReward", "ledger"]);
+    
+    this.setState({ blockchain: blockchainData });
   }
 
   fetchWallets() {
@@ -75,6 +82,7 @@ class App extends Component {
   componentDidMount() {
     this.fetchUser();
     this.fetchWallets();
+    this.fetchBlockchainData();
     this.fetchBlocks();
     this.fetchTransactions();
   }
