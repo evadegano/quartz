@@ -1,18 +1,18 @@
 import SHA256 from "crypto-js/sha256";
 import MD5 from "crypto-js/md5";
 class Block {
-    constructor(prevHash, merkelRoot, transactions, difficulty) {
+    constructor(prevHash, merkleRoot, transactions, difficulty, miningReward) {
         this.header = {
             prevHash: prevHash,
             nonce: Math.round(Math.random() * 999999999),
+            miner: null,
+            miningReward: miningReward,
             difficulty: difficulty,
-            height: this.calcHeight(),
-            merkelRoot: merkelRoot,
+            height: transactions.length,
+            merkleRoot: merkleRoot,
             timestamps: Date.now()
         };
         this.transactions = transactions;
-        this.transactionCounter = this.transactions.length;
-        this.hash = this.getHash();
     }
     // hash block's content
     getHash() {
@@ -21,21 +21,22 @@ class Block {
         // hash block's header
         return SHA256(blockHeader).toString();
     }
-    calcHeight() {
-        return 3;
-    }
     // proof of work
     // find a number that, when added to the block's nonce
     // produces a hash that starts with a certain amount of 0
-    mine(difficulty) {
+    mine(minerWalletAddress) {
         console.log("⛏ mining...");
         while (true) {
             // hash nonce
             const attempt = MD5(String(this.header.nonce)).toString();
             // solution to match based on difficulty
-            const substToMatch = new Array(difficulty).fill(0).join("");
+            const substToMatch = new Array(this.header.difficulty).fill(0).join("");
             // return solution if found
-            if (attempt.substr(0, difficulty) === substToMatch) {
+            if (attempt.substr(0, this.header.difficulty) === substToMatch) {
+                // update miner's wallet address
+                this.header.miner = minerWalletAddress;
+                // calculate block header's hash
+                this.hash = this.getHash();
                 console.log(`Block mined: ${this.hash}`);
                 return;
             }
@@ -44,7 +45,7 @@ class Block {
         }
     }
     // verify all transactions in the block via their merkle hash
-    areTransactionsValid() {
+    isValid() {
         return true;
     }
 }

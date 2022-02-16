@@ -5,7 +5,8 @@ import { processTx } from "../services/blockchain-service";
 
 class Transactions extends Component {
   state = {
-    message: ""
+    error: "",
+    success: ""
   }
 
   filterPendingTxs = () => {
@@ -16,10 +17,17 @@ class Transactions extends Component {
     const pendingTxs = this.filterPendingTxs();
 
     try {
-      processTx(pendingTxs);
-    } catch(err) {
-      console.log(err);
+      const { confirmedTx, rejectedTx, rewardTx } = processTx(pendingTxs, this.props.userWallets[0].address);
+
+      this.setState({ 
+        error: rejectedTx,
+        success: [confirmedTx, rewardTx] });
+    } 
+    catch(error) {
+      this.setState({ error });
     }
+
+    // faire les message de succès et erreur conditionnels
   }
 
   render() {

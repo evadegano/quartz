@@ -13,8 +13,8 @@
   Independent aggregation of those transactions into new blocks by mining nodes, coupled with demonstrated computation through a proof-of-work algorithm
   Independent verification of the new blocks by every node and assembly into a chain
   Independent selection, by every node, of the chain with the most cumulative computation demonstrated through proof of work
-=> - When user clicks on a button, all pending transactions are verified and added to a block
-  -> The merkle tree is calculated
+- OK | When user clicks on a button, all pending transactions are verified and added to a block
+  -> OK | The merkle tree is calculated
 - OK | The block is mined
 - The block is verified
 - OK | The block is added to the blockchain
@@ -23,7 +23,8 @@
 Add:
 - Gun passed as prop from App.js instead of init in each file?
 - Redirections
-- Other type of transactions that have no sender
+- Top up account
+- Blockchain validation
 
 
 faster than a blockchain, as secure and distributed

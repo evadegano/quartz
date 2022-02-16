@@ -23,7 +23,6 @@ class App extends Component {
       this.blocksRef = this.ledgerRef.get("blocks");
       this.transacsRef = this.gun.get("transactions");
       this.walletsRef = this.gun.get("wallets");
-      
   }
 
   state = {

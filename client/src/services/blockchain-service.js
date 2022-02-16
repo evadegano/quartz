@@ -59,14 +59,38 @@ function getCoins(amount, signingKeyPair, receiverAddress) {
   transacsRef.set(transaction);
 }
 
-function hashPair(a, b = a) {
-  return SHA256(`${a}${b}`).toString();
+function hashInPair(hashArray, output = []) {
+  // if only one element left, hash it with itself and return result
+  if (hashArray.length === 1) {
+    const hash = SHA256(`${hashArray[0]}${hashArray[0]}`).toString();
+    output.push(hash);
+
+    return output;
+  }
+
+  // if two elements left, hash them and return result
+  if (hashArray.length === 2) {
+    const hash = SHA256(`${hashArray[0]}${hashArray[1]}`).toString();
+    output.push(hash);
+
+    return output;
+  }
+
+  // else hash elmements and move on to the next
+  const hash = SHA256(`${hashArray[0]}${hashArray[1]}`).toString();
+  output.push(hash);
+
+  return hashInPair(hashArray.slice(2), output);
 }
 
-function getMerkleRoot(transactions) {
-  if (transactions.length === 1) return transactions.hash;
+function getMerkleRoot(txHashes) {
+  const merkleRoot = hashInPair(txHashes);
 
-  
+  if (merkleRoot.length === 1) {
+    return merkleRoot[0];
+  }
+
+  return getMerkleRoot(merkleRoot);
 }
 
 
@@ -91,49 +115,62 @@ function processTx(transactions, minerAddress) {
     if (!tx.isSignatureValid()) {
       // if error, add it to the rejection object
       rejectedTx[tx.hash].push("Invalid signature.");
+      tx.isValid = false;
     }
 
     // check header's validity
     if (!tx.isHeaderValid()) {
       // if error, add it to the rejection object
       rejectedTx[tx.hash].push("Invalid header.");
+      tx.isValid = false;
     }
-  })
 
-  // update transactions' status
-  transactions.map(tx => {
+    // add valid transactions to the confirmed tx list
     if (tx.isValid) {
-      // if transaction is valid, set status to confirmed
-      gun.get(tx["_"]["#"]).put({ status: "confirmed" });
       confirmedTx.push(tx);
-    } else {
-      gun.get(tx["_"]["#"]).put({ status: "rejected" });
     }
   })
 
   // build merkle tree with confirmed transactions
-  const merkleRoot = getMerkleRoot(confirmedTx);
+  const confirmedTxHashes = confirmedTx.map(tx => tx.hash);
+  const merkleRoot = getMerkleRoot(confirmedTxHashes);
 
   // get blockchain data
   const difficulty = blockchainRef.get("difficulty");
   const miningReward = blockchainRef.get("miningReward");
+  const prevBlockHash = blockchainRef.getLastBlockHash();
 
   // create and mine a block
-  const newBlock = new Block("pevhash", merkleRoot, confirmedTx, difficulty, miningReward);
+  const newBlock = new Block(prevBlockHash, merkleRoot, confirmedTx, difficulty, miningReward);
   newBlock.mine(minerAddress);
 
-  // add block to the blockchain
-  blocksRef.set(newBlock);
+  // if first one to mine, add block to the blockchain
+  if (!blocksRef.get(newBlock)) {
+    // update transactions' status
+    transactions.map(tx => {
+      if (tx.isValid) {
+        // if transaction is valid, set status to confirmed
+        gun.get(tx["_"]["#"]).put({ status: "confirmed" });
+      } else {
+        gun.get(tx["_"]["#"]).put({ status: "rejected" });
+      }
+    });
 
-  // create one-time signing key pair
-  const keypair = ec.genKeyPair();
+    // add new block to the blockchain
+    blocksRef.set(newBlock);
 
-  // add reward transaction to the blockchain
-  const rewardTx = new RewardTransaction(miningReward, blockchainRef.miningReward, newBlock.hash);
-  rewardTx.signTransaction(keypair);
-  transacsRef.set(rewardTx);
+    // create one-time signing key pair
+    const keypair = ec.genKeyPair();
 
-  return { confirmedTx, rejectedTx, rewardTx };
+    // add reward transaction to the blockchain
+    const rewardTx = new RewardTransaction(miningReward, minerAddress, newBlock.hash);
+    rewardTx.signTransaction(keypair);
+    transacsRef.set(rewardTx);
+
+    return { confirmedTx, rejectedTx, rewardTx };
+  }
+
+  throw new Error("Those transactions have been validated by someone else.");
 }
 
 

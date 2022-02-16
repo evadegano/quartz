@@ -1,14 +1,20 @@
 import SHA256 from "crypto-js/sha256";
+var Status;
+(function (Status) {
+    Status["Pending"] = "pending";
+    Status["Confirmed"] = "confirmed";
+    Status["Rejected"] = "rejected";
+})(Status || (Status = {}));
 class Transaction {
     constructor(amount, fromAddress, toAddress) {
         this.isValid = false;
-        this.isConfirmed = false;
         this.header = {
             amount: amount,
             fromAddress: fromAddress,
             toAddress: toAddress,
             timestamps: Date.now()
         };
+        this.status = Status.Pending;
     }
     // hash transaction's header
     getHash() {
@@ -23,8 +29,6 @@ class Transaction {
         if (!this.isSenderValid(signingKeyPair.publicKey, walletAddress)) {
             throw new Error("This public key doesn't belong to this wallet.");
         }
-        // update transaction status to valid
-        this.isValid = true;
         // get transaction's hash
         this.hash = this.getHash();
         // create signature
@@ -42,15 +46,38 @@ class Transaction {
         return true;
     }
     // check whether the transaction has been signed correctly
-    isSigatureValid(publicKey) {
-        // mining rewards
-        if (this.header.fromAddress === null)
-            return true;
+    isSigatureValid() {
         if (!this.signature || this.signature.length === 0) {
             this.isValid = false;
             return false;
         }
+        this.isValid = true;
+        return true;
+    }
+    // make sure the transaction's data hasen't been tampered with
+    isHeaderValid() {
+        const currentHash = this.getHash();
+        if (this.hash !== currentHash) {
+            this.isValid = false;
+            return false;
+        }
+        this.isValid = true;
         return true;
     }
 }
+class RewardTransaction extends Transaction {
+    constructor(amount, toAddress, blockHash) {
+        super(amount, null, toAddress);
+        this.header.minedBlock = blockHash;
+    }
+    // sign transaction with the sender's private and public keys
+    signTransaction(signingKeyPair) {
+        // get transaction's hash
+        this.hash = this.getHash();
+        // create signature
+        const signature = signingKeyPair.sign(this.hash, "base64");
+        this.signature = signature.toDER("hex");
+    }
+}
 export default Transaction;
+export { RewardTransaction };
