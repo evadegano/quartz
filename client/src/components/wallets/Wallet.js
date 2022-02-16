@@ -1,6 +1,6 @@
 function Wallet(props) {
   return (
-    <tr>
+    <tr className="table-row">
       <td>{props.address}</td>
       <td>{props.name}</td>
     </tr>

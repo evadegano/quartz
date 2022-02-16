@@ -1,6 +1,7 @@
 import { Component } from "react";
-import Wallet from "./Wallet";
 import { UilSearch } from "@iconscout/react-unicons";
+import Wallet from "./Wallet";
+import Header from "../user/Header"; 
 
 
 class Wallets extends Component {
@@ -27,6 +28,7 @@ class Wallets extends Component {
 
     return (
     <div className="inner-container">
+      <Header title="Wallets" subtitle="" />
       
       <div className="inner-container hollow-table">
         <div className="search-container">
@@ -48,6 +50,7 @@ class Wallets extends Component {
           </tbody>
         </table>
       </div>
+
     </div>
     );
   }

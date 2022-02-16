@@ -1,6 +1,7 @@
 import { Component } from "react";
 import Transaction from "./Transaction";
 import { processTx } from "../../services/blockchain-service";
+import SideNavbar from "../navbars/SideNavbar";
 
 
 class Transactions extends Component {
@@ -31,10 +32,13 @@ class Transactions extends Component {
   }
 
   render() {
-    const pendingTxs = this.filterPendingTxs();
+    //const pendingTxs = this.filterPendingTxs();
+    const pendingTxs = this.props.transactions;
 
     return (
       <div>
+        <SideNavbar />
+
         {pendingTxs.map(tx => {
           return <Transaction 
                     key={tx["_"]["#"]} 

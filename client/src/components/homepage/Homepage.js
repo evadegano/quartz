@@ -4,7 +4,7 @@ import Footer from "./Footer";
 
 function Homepage() {
   return (
-    <div className="Homepage">
+    <div className="homepage">
       <FullNavbar />
 
       <main>

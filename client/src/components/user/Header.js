@@ -1,7 +1,7 @@
 import { UilSetting, UilBell, UilUser, UilSignout } from "@iconscout/react-unicons";
 import { Link } from "react-router-dom";
 
-
+// make settings menu only appear if user is loggedin
 function Header(props) {
   return (
     <div className="row-container">

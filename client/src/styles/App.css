@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Nunito:wght@200;400;600&display=swap");
 .App {
-  text-align: center; }
+  text-align: center;
+background: #222222; }
 
 .App-logo {
   height: 40vmin;
@@ -29,16 +30,31 @@
   to {
     transform: rotate(360deg); } }
 
+.homepage {
+  background: white;
+}
 .title {
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 500;
   color: #222222; }
-  
+.left-align {
+  text-align: left;
+}
+
+.outer-container {
+  display: flex;
+  padding: 10px;
+  height: 100vh;
+}
 .inner-container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background: white;
+    border-radius: 30px;
+    padding: 30px;
+    flex: 1;
 }
 .search-container {
   display: flex;
@@ -72,4 +88,35 @@
   border: 1px solid #222222;
   border-radius: 30px;
   padding: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.side-nav {
+  height: 100%;
+  width: 250px;
+  text-align: left;
+  padding: 25px;
+}
+.side-nav * {
+  color: white;
+}
+.side-nav ul {
+  margin-top: 70px;
+}
+table {
+  width: 100%;
+}
+table th {
+  padding-bottom: 10px;
+}
+table td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.table-row {
+  border-collapse: separate;
+  padding-top: 20px;
+  border-top: 1px solid rgba(34,34,34, 0.3);
 }

@@ -4,15 +4,19 @@ import { UilCube, UilWallet, UilMinusPath, UilUserArrows, UilQrcodeScan } from "
 
 function SideNavbar() {
   return (
-    <div className="left-col-container">
+    <div className="side-nav">
       <div>
         <img src="/logo.png" alt="Logo" width="30px" />
       </div>
-      <Link to="/user/walletId"><UilWallet size="30" color="#000" />My wallet</Link>
-      <Link to="/user/blockchain"><UilCube size="30" color="#000" />Blockchain</Link>
-      <Link to="/user/blocks"><UilMinusPath size="30" color="#000" />Blocks</Link>
-      <Link to="/user/transactions"><UilUserArrows size="30" color="#000" />Transactions</Link>
-      <Link to="/user/wallets"><UilQrcodeScan size="30" color="#000" />Wallets</Link>
+
+      <ul>
+        <li><Link to="/user/walletId"><UilWallet size="30"/>  My wallet</Link></li>
+        <li><Link to="/blockchain"><UilCube size="30"/>  Blockchain</Link></li>
+        <li><Link to="/blocks"><UilMinusPath size="30"/>  Blocks</Link></li>
+        <li><Link to="/transactions"><UilUserArrows size="30"/>  Transactions</Link></li>
+        <li><Link to="/wallets"><UilQrcodeScan size="30"/>  Wallets</Link></li>
+      </ul>
+      
     </div>
   );
 }

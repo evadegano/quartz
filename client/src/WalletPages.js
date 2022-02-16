@@ -8,7 +8,7 @@ import WalletDetails from "./components/wallets/WalletDetails";
 class WalletPages extends Component {
   render() {
     return (
-      <div>
+      <div className="outer-container">
         <SideNavbar />
 
         <Switch>
