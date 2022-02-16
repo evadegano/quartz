@@ -4,11 +4,15 @@ import { loggedIn } from './services/auth-service';
 import { getWallets } from "./services/user-service";
 import Gun from  "gun";
 import _ from "lodash";
-import Homepage from './homepage/Homepage';
-import Auth from './auth/Auth';
-import Private from './private';
-import Legal from "./legal/Legal";
-import Blockchain from "./services/classes/blockchain";
+import Homepage from './components/homepage/Homepage';
+import Auth from './components/auth/Auth';
+import UserPages from './UserPages';
+import BlockPages from './BlockPages';
+import WalletPages from "./WalletPages";
+import Blockchain from "./components/blockchain/Blockchain";
+import Transactions from './components/transactions/Transactions';
+import Legal from "./components/legal/Legal";
+import BlockchainClass from "./services/classes/blockchain";
 import './styles/App.css';
 import "./mystyles.css";
 
@@ -18,7 +22,7 @@ class App extends Component {
     super();
       this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
       window.gun = this.gun; //To have access to gun object in browser console
-      this.blockchainRef = this.gun.get(Blockchain.instance); // is it the right way to do it?
+      this.blockchainRef = this.gun.get(BlockchainClass.instance); // is it the right way to do it?
       this.ledgerRef = this.blockchainRef.get("ledger");
       this.blocksRef = this.ledgerRef.get("blocks");
       this.transacsRef = this.gun.get("transactions");
@@ -92,9 +96,13 @@ class App extends Component {
       <div className="App">
         <Switch>
           <Route exact path="/" render={() => <Homepage />} />
-          <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
-          <Route path="/user" render={() => <Private user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
           <Route path="/legal" component={Legal} />
+          <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
+          <Route path="/user" render={() => <UserPages  user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
+          <Route path="/blockchain" render={() => <Blockchain blocks={this.props.blocks} />} />
+          <Route path="/transactions" render={() => <Transactions transactions={this.props.transactions} />} />
+          <Route path="/blocks" render={(routerProps) => <BlockPages {...routerProps} blocks={this.state.blocks} />} />
+          <Route path="/wallets" render={(routerProps) => <WalletPages {...routerProps} wallets={this.state.wallets} />} />
         </Switch>
       </div>
   );}

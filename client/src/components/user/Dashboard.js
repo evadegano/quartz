@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { getWalletBalance } from "../services/blockchain-service";
+import { getWalletBalance } from "../../services/blockchain-service";
 import Header from "./Header";
 import TransferBtns from "./TransferBtns";
 import Transactions from "../transactions/Transactions";
@@ -7,7 +7,7 @@ import Balance from "./Balance";
 import MiningStats from "./MiningStats";
 
 
-class Overview extends Component {
+class Dashboard extends Component {
   state = {
     balance: ""
   }
@@ -31,7 +31,6 @@ class Overview extends Component {
   render() {
     const walletAddress = this.props.match.params.walletId;
     const userTransactions = this.filterTransactions(walletAddress);
-    // modify function with output and input transactions
     //const userBalance = getWalletBalance(this.props.transactions, this.props.userWallet);
 
     return (
@@ -62,4 +61,4 @@ class Overview extends Component {
 }
 
 
-export default Overview;
+export default Dashboard;

@@ -1,4 +1,4 @@
-function TransacVolumes(props) {
+function TxVolumes(props) {
   return (
     <div>
       <div>
@@ -18,4 +18,4 @@ function TransacVolumes(props) {
 }
 
 
-export default TransacVolumes;
+export default TxVolumes;

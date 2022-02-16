@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Transaction from "./Transaction";
-import { processTx } from "../services/blockchain-service";
+import { processTx } from "../../services/blockchain-service";
 
 
 class Transactions extends Component {

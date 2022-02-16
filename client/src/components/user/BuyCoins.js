@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { getCoins } from "../services/blockchain-service";
+import { getCoins } from "../../services/blockchain-service";
 import Gun from "gun";
 
 

@@ -1,6 +1,6 @@
 import Transaction from "./classes/transaction";
 import { RewardTransaction } from "./classes/transaction";
-import Blockchain from "../blockchain/Blockchain";
+import Blockchain from "./classes/blockchain";
 import Block from "./classes/block";
 import Gun from  "gun";
 import SHA256 from "crypto-js/sha256";

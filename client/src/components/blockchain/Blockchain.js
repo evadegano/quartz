@@ -2,7 +2,7 @@ import { Link, Switch, Route } from "react-router-dom";
 import { Component } from "react";
 import Header from "../user/Header";
 import Block from "./Block";
-import TransacVolumes from "./TransacVolumes";
+import TxVolumes from "./TxVolumes";
 import BlockchainStats from "./BlockchainStats";
 
 
@@ -14,7 +14,7 @@ class Blockchain extends Component {
 
         <div className="columns centered-row-container">
           <div className="column">
-            <TransacVolumes />
+            <TxVolumes />
           </div>
 
           <div className="column">
