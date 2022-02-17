@@ -1,66 +1,71 @@
 import { Component } from "react";
+import { UilSearch } from "@iconscout/react-unicons";
 import Transaction from "./Transaction";
-import { processTx } from "../../services/blockchain-service";
-import SideNavbar from "../navbars/SideNavbar";
 
 
 class Transactions extends Component {
   state = {
-    error: "",
-    success: ""
+    query: ""
   }
 
-  filterPendingTxs = () => {
-    return this.props.transactions.filter(tx => tx.status === "pending");
+  handleChange = (event) => {
+    const { name, value } = event.target;
+
+    this.setState({
+      [name]: value
+    })
   }
 
-  handleClick = () => {
-    const pendingTxs = this.filterPendingTxs();
+  filterTx = () => {
+    const filteredTx = this.props.transactions.filter(tx => tx.hash.includes(this.state.query) || tx.header.fromAddress.includes(this.state.query) || tx.header.toAddress.includes(this.state.query));
 
-    try {
-      const { confirmedTx, rejectedTx, rewardTx } = processTx(pendingTxs, this.props.userWallets[0].address);
-
-      this.setState({ 
-        error: rejectedTx,
-        success: [confirmedTx, rewardTx] });
-    } 
-    catch(error) {
-      this.setState({ error });
-    }
-
-    // faire les message de succès et erreur conditionnels
+    return filteredTx;
   }
 
   render() {
-    //const pendingTxs = this.filterPendingTxs();
-    const pendingTxs = this.props.transactions;
+    const filteredTx = this.filterTx();
 
     return (
-      <div>
-        <SideNavbar />
+      <div className="inner-container hollow-table">
+        <div className="row-container">
+          <h2>All transactions</h2>
 
-        {pendingTxs.map(tx => {
-          return <Transaction 
-                    key={tx["_"]["#"]} 
-                    amount={tx.header.amount} 
-                    from={tx.header.fromAddress} 
-                    to={tx.header.toAddress} 
-                    date={tx.header.timestamps} />
-        })}
-        <button onClick={this.handleClick}>MINE</button>
+            <div className="search-container">
+            <UilSearch className="search-icon" />
+            <input className="search-bar" name="query" format="text" value={this.state.query} placeholder="Search..." onChange={this.handleChange} />
+          </div>
+        </div>
+        
 
-        {this.props.transactions.map(tx => {
-          return <Transaction
-                    key={tx["_"]["#"]}
-                    amount={tx.header.amount} 
-                    from={tx.header.fromAddress} 
-                    to={tx.header.toAddress}
-                    date={tx.header.timestamps}
-                    status={tx.status} />
-        })}
+        <table>
+          <thead>
+            <tr>
+              <th>Hash</th>
+              <th>Sender</th>
+              <th>Receiver</th>
+              <th>Amount</th>
+              <th>Created</th>
+              <th>Validity</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredTx.map(tx => {
+              return <Transaction 
+                        key={tx.hash} 
+                        hash={tx.hash} 
+                        from={tx.header.fromAddress} 
+                        to={tx.header.toAddress} 
+                        amount={tx.header.amount} 
+                        date={tx.header.timestamps}
+                        isValid={tx.isValid}
+                        status={tx.status}/>
+            })}
+          </tbody>
+        </table>
       </div>
-    )
-  ;}
+    );
+  }
 }
 
 

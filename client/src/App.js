@@ -19,7 +19,7 @@ import Auth from './components/auth/Auth';
 import UserPages from './UserPages';
 import BlockPages from './BlockPages';
 import WalletPages from "./WalletPages";
-import Transactions from './components/transactions/Transactions';
+import TxPages from './TxPages';
 import Legal from "./components/legal/Legal";
 
 
@@ -109,7 +109,7 @@ class App extends Component {
           <Route path="/legal" component={Legal} />
           <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
           <Route path="/user" render={() => <UserPages  user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
-          <Route path="/transactions" render={() => <Transactions transactions={this.props.transactions} />} />
+          <Route path="/transactions" render={() => <TxPages transactions={this.state.transactions} />} />
           <Route path="/blocks" render={(routerProps) => <BlockPages {...routerProps} blockchain={this.state.blockchain} blocks={this.state.blocks} />} />
           <Route path="/wallets" render={(routerProps) => <WalletPages {...routerProps} wallets={this.state.wallets} />} />
         </Switch>

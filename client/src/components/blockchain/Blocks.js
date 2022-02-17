@@ -48,7 +48,12 @@ class Blocks extends Component {
           </thead>
           <tbody>
             {filteredBlocks.map(block => {
-              return <Block key={block.hash} hash={block.hash} prevHash={block.header.prevHash} miner={block.header.miner} height={block.header.height}/>
+              return <Block 
+                        key={block.hash} 
+                        hash={block.hash} 
+                        prevHash={block.header.prevHash} 
+                        miner={block.header.miner} 
+                        height={block.header.height} />
             })}
           </tbody>
         </table>
