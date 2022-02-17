@@ -10,8 +10,16 @@ function getWallets() {
   return service.get("/wallets", {}).then(response => response.data);
 }
 
+function postWallets(userId) {
+  return service.post("/wallets", { userId }).then(response => response.data);
+}
+
+function putWallet(walletId) {
+  return service.put(`/${walletId}`, {}).then(response => response.data);
+}
+
 function updateUser(userId, email, password, passwordConfirm) {
-  return service.put(`/${userId}`, {email, password, passwordConfirm}).then(response => response.data);
+  return service.put(`/${userId}`, { email, password, passwordConfirm }).then(response => response.data);
 }
 
 function deleteUser(userId) {
@@ -19,4 +27,4 @@ function deleteUser(userId) {
 }
 
 
-export { getWallets, updateUser, deleteUser };
+export { getWallets, postWallets, putWallet, updateUser, deleteUser };

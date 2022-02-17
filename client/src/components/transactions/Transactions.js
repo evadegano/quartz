@@ -23,7 +23,8 @@ class Transactions extends Component {
   }
 
   render() {
-    const filteredTx = this.filterTx();
+    //const filteredTx = this.filterTx();
+    const filteredTx = this.props.transactions;
 
     return (
       <div className="inner-container hollow-table">
@@ -50,16 +51,16 @@ class Transactions extends Component {
             </tr>
           </thead>
           <tbody>
-            {filteredTx.map(tx => {
+            {filteredTx.map((tx, idx) => {
               return <Transaction 
-                        key={tx.hash} 
-                        hash={tx.hash} 
+                        key={idx} 
+                        /*hash={tx.hash} 
                         from={tx.header.fromAddress} 
-                        to={tx.header.toAddress} 
-                        amount={tx.header.amount} 
-                        date={tx.header.timestamps}
+                        to={tx.header.toAddress} */
+                        amount={tx.amount} 
+                        /*date={tx.header.timestamps}
                         isValid={tx.isValid}
-                        status={tx.status}/>
+                        status={tx.status}*//>
             })}
           </tbody>
         </table>

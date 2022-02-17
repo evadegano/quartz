@@ -100,34 +100,6 @@ router.post("/signup", (req, res, next) => {
 });
 
 
-// POST wallet 
-// router.post("/wallet", (req, res, next) => {
-//   const { userId } = req.body;
-  
-//   // generate new keypairs
-//   const [ publicKey, privateKey ] = genKeys();
-//   // hash public key into a wallet address
-//   const address = getHash(publicKey);
-
-//   // create new wallet
-//   const newWallet = new Wallet({
-//     user_id: req.user._id,
-//     address,
-//     lastConnection: Date.now()
-//   })
-
-//   newWallet.save()
-//     .then(() => {
-//       res.status(200).json({
-//         walletAddress: newWallet.address,
-//         publicKey,
-//         privateKey
-//       });
-//     })
-//     .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
-// });
-
-
 // POST login page
 router.post("/login", (req, res, next) => {
   
@@ -151,17 +123,20 @@ router.post("/login", (req, res, next) => {
         return;
       }
 
-      Wallet.find({ user_id: user._id }).sort({ lastConnection: "descending"})
-        .then(walletsFromDB => {
-          const walletAddresses = walletsFromDB.map(wallet => wallet.address);
-
-          res.status(200).json({ user, userWallets: walletAddresses });
+      // find user wallet
+      Wallet.findOneAndUpdate(
+        { user_id: user._id },
+        { lastConnection: Date.now() },
+        { new: true }
+        ).sort({ lastConnection: -1 })
+        .then(walletFromDB => {
+          res.status(200).json({ user, walletAddress: walletFromDB.address });
         })
         .catch(() => res.status(500).json({ message: "Something went wrong when retrieving user wallets." }))
-
     })
   })(req, res, next);
 });
+
 
 // GET user is logged in
 router.get("/loggedin", (req, res, next) => {

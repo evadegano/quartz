@@ -145,6 +145,7 @@ li * {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  overflow: scroll;
 }
 .filled-table {
   background: #222222;
@@ -154,6 +155,7 @@ li * {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  overflow: scroll;
 }
 .filled-table * {
   color: white;
@@ -183,6 +185,8 @@ table th {
 table td {
   padding-top: 10px;
   padding-bottom: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .table-row {
   border-collapse: separate;
@@ -207,6 +211,7 @@ table td {
   background: #7c6bfb;
   padding: 10px;
 }
+/*  yellow: */
 .icon {
   width: 30px;
 }

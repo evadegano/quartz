@@ -9,6 +9,8 @@ const saltRounds = 10;
 // database models
 const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
+const { findByIdAndUpdate } = require("../models/User.model");
+const { DESTRUCTION } = require("dns");
 
 
 // PUT user data
@@ -45,13 +47,8 @@ router.put("/:userId", (req, res, next) => {
   // get user by _id and update
   User.findByIdAndUpdate(
     userId, 
-    {
-      email,
-      password: hashedPwd
-    },
-    { 
-      new: true 
-    })
+    { email, password: hashedPwd },
+    { new: true })
     .then((user) => res.status(200).json(user))
     .catch(() => res.status(500).json({ message: "Something went wrong." }))
 });
@@ -93,6 +90,47 @@ router.get("/wallets", (req, res, next) => {
       res.status(500).json({ message: "Something went wrong when retrieving wallets." })
     })
 });
+
+
+// POST wallet 
+router.post("/wallets", (req, res, next) => {
+  const { userId } = req.body;
+  
+  // generate new keypairs
+  const [ publicKey, privateKey ] = genKeys();
+  // hash public key into a wallet address
+  const address = getHash(publicKey);
+
+  // create new wallet
+  const newWallet = new Wallet({
+    user_id: req.user._id,
+    address,
+    lastConnection: Date.now()
+  })
+
+  newWallet.save()
+    .then(() => {
+      res.status(200).json({
+        walletAddress: newWallet.address,
+        publicKey,
+        privateKey
+      });
+    })
+    .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
+});
+
+
+// PUT wallets
+router.put("/:walletId", (req, res, next) => {
+  const { walletId } = req.params.walletId;
+
+  Wallet.findByIdAndUpdate(
+    walletId,
+    { lastConnection: Date.now() },
+    { new: true })
+    .then(walletFromDb => res.status(200).json(walletFromDb.address))
+    .catch(() => res.status(500).json({ message: "Connection to database failed."}))
+})
 
 
 module.exports = router;

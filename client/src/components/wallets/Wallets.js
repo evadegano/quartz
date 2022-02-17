@@ -41,6 +41,8 @@ class Wallets extends Component {
             <tr>
               <th>Address</th>
               <th>Name</th>
+              <th>Balance</th>
+              <th>Blocks mined</th>
             </tr>
           </thead>
           <tbody>

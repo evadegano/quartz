@@ -1,8 +1,31 @@
 import { Component } from "react";
+import { processTx } from "../../services/blockchain-service";
 import Transaction from "./Transaction";
 
 
 class Transactions extends Component {
+  state = {
+    error: "",
+    success: ""
+  };
+
+  processTx = (event) => {
+    try {
+      const { confirmedTx, rejectedTx, rewardTx } = processTx();
+
+      this.setState({
+        error: rejectedTx,
+        success: {
+          confirmedTx,
+          rewardTx
+        }
+      });
+    }
+    catch(error) {
+      this.setState({ error });
+    }
+  };
+
   render() {
     return (
       <div className="pending-tx">
@@ -30,7 +53,7 @@ class Transactions extends Component {
             </tbody>
           </table>
 
-          <button className="main-btn">VERIFY & MINE</button>
+          <button className="main-btn" onClick={this.processTx}>VERIFY & MINE</button>
         </div>
         
       </div>
@@ -38,5 +61,7 @@ class Transactions extends Component {
   }
 }
 
+// add error, success message
+// display something when no pending tx
 
 export default Transactions;

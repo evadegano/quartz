@@ -25,8 +25,10 @@ Add:
 - Redirections
 - Top up account
 - Blockchain validation
-
-=> régler problème de fetching des blocks, ensuite faire page des blocs
+- régler problème de fetching des blocks
+- Loading screens
+- Error / success messages
+- Add names to wallets (reandomly generated)
 
 
 faster than a blockchain, as secure and distributed

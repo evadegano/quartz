@@ -9,7 +9,7 @@ class BlockPages extends Component {
   render() {
     return (
       <div className="outer-container">
-        <SideNavbar />
+        <SideNavbar user={this.props.loggedInUser} />
 
         <Switch>
           <Route exact path="/blocks" render={() => <Blockchain blockchain={this.props.blockchain} blocks={this.props.blocks} />} />

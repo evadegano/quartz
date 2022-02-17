@@ -47,6 +47,11 @@ class App extends Component {
     this.setState({ loggedInUser: userObj })
   }
 
+  getUserWallets = () => {
+    const userWallets = this.state.wallets.filter(wallet => wallet.user_id === this.state.loggedInUser._id);
+    return userWallets;
+  }
+
   fetchUser() {
     if (this.state.loggedInUser === "") {
       loggedIn()
@@ -64,7 +69,7 @@ class App extends Component {
   fetchWallets() {
     getWallets()
       .then(response => this.setState({ wallets: response}))
-      .catch(err => this.setState({ error: err.response.data.message }) )
+      .catch(err => this.setState({ error: err.response.data.message }))
   }
 
   fetchBlocks() {
@@ -102,16 +107,18 @@ class App extends Component {
   }
 
   render() {
+    if (!this.state.blockchain || !this.state.wallets || !this.state.transactions || !this.state.blocks) return <div>Loading...</div>
+
     return (
       <div className="App">
         <Switch>
           <Route exact path="/" render={() => <Homepage />} />
           <Route path="/legal" component={Legal} />
           <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
-          <Route path="/user" render={() => <UserPages  user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
-          <Route path="/transactions" render={() => <TxPages transactions={this.state.transactions} />} />
-          <Route path="/blocks" render={(routerProps) => <BlockPages {...routerProps} blockchain={this.state.blockchain} blocks={this.state.blocks} />} />
-          <Route path="/wallets" render={(routerProps) => <WalletPages {...routerProps} wallets={this.state.wallets} />} />
+          <Route path="/user" render={() => <UserPages  updateUser={this.updateLoggedInUser} user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
+          <Route path="/transactions" render={() => <TxPages user={this.state.loggedInUser} transactions={this.state.transactions} />} />
+          <Route path="/blocks" render={(routerProps) => <BlockPages {...routerProps} user={this.state.loggedInUser} blockchain={this.state.blockchain} blocks={this.state.blocks} />} />
+          <Route path="/wallets" render={(routerProps) => <WalletPages {...routerProps} user={this.state.loggedInUser} wallets={this.state.wallets} />} />
         </Switch>
       </div>
   );}

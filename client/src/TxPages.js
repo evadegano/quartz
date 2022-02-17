@@ -18,7 +18,7 @@ class TxPages extends Component {
 
     return (
       <div className="outer-container">
-        <SideNavbar />
+        <SideNavbar user={this.props.loggedInUser} />
 
         <div className="inner-container">
           <Header title="Transactions" subtitle="" />

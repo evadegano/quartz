@@ -34,13 +34,15 @@ class Login extends Component {
           error: ""
         });
 
-        console.log("response =>", response);
+        // store user data
+        const userData = response.user;
+        userData["activeWallet"] = response.walletAddress;
 
         // update global logged in user state
-        this.props.updateUser(response);
+        this.props.updateUser(userData);
 
         // redirect user to their dashboard
-        this.props.history.push(`/user/${response.userWallets[0]}`);
+        this.props.history.push(`/user/${userData.activeWallet}`);
       })
       .catch(err => this.setState({ error: err.response.data.message }))
   }

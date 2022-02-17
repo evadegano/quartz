@@ -35,19 +35,21 @@ class Signup extends Component {
           error: ""
         });
 
-        console.log("response ==>", response);
+        // store user data
+        const userData = response.newUser;
+        userData["activeWallet"] = response.walletAddress;
 
         // update global user state
-        this.props.updateUser(response.newUser);
+        this.props.updateUser(userData);
 
         // store wallet signing keys in local storage
-        localStorage.setItem(response.walletAddress, {
+        localStorage.setItem(userData.activeWallet, {
           publicKey: response.publicKey,
           privateKey: response.privateKey
         });
 
         // redirect user to their dashboard
-        this.props.history.push(`/user/${response.walletAddress}`);
+        this.props.history.push(`/user/${userData.activeWallet}`);
       })
       .catch(err => this.setState({ error: err.response.data.message }))
   }
