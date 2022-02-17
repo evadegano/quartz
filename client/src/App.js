@@ -70,12 +70,14 @@ class App extends Component {
   fetchBlocks() {
     let blocksCopy = [];
 
-    console.log("ledger =>", this.blockchain.ledger)
+    // console.log("ledger =>", this.blockchainRef.get("ledger"))
 
-    this.blocksRef.map().once(function(block) {
-      let data = _.pick(block);
-      blocksCopy.push(data);
-    });
+    // this.blocksRef.map().once(function(block) {
+    //   let data = _.pick(block);
+    //   blocksCopy.push(data);
+    // });
+
+    this.blockchain.ledger.map(block => blocksCopy.push(block));
 
     this.setState({ blocks: blocksCopy });
   }

@@ -26,6 +26,8 @@ Add:
 - Top up account
 - Blockchain validation
 
+=> régler problème de fetching des blocks, ensuite faire page des blocs
+
 
 faster than a blockchain, as secure and distributed
 
