@@ -27,10 +27,15 @@ class Blocks extends Component {
 
     return (
       <div className="inner-container hollow-table">
-        <div className="search-container">
-          <UilSearch className="search-icon" />
-          <input className="search-bar" name="query" format="text" value={this.state.query} placeholder="Search..." onChange={this.handleChange} />
+        <div className="row-container">
+          <h2>Blocks</h2>
+
+            <div className="search-container">
+            <UilSearch className="search-icon" />
+            <input className="search-bar" name="query" format="text" value={this.state.query} placeholder="Search..." onChange={this.handleChange} />
+          </div>
         </div>
+        
 
         <table>
           <thead>

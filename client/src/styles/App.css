@@ -43,6 +43,10 @@ h3,
 h4 {
   font-family: 'IBM Plex Mono', monospace;
 }
+
+h2 {
+  font-size: 2rem;
+}
 .left-align {
   text-align: left;
 }
@@ -66,7 +70,15 @@ h4 {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  width: 100%;
   column-gap: 40px;
+}
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 40px;
 }
 .stat-container {
   display: flex;
@@ -138,6 +150,7 @@ table {
 }
 table th {
   padding-bottom: 10px;
+  font-weight: 600;
 }
 table td {
   padding-top: 10px;
@@ -147,4 +160,14 @@ table td {
   border-collapse: separate;
   padding-top: 20px;
   border-top: 1px solid rgba(34,34,34, 0.3);
+}
+.settings-btn {
+  background: white;
+  border: none;
+}
+.settings-btn:hover {
+  cursor: pointer;
+}
+#setting-menu {
+  display: none;
 }

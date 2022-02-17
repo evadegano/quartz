@@ -4,7 +4,7 @@ import { UilServer, UilMinusPath } from '@iconscout/react-unicons';
 function BlockchainStats(props) {
   return(
     <div>
-      <h2 className="title">Stats</h2>
+      <h2>Stats</h2>
 
       <div>
         <div className="stat-container">

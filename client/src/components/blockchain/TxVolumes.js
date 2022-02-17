@@ -2,7 +2,7 @@ function TxVolumes(props) {
   return (
     <div>
       <div>
-        <h2 className="title">Transactions</h2>
+        <h2>Transactions</h2>
 
         <div>
           <button>Week</button>
