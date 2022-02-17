@@ -50,7 +50,11 @@ h2 {
 .left-align {
   text-align: left;
 }
-
+li * {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
 .outer-container {
   display: flex;
   padding: 10px;
@@ -145,6 +149,9 @@ h2 {
 .side-nav ul {
   margin-top: 70px;
 }
+.side-nav li {
+  margin-bottom: 25px;
+}
 table {
   width: 100%;
 }
@@ -161,6 +168,11 @@ table td {
   padding-top: 20px;
   border-top: 1px solid rgba(34,34,34, 0.3);
 }
+.settings-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
 .settings-btn {
   background: white;
   border: none;
@@ -168,6 +180,6 @@ table td {
 .settings-btn:hover {
   cursor: pointer;
 }
-#setting-menu {
-  display: none;
+.icon {
+  width: 30px;
 }
