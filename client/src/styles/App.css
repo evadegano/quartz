@@ -204,9 +204,18 @@ table td {
 .main-btn {
   border-radius: 30px;
   border: none;
-  background: #BADEFF;
+  background: #7c6bfb;
   padding: 10px;
 }
 .icon {
   width: 30px;
+}
+.logo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 10px;
+  font-size: 25px;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
 }

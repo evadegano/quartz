@@ -4,8 +4,9 @@ import { Link } from "react-router-dom";
 function SideNavbar() {
   return (
     <div className="side-nav">
-      <div>
-        <img src="/logo.png" alt="Logo" width="30px" />
+      <div className="logo">
+        <img src="/logo-white.png" alt="Logo" width="30px" />
+        Quartz
       </div>
 
       <ul>
