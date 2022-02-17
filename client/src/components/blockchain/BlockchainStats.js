@@ -27,7 +27,7 @@ function BlockchainStats(props) {
           <UilMinusPath size="30"/>
           <div>
             <h3>Blocks</h3>
-            <p>{props.blockchain.ledger.length}</p>
+            <p>{props.blocks}</p>
           </div>
         </div>
       </div>
