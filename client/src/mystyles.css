@@ -721,7 +721,7 @@ fieldset[disabled] .button.is-dark.is-inverted.is-outlined {
   color: #fff; }
 
 .button.is-primary {
-  background-color: #8A4D76;
+  background-color: #7c6bfb;
   border-color: transparent;
   color: #fff; }
 
@@ -2579,6 +2579,9 @@ fieldset[disabled] .select select:hover {
   font-size: 1.5rem; }
 
 .navbar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
   background-color: white;
   min-height: 3.25rem;
   position: relative;

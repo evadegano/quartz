@@ -32,6 +32,16 @@ background: #222222; }
 
 .homepage {
   background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+main {
+  width: 80%;
+}
+section {
+  margin-top: 100px;
 }
 .pending-tx {
   width: 100%;
@@ -86,6 +96,9 @@ li * {
   width: 100%;
   column-gap: 40px;
 }
+.homepage .row-container {
+  column-gap: 80px;
+}
 .header-container {
   display: flex;
   justify-content: space-between;
@@ -117,6 +130,9 @@ li * {
   border-radius: 30px;
   width: 300px;
   margin-bottom: 30px;
+}
+.column {
+  flex: 1;
 }
 .search-bar {
   background: #F2F5FA;
