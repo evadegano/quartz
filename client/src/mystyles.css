@@ -1378,7 +1378,8 @@ fieldset[disabled] .button {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start; }
+  justify-content: space-between;
+column-gap: 10px; }
 
 .buttons .button {
   margin-bottom: 0.5rem; }

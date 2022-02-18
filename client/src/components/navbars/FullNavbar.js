@@ -14,11 +14,11 @@ function FullNavbar() {
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">
-              <NavLink to="/auth/login" className="button is-light">
+              <NavLink to="/auth/login" className="login-btn">
                 Log in
               </NavLink>
 
-              <NavLink to="/auth/signup" className="button is-primary">
+              <NavLink to="/auth/signup" className="signup-btn">
                 <strong>Sign up</strong>
               </NavLink>
             </div>
