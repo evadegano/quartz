@@ -38,14 +38,6 @@ router.post("/request", (req, res, next) => {
 })
 
 
-// get reset-password route
-router.get("/reset-password/:userId", (req, res, next) => {
-  const userId = req.params.userId;
-
-  res.status(200).json({ userId });
-})
-
-
 // post reset-password route
 router.post("/reset-password/:userId", (req, res, next) => {
   const userId = req.params.userId;

@@ -20,6 +20,8 @@ import UserPages from './UserPages';
 import BlockPages from './BlockPages';
 import WalletPages from "./WalletPages";
 import TxPages from './TxPages';
+import ResetRequest from "./components/recovery/reset-request";
+import ResetPwd from "./components/recovery/reset-pwd";
 
 
 class App extends Component {
@@ -117,6 +119,8 @@ class App extends Component {
           <Route path="/transactions" render={() => <TxPages user={this.state.loggedInUser} transactions={this.state.transactions} />} />
           <Route path="/blocks" render={(routerProps) => <BlockPages {...routerProps} user={this.state.loggedInUser} blockchain={this.state.blockchain} blocks={this.state.blocks} />} />
           <Route path="/wallets" render={(routerProps) => <WalletPages {...routerProps} user={this.state.loggedInUser} wallets={this.state.wallets} />} />
+          <Route path="/request-reset" component={ResetRequest} />
+          <Route path="/reset-password/:userId" component={ResetPwd} />
         </Switch>
       </div>
   );}

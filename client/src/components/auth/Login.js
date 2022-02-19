@@ -66,7 +66,7 @@ class Login extends Component {
               <div className="field">
                 <label className="label">Email</label>
                 <div className="control">
-                  <input name="email" value={this.state.email} className="input" type="email" placeholder="e.g. alex@example.com" onChange={this.handleChange} />
+                  <input name="email" value={this.state.email} className="input" type="email" placeholder="e.g. rhendricks@piedpiper.com" onChange={this.handleChange} />
                 </div>
               </div>
 
@@ -77,14 +77,14 @@ class Login extends Component {
                 </div>
               </div>
 
-              <button className="signup-btn">LOG IN</button>
+              <button className="signup-btn" type="submit">LOG IN</button>
             </form>
 
             {this.state.error && (
               <div className="error">{this.state.error}</div>
             )}
 
-            <Link to="" >I forgot my password</Link>
+            <Link to="/recovery/request" >I forgot my password</Link>
           </div>
         </div>
       </div>

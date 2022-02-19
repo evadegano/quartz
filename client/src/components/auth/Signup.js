@@ -76,7 +76,7 @@ class Signup extends Component {
               <div className="field">
                 <label className="label">Email</label>
                 <div className="control">
-                  <input name="email" value={this.state.email} className="input" type="email" placeholder="e.g. alex@example.com" onChange={this.handleChange} />
+                  <input name="email" value={this.state.email} className="input" type="email" placeholder="e.g. rhendricks@piedpiper.com" onChange={this.handleChange} />
                 </div>
               </div>
 
@@ -103,8 +103,8 @@ class Signup extends Component {
                 </div>
               </div>
 
-              <button className="signup-btn">SIGN UP</button>
-              <p className="secondary-txt">By signing up, you agree to our <Link to="#">Terms and Services</Link>.</p>
+              <button className="signup-btn" type="submit">SIGN UP</button>
+              <p className="secondary-txt">By signing up, you agree to our <Link to="#">Terms and Service</Link>.</p>
             </form>
 
             {this.state.error && <div className="error">{this.state.error}</div>}
