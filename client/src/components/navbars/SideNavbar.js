@@ -10,7 +10,7 @@ function SideNavbar(props) {
       </div>
 
       <ul>
-        <li><Link to={`/user/${props.loggedInUser.activeWallet}`}><img className="icon" src="/icons/qr-code.png" alt="qr code icon" />My wallet</Link></li>
+        <li><Link to={`/user/${props.user.activeWallet}`}><img className="icon" src="/icons/qr-code.png" alt="qr code icon" />My wallet</Link></li>
         <li><Link to="/blocks"><img className="icon" src="/icons/blockchain.png" alt="blocks icon" />Blockchain</Link></li>
         <li><Link to="/transactions"><img className="icon" src="/icons/shuffle.png" alt="shuffle icon" />Transactions</Link></li>
         <li><Link to="/wallets"><img className="icon" src="/icons/wallet.png" alt="wallet icon" />Wallets</Link></li>

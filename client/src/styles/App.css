@@ -166,7 +166,6 @@ li * {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 40px;
 }
 .homepage .row-container,
 .homepage .header-container {
@@ -300,9 +299,9 @@ table td {
   cursor: pointer;
 }
 .main-btn {
-  border-radius: 30px;
+  border-radius: 4px;
   border: none;
-  background: #7c6bfb;
+  background: #FF8300;
   padding: 10px;
 }
 .signup-btn {

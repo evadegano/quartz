@@ -119,11 +119,11 @@ router.post("/login", (req, res, next) => {
     // save user in session
     req.login(user, (err) => {
       if (err) {
-        res.status(500).json({ message: "Something went wrong when saving session." });
+        res.status(500).json({ message: "Something went wrong when saving your session." });
         return;
       }
 
-      // find user wallet
+      // find user's active wallet
       Wallet.findOneAndUpdate(
         { user_id: user._id },
         { lastConnection: Date.now() },
@@ -142,12 +142,22 @@ router.post("/login", (req, res, next) => {
 router.get("/loggedin", (req, res, next) => {
   // return user if loggin
   if (req.user) {
-    res.status(200).json(req.user);
-    return
+    // find user's active wallet
+    Wallet.findOneAndUpdate(
+      { user_id: req.user._id },
+      { lastConnection: Date.now() },
+      { new: true }
+      ).sort({ lastConnection: -1 })
+      .then(walletFromDB => {
+        res.status(200).json({ user: req.user, walletAddress: walletFromDB.address });
+      })
+      .catch(() => res.status(500).json({ message: "Something went wrong when retrieving your wallet." }))
   }
 
-  // else return error
-  res.status(403).json({ message: "Unauthorized" });
+  else {
+    // else return error
+    res.status(403).json({ message: "Unauthorized" });
+  }
 });
 
 

@@ -18,7 +18,7 @@ class UserPages extends Component {
 
     return (
       <div>
-        <SideNavbar user={this.props.loggedInUser} />
+        <SideNavbar user={this.props.user} />
 
         <Switch>
           <Route exact path="/user/:walletId" render={(routerProps) => <Dashboard {...routerProps} updateUser={this.props.updateUser} user={this.props.user} userWallets={userWallets} transactions={this.props.transactions} />} />

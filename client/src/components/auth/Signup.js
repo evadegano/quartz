@@ -54,7 +54,14 @@ class Signup extends Component {
         // redirect user to their dashboard
         this.props.history.push(`/user/${userData.activeWallet}`);
       })
-      .catch(err => this.setState({ error: err.response.data.message }))
+      .catch(err => {
+        console.log(err);
+
+        if (err.response.data.message) {
+          this.setState({ error: err.response.data.message });
+        } else {
+          this.setState({ error: err.message });
+        }})
   }
 
   render() {

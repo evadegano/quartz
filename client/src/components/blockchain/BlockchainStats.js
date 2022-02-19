@@ -16,7 +16,7 @@ function BlockchainStats(props) {
         </div>
         
         <div className="stat-container">
-          <img className="icon" src="/logo.png" alt="Quartz logo" />
+          <img className="icon" src="/logo-bold-line.png" alt="Quartz logo" />
           <div>
             <h3>Migning reward</h3>
             <p>{props.blockchain.miningReward} QRTZ</p>

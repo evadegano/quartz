@@ -56,8 +56,15 @@ class App extends Component {
   fetchUser() {
     if (this.state.loggedInUser === "") {
       loggedIn()
-        .then(response => this.setState({ loggedInUser: response }))
-        .catch(() => this.setState({ loggedInUser: false }))
+        .then(response => {
+          // store user data
+          const userData = response.user;
+          userData["activeWallet"] = response.walletAddress;
+
+          // update state
+          this.setState({ loggedInUser: userData })
+        })
+        .catch((err) => this.setState({ loggedInUser: false }))
     }
   }
 
@@ -70,7 +77,14 @@ class App extends Component {
   fetchWallets() {
     getWallets()
       .then(response => this.setState({ wallets: response}))
-      .catch(err => this.setState({ error: err.response.data.message }))
+      .catch(err => {
+        console.log(err);
+
+        if (err.response.data.message) {
+          this.setState({ error: err.response.data.message });
+        } else {
+          this.setState({ error: err.message });
+      }})
   }
 
   fetchBlocks() {

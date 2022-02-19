@@ -15,7 +15,7 @@ function login(email, password) {
 }
 
 function loggedIn() {
-  return service.get("/loggedin").then(response => response.data);
+  return service.get("/loggedin", {}).then(response => response.data);
 }
 
 function logout() {

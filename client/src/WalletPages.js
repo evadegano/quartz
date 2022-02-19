@@ -9,7 +9,7 @@ class WalletPages extends Component {
   render() {
     return (
       <div className="outer-container">
-        <SideNavbar user={this.props.loggedInUser} />
+        <SideNavbar user={this.props.user} />
 
         <Switch>
           <Route exact path="/wallets" render={() => <Wallets wallets={this.props.wallets} />} />
