@@ -20,7 +20,6 @@ import UserPages from './UserPages';
 import BlockPages from './BlockPages';
 import WalletPages from "./WalletPages";
 import TxPages from './TxPages';
-import Legal from "./components/legal/Legal";
 
 
 class App extends Component {
@@ -113,7 +112,6 @@ class App extends Component {
       <div className="App">
         <Switch>
           <Route exact path="/" render={() => <Homepage />} />
-          <Route path="/legal" component={Legal} />
           <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
           <Route path="/user" render={() => <UserPages  updateUser={this.updateLoggedInUser} user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
           <Route path="/transactions" render={() => <TxPages user={this.state.loggedInUser} transactions={this.state.transactions} />} />

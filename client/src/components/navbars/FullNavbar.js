@@ -4,11 +4,10 @@ import { NavLink } from "react-router-dom";
 function FullNavbar() {
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
-      <div className="navbar-brand">
-        <NavLink to="/" className="navbar-item">
-          <img src="/logo.png" alt="Logo" /> Quartz
+        <NavLink to="/" className="navbar-brand">
+          <img src="/logo.png" alt="Logo" height="70px"/>
+          <span>Quartz</span>
         </NavLink>
-      </div>
 
       <div id="navbarBasicExample" className="navbar-menu">
         <div className="navbar-end">

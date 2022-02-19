@@ -5,7 +5,7 @@ function Footer() {
   return (
     <footer className="footer">
         <div>
-          @2022 Quartz
+        ©2022 Quartz
         </div>
 
         <div className="footer-menu">

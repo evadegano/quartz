@@ -154,11 +154,6 @@ html {
 *, *::before, *::after {
   box-sizing: inherit; }
 
-img,
-video {
-  height: auto;
-  max-width: 100%; }
-
 iframe {
   border: 0; }
 
@@ -238,10 +233,6 @@ hr {
   display: block;
   height: 2px;
   margin: 1.5rem 0; }
-
-img {
-  height: auto;
-  max-width: 100%; }
 
 input[type="checkbox"],
 input[type="radio"] {
@@ -1386,9 +1377,6 @@ column-gap: 10px; }
 
 .buttons .button:not(:last-child):not(.is-fullwidth) {
   margin-right: 0.5rem; }
-
-.buttons:last-child {
-  margin-bottom: -0.5rem; }
 
 .buttons:not(:last-child) {
   margin-bottom: 1rem; }
@@ -3132,10 +3120,9 @@ body.has-navbar-fixed-bottom {
 
 .navbar-brand,
 .navbar-tabs {
-  align-items: stretch;
+  align-items: center;
   display: flex;
-  flex-shrink: 0;
-  min-height: 3.25rem; }
+  flex-shrink: 0; }
 
 .navbar-brand a.navbar-item:focus, .navbar-brand a.navbar-item:hover {
   background-color: transparent; }
@@ -3196,7 +3183,6 @@ body.has-navbar-fixed-bottom {
   color: #222222;
   display: block;
   line-height: 1.5;
-  padding: 0.5rem 0.75rem;
   position: relative; }
 
 .navbar-item .icon:only-child,
