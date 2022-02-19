@@ -49,29 +49,43 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
+      <div className="auth-page">
         <div className="centered-col-container">
           <h1 className="title">Log in</h1>
 
-          <form className="box s-container" onSubmit={this.handleSubmit}>
-            <div className="field">
-              <label className="label">Email</label>
-              <div className="control">
-                <input name="email" value={this.state.email} className="input" type="email" placeholder="e.g. alex@example.com" onChange={this.handleChange} />
-              </div>
+          <div className="auth-container">
+            <Link className="oAuth-btn" to="/auth/google">
+              <img src="https://d3ptyyxy2at9ui.cloudfront.net/google-32ae27.svg" alt="Google logo"/>Log in with Google
+            </Link>
+
+            <div className="line-separator">
+              <div>OR</div>
             </div>
 
-            <div className="field">
-              <label className="label">Password</label>
-              <div className="control">
-                <input name="password" value={this.state.password} className="input" type="password" placeholder="********" onChange={this.handleChange} />
+            <form onSubmit={this.handleSubmit}>
+              <div className="field">
+                <label className="label">Email</label>
+                <div className="control">
+                  <input name="email" value={this.state.email} className="input" type="email" placeholder="e.g. alex@example.com" onChange={this.handleChange} />
+                </div>
               </div>
-            </div>
 
-            <button className="button is-primary">Log in</button>
-          </form>
+              <div className="field">
+                <label className="label">Password</label>
+                <div className="control">
+                  <input name="password" value={this.state.password} className="input" type="password" placeholder="********" onChange={this.handleChange} />
+                </div>
+              </div>
 
-          <Link to="" >I forgot my password</Link>
+              <button className="signup-btn">LOG IN</button>
+            </form>
+
+            {this.state.error && (
+              <div className="error">{this.state.error}</div>
+            )}
+
+            <Link to="" >I forgot my password</Link>
+          </div>
         </div>
       </div>
     );

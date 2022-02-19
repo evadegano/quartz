@@ -39,7 +39,7 @@ function Homepage() {
               <h1 className="title">Meet the future of banking</h1>
               <p>Quartz is a decentralized banking system that allows anyone to make fast and secure transactions. 
                 <br/>While it is built like a blockchain, Quartz stores its data on a graph database that is distributed among all users.
-                <br/>No need to download a whole copy of the blockchain. Every user stores part of the data on their own cloud database and can validate and mine blocks if they want to. 
+                <br/>No need to download a whole copy of the blockchain. Every user stores part of the data and can validate and mine blocks if they want to. 
                 
 
                 <br/><span className="text-highlight">By combining the power of modern databases with the integrity of blockchains, Quartz offers a way to securely make transactions while still providing easy ways to query the data.</span>
@@ -90,15 +90,9 @@ function Homepage() {
         </section>
 
         <section>
-          <div className="columns">
-            <div className="column">
-              illustration
-            </div>
-
-            <div className="column">
-              <h1 className="title">The best of blockchains and databases</h1>
-              <p>Quartz is a digital stablecoin that allows you too</p>
-            </div>
+          <div>
+            <h1 className="title">The best of blockchains and databases</h1>
+            <p>Quartz is a digital stablecoin that allows you too</p>
           </div>
         </section>
       </main>
