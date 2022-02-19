@@ -132,6 +132,10 @@ li * {
   align-items: center;
   column-gap: 10px;
 }
+.secondary-txt {
+  margin-top: 10px;
+  color: #AAAAAA;
+}
 
 /* Containers */
 .outer-container {
@@ -307,6 +311,9 @@ table td {
   color: white;
   padding: 10px 20px;
 }
+.auth-container .signup-btn {
+  margin-top: 10px;
+}
 .login-btn {
   border: 1px solid #222222;
   background: none;
@@ -326,6 +333,33 @@ table td {
   border-radius: 4px;
 }
 
+/* Forms */
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+.tooltiptext {
+  width: 200px;
+  background-color: #222222;
+  color: white;
+  text-align: left;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  top: -110%;
+  left: 110%;
+}
+.tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #222222 transparent transparent;
+}
+
 /* Images */
 /*  yellow: */
 .icon {
@@ -340,7 +374,7 @@ table td {
   font-weight: 600;
   font-family: 'IBM Plex Mono', monospace;
 }
-svg * {
+.animated-svg * {
   stroke-dasharray: 1500;
   stroke-dashoffset: 1500;
   fill-opacity: 0;

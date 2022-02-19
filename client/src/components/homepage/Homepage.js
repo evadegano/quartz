@@ -47,7 +47,7 @@ function Homepage() {
             </div>
 
             <div className="column">
-              <svg width="400" height="433" viewBox="0 0 560 433" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="animated-svg" width="400" height="433" viewBox="0 0 560 433" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle ref={ill1Circ1} cx="278.5" cy="216.5" r="214" stroke="#222222" strokeWidth="3"/>
                 <path ref={ill1Path1} d="M281 2C133.019 98.5499 114.584 318.027 281 431" stroke="#222222" strokeWidth="3"/>
                 <path ref={ill1Path2} d="M281 2C428.981 98.5499 447.416 318.027 281 431" stroke="#222222" strokeWidth="3"/>

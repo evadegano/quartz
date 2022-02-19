@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 import { signup } from "../../services/auth-service";
+import { UilInfoCircle } from '@iconscout/react-unicons'
 
 
 class Signup extends Component {
@@ -8,7 +9,8 @@ class Signup extends Component {
     email: "",
     password: "",
     passwordConfirm: "",
-    error: ""
+    error: "",
+    displayInfo: false
   }
 
   handleChange = (event) => {
@@ -79,11 +81,19 @@ class Signup extends Component {
               </div>
 
               <div className="field">
-                <label className="label">Password</label>
+                <label className="label tooltip">
+                  <span>Password</span> 
+
+                  <UilInfoCircle 
+                    size="20" 
+                    onMouseEnter={() => this.setState({ displayInfo: true })}
+                    onMouseLeave={() => this.setState({ displayInfo: false })} />
+                  
+                  {this.state.displayInfo && <span className="tooltiptext">Your password must contain at least 8 characters, including one cap letter, one number and one special character.</span>}
+                </label>
                 <div className="control">
                   <input name="password" value={this.state.password} className="input" type="password" placeholder="********" onChange={this.handleChange} />
                 </div>
-                <p>Your password must contain at least 8 characters, including one cap letter, one number and one special character.</p>
               </div>
 
               <div className="field">
@@ -94,12 +104,10 @@ class Signup extends Component {
               </div>
 
               <button className="signup-btn">SIGN UP</button>
+              <p className="secondary-txt">By signing up, you agree to our <Link to="#">Terms and Services</Link>.</p>
             </form>
 
-            {this.state.error && (
-              <div className="error">{this.state.error}</div>
-            )}
-
+            {this.state.error && <div className="error">{this.state.error}</div>}
           </div>
         </div>
       </div>
