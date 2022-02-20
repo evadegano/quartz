@@ -35,20 +35,22 @@ class Transactions extends Component {
           <table>
             <thead>
               <tr>
-                <th>Sender</th>
-                <th>Receiver</th>
+                <th>From</th>
+                <th>To</th>
                 <th>Amount</th>
-                <th>Created</th>
+                <th>Date</th>
               </tr>
             </thead>
             <tbody>
               {this.props.pendingTx.map(tx => {
-                return <Transaction 
-                          key={tx.hash} 
-                          from={tx.header.fromAddress} 
-                          to={tx.header.toAddress} 
-                          amount={tx.header.amount}
-                          date={tx.header.timestamps}/>
+                return (
+                  <tr key={tx.hash}>
+                    <td className="trunc-txt">{tx.header.fromAddress}</td>
+                    <td className="trunc-txt">{tx.header.toAddress}</td>
+                    <td>{tx.header.amount}</td>
+                    <td>{tx.header.timestamps}</td>
+                  </tr>
+                )
               })}
             </tbody>
           </table>

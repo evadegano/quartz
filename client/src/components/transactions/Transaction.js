@@ -21,7 +21,7 @@ class Transaction extends Component {
         </div>
 
         <div className="table-col">
-          <div>Date: {this.props.date}</div>
+          <div><b>Date:</b> {this.props.date}</div>
           <div><b>Amount:</b> {this.props.amount} QRTZ</div>
           <div><b>Status:</b> {this.props.status}</div>
         </div>
