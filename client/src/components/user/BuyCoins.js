@@ -55,16 +55,12 @@ class BuyCoins extends Component {
         });
       })
       .catch(err => {
-        if (err.response.data.err) {
-          console.log("PROMISE ERROR:", err);
+        console.log(err);
 
-          this.setState({
-            error: err.response.data.err
-          });
+        if (err.response) {
+          this.setState({ error: err.response.data.message });
         } else {
-          this.setState({
-            error: err
-          });
+          this.setState({ error: err.message });
         }
       })
   }

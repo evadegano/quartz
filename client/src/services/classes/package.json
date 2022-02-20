@@ -1,5 +1,5 @@
 {
-  "name": "blockchain",
+  "name": "classes",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,5 +11,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "elliptic": "^6.5.4"
+  },
+  "devDependencies": {
+    "@types/elliptic": "^6.4.14"
+  }
 }

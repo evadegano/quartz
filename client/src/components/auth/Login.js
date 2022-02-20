@@ -46,7 +46,7 @@ class Login extends Component {
       .catch(err => {
         console.log(err);
 
-        if (err.response.data.message) {
+        if (err.response) {
           this.setState({ error: err.response.data.message });
         } else {
           this.setState({ error: err.message });

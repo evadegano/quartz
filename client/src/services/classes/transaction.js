@@ -1,4 +1,7 @@
 import SHA256 from "crypto-js/sha256";
+import * as elliptic from "elliptic";
+const EC = elliptic.ec;
+const ec = new EC("secp256k1");
 var Status;
 (function (Status) {
     Status["Pending"] = "pending";
@@ -50,6 +53,7 @@ class Transaction {
             this.isValid = false;
             return false;
         }
+        // add verification via public key, then add to blockchain-service
         this.isValid = true;
         return true;
     }

@@ -7,8 +7,6 @@ function genKeys() {
   // digital signature to sign and verify hash
   // used to prevent third party agents from modifying transaction
   const keypair = ec.genKeyPair();
-  const publicKey = keypair.getPublic("hex");
-  const privateKey = keypair.getPrivate("hex");
 
   return keypair;
 }

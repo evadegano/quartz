@@ -28,14 +28,9 @@ Add:
 - Add names to wallets (reandomly generated)
 - qr code
 - copy to clipboard
-- for long addresses: jfjrji...dezfr
-
-TODAY
+- displaying long addresses: jfjrji...dezfr
 - Seed file 
-- Top up account
 
-
-faster than a blockchain, as secure and distributed
 
 cred:
 - user: 62052a1cd61396aa82262ba4
