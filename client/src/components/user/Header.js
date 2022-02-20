@@ -6,8 +6,35 @@ import { UilSetting, UilBell, UilUser, UilSignout } from "@iconscout/react-unico
 // make settings menu only appear if user is loggedin
 class Header extends Component {
   state = {
-    viewSettings: false
+    viewSettings: false,
+    viewNotifs: false,
+    notifications: ""
   };
+
+  fetchNotifs = () => {
+    // fetch notifications
+    let notifs = localStorage.getItem("notifications");
+
+    // remove notifications that have been read and are over two days old
+    notifs = notifs.filter(notif => notif.read === true && notif.date > Date.now());
+
+    // update all notifs status to read
+    notifs = notifs.map(notif => notif.read === true);
+    localStorage.setItem("notifications", notifs);
+
+    // if no notif, display message
+    if (notifs.length === 0) {
+      this.setState({ 
+        notifications: "Nothing new to display...",
+        viewSettings: !this.state.viewSettings
+      });
+    } else {
+      this.setState({ 
+        notifications: notifs,
+        viewSettings: !this.state.viewSettings
+    });
+    }
+  }
 
   render() {
     return (
@@ -23,7 +50,11 @@ class Header extends Component {
             <UilSetting/>
           </button>
 
-          <button className="settings-btn"><UilBell size="27"/></button>
+          <button 
+            className={`settings-btn ${this.state.viewNotifs ? "active" : "" }`}
+            onClick={this.fetchNotifs}>
+            <UilBell size="27"/>
+          </button>
         </div>
 
         {this.state.viewSettings && 
