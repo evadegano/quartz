@@ -57,37 +57,30 @@ class SendCoins extends Component {
 
   render() {
     return (
-      <div>
-        <div className="centered-col-container">
-          <h1 className="title">Send QRTZ</h1>
+      <div className="inner-container">
+        <h1 className="title">Send QRTZ</h1>
 
-          <form className="box s-container" onSubmit={this.handleSubmit}>
-            <div className="field">
-              <label className="label">To wallet</label>
-              <div className="control">
-                <input name="toAddress" value={this.state.toAddress} className="input" type="text" placeholder="the wallet you are sending coins to" onChange={this.handleChange} />
-              </div>
+        <form className="auth-container" onSubmit={this.handleSubmit}>
+          <div className="field">
+            <label className="label">To wallet</label>
+            <div className="control">
+              <input name="toAddress" value={this.state.toAddress} className="input" type="text" placeholder="the wallet you are sending coins to" onChange={this.handleChange} />
             </div>
+          </div>
 
-            <div className="field">
-              <label className="label">Amount</label>
-              <div className="control">
-                <input name="amount" value={this.state.amount} className="input" type="number" placeholder="300" onChange={this.handleChange} />
-              </div>
+          <div className="field">
+            <label className="label">Amount</label>
+            <div className="control">
+              <input name="amount" value={this.state.amount} className="input" type="number" placeholder="300" onChange={this.handleChange} />
             </div>
+          </div>
 
-            <button className="button is-primary">SEND</button>
-          </form>
+          <button className="signup-btn">SEND</button>
+        </form>
 
-          {this.state.error && (
-            <div className="error">{this.state.error}</div>
-          )}
+        {this.state.error && <div className="error">{this.state.error}</div>}
 
-          {this.state.success && (
-            <div className="success">{this.state.success}</div>
-          )}
-
-        </div>
+        {this.state.success && <div className="success">{this.state.success}</div>}
       </div>
     );
   }

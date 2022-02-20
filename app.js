@@ -5,6 +5,7 @@ const express = require("express"); // node framework to handle http requests
 const app = express();
 const cors = require("cors");
 
+
 // import app middlewares
 require("./config/index")(app);
 

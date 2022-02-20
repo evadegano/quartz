@@ -22,13 +22,17 @@
 
 Add:
 - Gun passed as prop from App.js instead of init in each file?
-- Redirections
-- Top up account
 - Blockchain validation
-- régler problème de fetching des blocks
 - Loading screens
 - Error / success messages
 - Add names to wallets (reandomly generated)
+- qr code
+- copy to clipboard
+- for long addresses: jfjrji...dezfr
+
+TODAY
+- Seed file 
+- Top up account
 
 
 faster than a blockchain, as secure and distributed

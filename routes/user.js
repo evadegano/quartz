@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const router = require("express").Router();
+const stripe = require('stripe')("sk_test_51KUuGeD6SFhoou9ACHMG9MMkHMT5DKeJhlMEbqzh1GElp26nxVEbetozSgZVlxSdpDSZcyPAp8tL6aWHOWkHcdGL00SNDkbmii");
+const uuid = require("uuid");
 
 // package used for password hashing
 const bcrypt = require("bcryptjs");
@@ -11,6 +13,7 @@ const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
 const { findByIdAndUpdate } = require("../models/User.model");
 const { DESTRUCTION } = require("dns");
+const app = require("../app");
 
 
 // PUT user data
@@ -130,7 +133,30 @@ router.put("/:walletId", (req, res, next) => {
     { new: true })
     .then(walletFromDb => res.status(200).json(walletFromDb.address))
     .catch(() => res.status(500).json({ message: "Connection to database failed."}))
-})
+});
+
+
+// POST coins
+router.post("/coins", (req, res, next) => {
+  const { amount, token } = req.body;
+   // key used to prevent user from being charged twice by mistake
+  const idempotencyKey = uuid();
+
+  // add user to user list
+  stripe.customers.create({
+    email: token.email,
+    source: token.id
+  }).then(customer => {
+    stripe.charges.create({
+      amount: amount * 100, // mul by 100 to convert amount to cents
+      currency: "usd",
+      customer: customer.id,
+      description: "Exchangnig usd to Quartz Coins"
+    }, {idempotencyKey});
+  })
+    .then(response => res.status(200).json(response))
+    .catch(() => res.status(500).json({ message: "Money transfer failed."}))
+});
 
 
 module.exports = router;

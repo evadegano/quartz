@@ -1,6 +1,11 @@
 import { Component } from "react";
-import { getCoins } from "../../services/blockchain-service";
+import { getCoins } from "../../services/user-service";
 import Gun from "gun";
+import { loadStripe } from '@stripe/stripe-js';
+import StripeCheckout from "react-stripe-checkout";
+import { ElementsConsumer, PaymentElement } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe('pk_test_51KUuGeD6SFhoou9AcyixNXVznOHeqWkOKkF7UNusiugaRIVhOq9eyYUkBYZ7HXOYgMIjhkPqSWMycsfLV2bzAzVz00ZWHLNjlA');
 
 
 class BuyCoins extends Component {
@@ -24,60 +29,73 @@ class BuyCoins extends Component {
     });
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { amount } = this.state;
-    const walletAddress = this.props.match.params.walletId;
-    const signingKeyPair = localStorage.getItem(walletAddress);
+    return;
+  }
 
-    // create new transaction
-    try {
-      getCoins(amount, signingKeyPair, walletAddress);
-      this.setState({
-        amount: "",
-        error: "",
-        success: "Your transaction was sent to the blockchain for validation."
-      });
-    }
-    catch (err) {
-      this.setState({
-        amount: "",
-        error: err,
-        success: ""
-      });
-    }
+  // process user's purchase of Quartz coins
+  processTransfer = (token) => {
+    const amount = this.state.amount;
+
+    getCoins(amount, token)
+      .then(response => {
+
+        console.log("stripe", response)
+
+        // reset state
+        this.setState({
+          amount: "",
+          error: "",
+          success: `${amount} Quartz coins have been added to your wallet.`
+        })
+      })
+      .catch(err => {
+        if (err.response.data.err) {
+          console.log("PROMISE ERROR:", err);
+
+          this.setState({
+            error: err.response.data.err
+          });
+        } else {
+          this.setState({
+            error: err
+          });
+        }
+      })
   }
 
   render() {
     return (
-      <div>
-        <div className="centered-col-container">
-          <h1 className="title">Add QRTZ</h1>
-          <h1 className="subtitle">to account:
-          <br />{this.props.match.params.walletId}</h1>
+      <div className="inner-container">
+        <h1 className="title">Add QRTZ</h1>
+        <h2 className="subtitle">to account:
+        <br />{this.props.match.params.walletId}</h2>
 
-          <form className="box s-container" onSubmit={this.handleSubmit}>
-            <div className="field">
-              <label className="label">Amount</label>
-              <div className="control">
-                <input name="amount" value={this.state.amount} className="input" type="number" placeholder="300" onChange={this.handleChange} />
-              </div>
+        <form className="auth-container" onSubmit={this.handleSubmit}>
+          <div className="field">
+            <label className="label">Amount</label>
+            <div className="control">
+              <input name="amount" value={this.state.amount} className="input" type="number" placeholder="300" onChange={this.handleChange} />
             </div>
+          </div>
 
-            <button className="button is-primary">TOP UP ACCOUNT</button>
-          </form>
+          
+          <StripeCheckout 
+            stripeKey="pk_test_51KUuGeD6SFhoou9AcyixNXVznOHeqWkOKkF7UNusiugaRIVhOq9eyYUkBYZ7HXOYgMIjhkPqSWMycsfLV2bzAzVz00ZWHLNjlA" 
+            token={this.processTransfer}
+            amount={this.state.amount * 100}>
+            
+            <button className="signup-btn">TOP UP ACCOUNT</button>
+          
+          </StripeCheckout>
+        </form>
 
-          {this.state.error && (
-            <div className="error">{this.state.error}</div>
-          )}
+        {this.state.error && <div className="error">{this.state.error}</div>}
 
-          {this.state.success && (
-            <div className="success">{this.state.success}</div>
-          )}
-
-        </div>
-      </div>
+        {this.state.success && <div className="success">{this.state.success}</div>}
+    </div>
     )
   ;}
 }

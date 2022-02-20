@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import Gun from  "gun";
 import _ from "lodash";
 
+
 // styles
 import './styles/App.css';
 import "./mystyles.css";
@@ -23,13 +24,16 @@ import TxPages from './TxPages';
 import ResetRequest from "./components/recovery/reset-request";
 import ResetPwd from "./components/recovery/reset-pwd";
 
+// init global variables
+const quartzBlockchain = Blockchain.instance;
+
 
 class App extends Component {
   constructor() {
     super();
       this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
       window.gun = this.gun; //To have access to gun object in browser console
-      this.blockchain = Blockchain.instance;
+      this.blockchain = quartzBlockchain;
       this.blockchainRef = this.gun.get(this.blockchain); // is it the right way to do it?
       this.blocksRef = this.blockchainRef.get("ledger").set(this.blockchain.ledger);
       this.transacsRef = this.gun.get("transactions");

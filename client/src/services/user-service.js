@@ -26,5 +26,9 @@ function deleteUser(userId) {
   return service.delete(`/${userId}`, {}).then(response => response.data);
 }
 
+function getCoins(amount, token) {
+  return service.post("/coins", {amount, token}).then(response => response.data);
+}
 
-export { getWallets, postWallets, putWallet, updateUser, deleteUser };
+
+export { getWallets, postWallets, putWallet, updateUser, deleteUser, getCoins };

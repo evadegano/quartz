@@ -8,7 +8,7 @@ function BlockchainStats(props) {
 
       <div>
         <div className="stat-container">
-        <UilServer size="30"/>
+          <UilServer size="30"/>
           <div>
             <h3>Difficulty</h3>
             <p>{props.blockchain.difficulty}</p>

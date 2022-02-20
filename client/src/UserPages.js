@@ -17,7 +17,7 @@ class UserPages extends Component {
     const userWallets = this.getUserWallets();
 
     return (
-      <div>
+      <div className="outer-container">
         <SideNavbar user={this.props.user} />
 
         <Switch>

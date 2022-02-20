@@ -11,7 +11,22 @@ import MiningStats from "./MiningStats";
 class Dashboard extends Component {
   state = {
     balance: "",
-    error: ""
+    error: "",
+    greeting: ""
+  }
+
+  // adapt greeting message depending on the time of day
+  updateGreeting = () => {
+    const date = new Date();
+    const hours = date.getHours();
+
+    if (hours > 2 && hours < 12) {
+      this.setState({ greeting: "Good morning!"});
+    } else if (hours < 18) {
+      this.setState({ greeting: "Good afternoon!"});
+    } else {
+      this.setState({ greeting: "Good evening!"});
+    }
   }
 
   // calculate wallet's balance
@@ -69,6 +84,7 @@ class Dashboard extends Component {
   // update component's state on mounting
   componentDidMount() {
     this.fetchWalletBalance();
+    this.updateGreeting();
   }
 
   render() {
@@ -77,8 +93,8 @@ class Dashboard extends Component {
     //const userBalance = getWalletBalance(this.props.transactions, this.props.userWallet);
 
     return (
-      <main>
-        <Header title="Good morning!" userId={this.props.user._id} />
+      <div className="inner-container">
+        <Header title={this.state.greeting} userId={this.props.user._id} />
 
         <div>
           <h2 className="subtitle">Wallet: {walletAddress}</h2>
@@ -101,7 +117,7 @@ class Dashboard extends Component {
             <MiningStats />
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 }
