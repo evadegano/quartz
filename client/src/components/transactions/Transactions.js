@@ -31,39 +31,23 @@ class Transactions extends Component {
         <div className="row-container">
           <h2>All transactions</h2>
 
-            <div className="search-container">
+          <div className="search-container">
             <UilSearch className="search-icon" />
             <input className="search-bar" name="query" format="text" value={this.state.query} placeholder="Search..." onChange={this.handleChange} />
           </div>
         </div>
         
-
-        <table>
-          <thead>
-            <tr>
-              <th>Hash</th>
-              <th>Sender</th>
-              <th>Receiver</th>
-              <th>Amount</th>
-              <th>Created</th>
-              <th>Validity</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredTx.map((tx, idx) => {
-              return <Transaction 
-                        key={idx} 
-                        /*hash={tx.hash} 
-                        from={tx.header.fromAddress} 
-                        to={tx.header.toAddress} */
-                        amount={tx.amount} 
-                        /*date={tx.header.timestamps}
-                        isValid={tx.isValid}
-                        status={tx.status}*//>
-            })}
-          </tbody>
-        </table>
+        {filteredTx.map((tx, idx) => {
+          return <Transaction 
+                    key={idx} 
+                    /*hash={tx.hash} 
+                    from={tx.header.fromAddress} 
+                    to={tx.header.toAddress} */
+                    amount={tx.amount} 
+                    /*date={tx.header.timestamps}
+                    isValid={tx.isValid}
+                    status={tx.status}*//>
+        })}
       </div>
     );
   }
