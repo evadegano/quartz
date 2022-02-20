@@ -28,7 +28,7 @@ class Wallets extends Component {
 
     return (
     <div className="inner-container">
-      <Header title="Wallets" subtitle="" />
+      <Header userId={this.props.userId} title="Wallets" subtitle="" />
       
       <div className="inner-container hollow-table">
         <div className="search-container">
@@ -36,23 +36,10 @@ class Wallets extends Component {
           <input className="search-bar" name="query" format="text" value={this.state.query} placeholder="Search..." onChange={this.handleChange} />
         </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Address</th>
-              <th>Name</th>
-              <th>Balance</th>
-              <th>Blocks mined</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredWallets.map(wallet => {
-              return <Wallet key={wallet.address} address={wallet.address} name={wallet.name} />
-            })}
-          </tbody>
-        </table>
+        {filteredWallets.map(wallet => {
+          return <Wallet key={wallet.address} address={wallet.address} name={wallet.name} />
+        })}
       </div>
-
     </div>
     );
   }

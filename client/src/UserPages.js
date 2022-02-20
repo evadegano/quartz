@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import SideNavbar from "./components/navbars/SideNavbar";
+import BottomNavbar from "./components/navbars/BottomNavbar";
 import Dashboard from './components/user/Dashboard';
 import Profile from './components/user/Profile';
 import SendCoins from "./components/user/SendCoins";
@@ -26,6 +27,8 @@ class UserPages extends Component {
           <Route exact path="/user/:walletId/get-coins" render={(routerProps) => <BuyCoins {...routerProps} />} />
           <Route exact path="/user/:userId" render={(routerProps) => <Profile {...routerProps} user={this.props.user} />} />
         </Switch>
+
+        <BottomNavbar user={this.props.user} />
       </div>
     );
   }
