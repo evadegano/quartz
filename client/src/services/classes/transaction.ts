@@ -40,7 +40,7 @@ class Transaction {
   // sign transaction with the sender's private and public keys
   signTransaction(walletAddress: string, signingKeyPair: any) {
     // make sure the public key matches the sender wallet's address
-    if (!this.isSenderValid(signingKeyPair.publicKey, walletAddress)) {
+    if (!this.isSenderValid(walletAddress, signingKeyPair)) {
       throw new Error("This public key doesn't belong to this wallet.");
     }
 
@@ -53,12 +53,9 @@ class Transaction {
   }
 
   // check whether the sender's public key belongs to their wallet address
-  isSenderValid(publicKey: string, walletAddress: string) {
-    // make sure that the key pair is valid: derive public from private key
-    
-    
+  isSenderValid(walletAddress: string, signingKeyPair: any) {
     // hash public key
-    const hashedKey = SHA256(publicKey).toString()
+    const hashedKey = SHA256(signingKeyPair.getPublic("hex")).toString()
 
     // compare hashed key and wallet address
     if (hashedKey !== walletAddress) return false;
@@ -101,7 +98,7 @@ class RewardTransaction extends Transaction {
   };
 
   constructor(amount: number, toAddress: string, blockHash: string) {
-    super(amount, null, toAddress);
+    super(amount, "null - QRTZ reward", toAddress);
     this.header.minedBlock = blockHash;
   }
 
@@ -116,5 +113,34 @@ class RewardTransaction extends Transaction {
   }
 }
 
+
+class PurchaseTransaction extends Transaction {
+  public header: {
+    amount: number,
+    fromAddress: string,
+    toAddress: string,
+    timestamps: number
+  };
+
+  constructor(amount: number, toAddress: string) {
+    super(amount, "null - bank transfer", toAddress);
+  }
+
+  // sign transaction with the sender's private and public keys
+  signTransaction(signingKeyPair: any) {
+    // get transaction's hash
+    this.hash = this.getHash();
+
+    // create signature
+    const signature = signingKeyPair.sign(this.hash, "base64");
+    this.signature = signature.toDER("hex");
+
+    // update transaction's status
+    this.isValid = true;
+    this.status = Status.Confirmed;
+  }
+}
+
+
 export default Transaction;
-export { RewardTransaction };
+export { RewardTransaction, PurchaseTransaction };

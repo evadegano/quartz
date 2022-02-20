@@ -1,5 +1,5 @@
 import Transaction from "./classes/transaction";
-import { RewardTransaction } from "./classes/transaction";
+import { RewardTransaction, PurchaseTransaction } from "./classes/transaction";
 import Blockchain from "./classes/blockchain";
 import Block from "./classes/block";
 import Gun from  "gun";
@@ -50,15 +50,16 @@ function sendCoins(amount, signingKeyPair, senderAddress, receiverAddress) {
 }
 
 
-function getCoins(amount, signingKeyPair, receiverAddress) {
+function createPurchaseTx(amount, signingKeyPair, receiverAddress) {
   // create transaction
-  const transaction = new Transaction(amount, receiverAddress, receiverAddress);
+  const transaction = new PurchaseTransaction(amount, receiverAddress);
   // sign transaction
   transaction.signTransaction(receiverAddress, signingKeyPair);
   
   // add transaction to the decentralized database
   transacsRef.set(transaction);
 }
+
 
 function hashInPair(hashArray, output = []) {
   // if only one element left, hash it with itself and return result
@@ -171,8 +172,8 @@ function processTx(transactions, minerAddress) {
     return { confirmedTx, rejectedTx, rewardTx };
   }
 
-  throw new Error("Those transactions have been validated by someone else.");
+  throw new Error("Pending transactions have been validated by someone else.");
 }
 
 
-export { getWalletBalance, sendCoins, getCoins, processTx };
+export { getWalletBalance, sendCoins, createPurchaseTx, processTx };

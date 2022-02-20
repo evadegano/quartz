@@ -33,7 +33,7 @@ class SendCoins extends Component {
     // get data
     const { toAddress, amount } = this.state;
     const walletAddress = this.props.match.params.walletId;
-    const signingKeyPair = localStorage.getItem(walletAddress);
+    const signingKeyPair = localStorage.getItem(walletAddress.keypair);
 
     // create new transaction
     try {
@@ -42,7 +42,7 @@ class SendCoins extends Component {
         toAddress: "",
         amount: "",
         error: "",
-        success: "Your transaction was sent to the blockchain for validation."
+        success: "Your transaction was sent to the network for validation."
       });
     }
     catch (err) {

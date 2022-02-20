@@ -47,8 +47,7 @@ class Signup extends Component {
 
         // store wallet signing keys in local storage
         localStorage.setItem(userData.activeWallet, {
-          publicKey: response.publicKey,
-          privateKey: response.privateKey
+          keypair: response.keypair
         });
 
         // redirect user to their dashboard

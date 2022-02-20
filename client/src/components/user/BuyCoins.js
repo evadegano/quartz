@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { getCoins } from "../../services/user-service";
+import { createPurchaseTx } from "../../services/blockchain-service";
 import Gun from "gun";
 import { loadStripe } from '@stripe/stripe-js';
 import StripeCheckout from "react-stripe-checkout";
@@ -41,15 +42,17 @@ class BuyCoins extends Component {
 
     getCoins(amount, token)
       .then(response => {
-
-        console.log("stripe", response)
+        // add transaction to the blockchain
+        const { amount, keypair } = response;
+        const wallet = this.props.match.params.walletId;
+        createPurchaseTx(amount, keypair, wallet);
 
         // reset state
         this.setState({
           amount: "",
           error: "",
-          success: `${amount} Quartz coins have been added to your wallet.`
-        })
+          success: `${amount} QRTZ have been added to your wallet.`
+        });
       })
       .catch(err => {
         if (err.response.data.err) {

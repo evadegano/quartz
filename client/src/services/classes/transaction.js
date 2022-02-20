@@ -26,7 +26,7 @@ class Transaction {
     // sign transaction with the sender's private and public keys
     signTransaction(walletAddress, signingKeyPair) {
         // make sure the public key matches the sender wallet's address
-        if (!this.isSenderValid(signingKeyPair.publicKey, walletAddress)) {
+        if (!this.isSenderValid(walletAddress, signingKeyPair)) {
             throw new Error("This public key doesn't belong to this wallet.");
         }
         // get transaction's hash
@@ -36,10 +36,9 @@ class Transaction {
         this.signature = signature.toDER("hex");
     }
     // check whether the sender's public key belongs to their wallet address
-    isSenderValid(publicKey, walletAddress) {
-        // make sure that the key pair is valid: derive public from private key
+    isSenderValid(walletAddress, signingKeyPair) {
         // hash public key
-        const hashedKey = SHA256(publicKey).toString();
+        const hashedKey = SHA256(signingKeyPair.getPublic("hex")).toString();
         // compare hashed key and wallet address
         if (hashedKey !== walletAddress)
             return false;
@@ -67,7 +66,7 @@ class Transaction {
 }
 class RewardTransaction extends Transaction {
     constructor(amount, toAddress, blockHash) {
-        super(amount, null, toAddress);
+        super(amount, "null - QRTZ reward", toAddress);
         this.header.minedBlock = blockHash;
     }
     // sign transaction with the sender's private and public keys
@@ -79,5 +78,21 @@ class RewardTransaction extends Transaction {
         this.signature = signature.toDER("hex");
     }
 }
+class PurchaseTransaction extends Transaction {
+    constructor(amount, toAddress) {
+        super(amount, "null - bank transfer", toAddress);
+    }
+    // sign transaction with the sender's private and public keys
+    signTransaction(signingKeyPair) {
+        // get transaction's hash
+        this.hash = this.getHash();
+        // create signature
+        const signature = signingKeyPair.sign(this.hash, "base64");
+        this.signature = signature.toDER("hex");
+        // update transaction's status
+        this.isValid = true;
+        this.status = Status.Confirmed;
+    }
+}
 export default Transaction;
-export { RewardTransaction };
+export { RewardTransaction, PurchaseTransaction };

@@ -73,9 +73,9 @@ router.post("/signup", (req, res, next) => {
         }
 
         // generate new keypairs
-        const [ publicKey, privateKey ] = genKeys();
+        const keypair = genKeys();
         // hash public key into a wallet address
-        const address = getHash(publicKey);
+        const address = getHash(keypair.getPublic("hex"));
 
         // create new wallet
         const newWallet = new Wallet({
@@ -89,8 +89,7 @@ router.post("/signup", (req, res, next) => {
             res.status(200).json({
               newUser: req.user,
               walletAddress: newWallet.address,
-              publicKey,
-              privateKey
+              keypair
             });
           })
           .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
