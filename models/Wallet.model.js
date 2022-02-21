@@ -7,11 +7,13 @@ const walletSchema = new Schema({
     },
     address: {
       type: String,
-      required: [true, "Wallet address required."]
+      required: [true, "Wallet address required."],
+      unique: [true, "This address has already been taken"]
     },
     name: {
       type: String,
-      default: null
+      required: [true, "Wallet name required."],
+      unique: [true, "This name has already been taken"]
     },
     active: {
       type: Boolean,

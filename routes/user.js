@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const router = require("express").Router();
 const stripe = require('stripe')("sk_test_51KUuGeD6SFhoou9ACHMG9MMkHMT5DKeJhlMEbqzh1GElp26nxVEbetozSgZVlxSdpDSZcyPAp8tL6aWHOWkHcdGL00SNDkbmii");
-const genKeys = require("../helpers/keygenerator");
+const genKeys = require("../helpers/keyGenerator");
+var hri = require('human-readable-ids').hri;
 
 // package used for password hashing
 const bcrypt = require("bcryptjs");
@@ -100,11 +101,14 @@ router.post("/wallets", (req, res, next) => {
   const [ publicKey, privateKey ] = genKeys();
   // hash public key into a wallet address
   const address = getHash(publicKey);
+  // generate random name
+  const randWalletName = hri.random();
 
   // create new wallet
   const newWallet = new Wallet({
     user_id: req.user._id,
     address,
+    name: randWalletName,
     lastConnection: Date.now()
   })
 

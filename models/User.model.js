@@ -7,15 +7,12 @@ const userSchema = new Schema({
     trim: true,
     lowercase: true,
     required: [true, "Email address is required."],
-    //match: []
     },
   password: {
     type: String,
     trim: true,
     required: [true, "Password is required."],
-    //match: []
-    },
-  databaseAddress: String
+    }
   },
   {
     timestamps: true,

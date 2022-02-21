@@ -1,13 +1,14 @@
 const express = require("express");
 const router = require("express").Router();
 const passport = require("passport");
+var hri = require('human-readable-ids').hri;
  
 // package for password encryption
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 
 // helpers for wallet keys and address
-const genKeys = require("../helpers/keygenerator");
+const genKeys = require("../helpers/keyGenerator");
 const getHash = require("../helpers/getHash");
 
 // database models
@@ -76,11 +77,14 @@ router.post("/signup", (req, res, next) => {
         const keypair = genKeys();
         // hash public key into a wallet address
         const address = getHash(keypair.getPublic("hex"));
+        // generate random name
+        const randWalletName = hri.random();
 
         // create new wallet
         const newWallet = new Wallet({
           user_id: req.user._id,
           address,
+          name: randWalletName,
           lastConnection: Date.now()
         })
 

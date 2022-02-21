@@ -45,11 +45,16 @@ class App extends Component {
     wallets: [],
     transactions: [],
     blocks: [],
+    newNotifs: false,
     error: ""
   }
 
   updateLoggedInUser = (userObj) => {
-    this.setState({ loggedInUser: userObj })
+    this.setState({ loggedInUser: userObj });
+  }
+
+  updateNotifsStatus = (bool) => {
+    this.setState({ newNotifs: bool });
   }
 
   getUserWallets = () => {
@@ -133,10 +138,10 @@ class App extends Component {
         <Switch>
           <Route exact path="/" render={() => <Homepage />} />
           <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
-          <Route path="/user" render={() => <UserPages  updateUser={this.updateLoggedInUser} user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
-          <Route path="/transactions" render={() => <TxPages user={this.state.loggedInUser} transactions={this.state.transactions} />} />
-          <Route path="/blocks" render={(routerProps) => <BlockPages {...routerProps} user={this.state.loggedInUser} blockchain={this.state.blockchain} blocks={this.state.blocks} />} />
-          <Route path="/wallets" render={(routerProps) => <WalletPages {...routerProps} user={this.state.loggedInUser} wallets={this.state.wallets} />} />
+          <Route path="/user" render={(routerProps) => <UserPages  {...routerProps} updateNotifsStatus={this.updateNotifsStatus} newNotifs={this.state.newNotifs} updateUser={this.updateLoggedInUser} user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
+          <Route path="/transactions" render={(routerProps) => <TxPages {...routerProps} updateNotifsStatus={this.updateNotifsStatus} newNotifs={this.state.newNotifs} user={this.state.loggedInUser} transactions={this.state.transactions} />} />
+          <Route path="/blocks" render={(routerProps) => <BlockPages {...routerProps} updateNotifsStatus={this.updateNotifsStatus} newNotifs={this.state.newNotifs} user={this.state.loggedInUser} blockchain={this.state.blockchain} blocks={this.state.blocks} />} />
+          <Route path="/wallets" render={(routerProps) => <WalletPages {...routerProps} updateNotifsStatus={this.updateNotifsStatus} newNotifs={this.state.newNotifs} user={this.state.loggedInUser} wallets={this.state.wallets} />} />
           <Route path="/request-reset" component={ResetRequest} />
           <Route path="/reset-password/:userId" component={ResetPwd} />
         </Switch>
