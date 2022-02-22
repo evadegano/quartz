@@ -1,7 +1,14 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import SHA256 from "crypto-js/sha256";
-import * as elliptic from "elliptic";
-const EC = elliptic.ec;
-const ec = new EC("secp256k1");
+// list of possible transaction's status
 var Status;
 (function (Status) {
     Status["Pending"] = "pending";
@@ -27,21 +34,29 @@ class Transaction {
         return SHA256(transacHeader).toString();
     }
     // sign transaction with the sender's private and public keys
-    signTransaction(walletAddress, signingKeyPair) {
-        // make sure the public key matches the sender wallet's address
-        if (!this.isSenderValid(walletAddress, signingKeyPair)) {
-            throw new Error("This public key doesn't belong to this wallet.");
-        }
-        // get transaction's hash
-        this.hash = this.getHash();
-        // create signature
-        const signature = signingKeyPair.sign(this.hash, "base64");
-        this.signature = signature.toDER("hex");
+    signTransaction(walletAddress, publicKey, privateKey) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // make sure the public key matches the sender wallet's address
+            if (!this.isSenderValid(walletAddress, publicKey)) {
+                throw new Error("This public key doesn't belong to this wallet.");
+            }
+            // get transaction's hash
+            this.hash = this.getHash();
+            let enc = new TextEncoder();
+            let encodedTx = enc.encode(this.hash);
+            // create signature
+            const signature = yield window.crypto.subtle.sign({
+                name: "ECDSA",
+                hash: { name: "SHA-384" },
+            }, privateKey, encodedTx);
+            this.signature = signature;
+            console.log("signature", this.signature);
+        });
     }
     // check whether the sender's public key belongs to their wallet address
-    isSenderValid(walletAddress, signingKeyPair) {
+    isSenderValid(walletAddress, publicKey) {
         // hash public key
-        const hashedKey = SHA256(signingKeyPair.getPublic("hex")).toString();
+        const hashedKey = SHA256(publicKey.toString()).toString();
         // compare hashed key and wallet address
         if (hashedKey !== walletAddress)
             return false;
@@ -49,7 +64,7 @@ class Transaction {
     }
     // check whether the transaction has been signed correctly
     isSigatureValid() {
-        if (!this.signature || this.signature.length === 0) {
+        if (!this.signature) {
             this.isValid = false;
             return false;
         }
@@ -73,29 +88,10 @@ class RewardTransaction extends Transaction {
         super(amount, "null - QRTZ reward", toAddress);
         this.header.minedBlock = blockHash;
     }
-    // sign transaction with the sender's private and public keys
-    signTransaction(signingKeyPair) {
-        // get transaction's hash
-        this.hash = this.getHash();
-        // create signature
-        const signature = signingKeyPair.sign(this.hash, "base64");
-        this.signature = signature.toDER("hex");
-    }
 }
 class PurchaseTransaction extends Transaction {
     constructor(amount, toAddress) {
         super(amount, "null - bank transfer", toAddress);
-    }
-    // sign transaction with the sender's private and public keys
-    signTransaction(signingKeyPair) {
-        // get transaction's hash
-        this.hash = this.getHash();
-        // create signature
-        const signature = signingKeyPair.sign(this.hash, "base64");
-        this.signature = signature.toDER("hex");
-        // update transaction's status
-        this.isValid = true;
-        this.status = Status.Confirmed;
     }
 }
 export default Transaction;

@@ -95,15 +95,10 @@ router.get("/wallets", (req, res, next) => {
 
 // POST wallet 
 router.post("/wallets", (req, res, next) => {
-  const { userId } = req.body;
-  
-  // generate new keypairs
-  const [ publicKey, privateKey ] = genKeys();
-  // hash public key into a wallet address
-  const address = getHash(publicKey);
+  const { userId, walletAddress } = req.body;
 
   // generate random name
-  let randWalletName = hri.random();
+  let randWalletName = hri.random() + Math.round(Math.random() * 100);
 
   // create new wallet
   const newWallet = new Wallet({
@@ -115,13 +110,7 @@ router.post("/wallets", (req, res, next) => {
 
   newWallet.save()
     .then(() => {
-      res.status(200).json({
-        walletAddress: newWallet.address,
-        keypair: {
-          publicKey,
-          privateKey
-        }
-      });
+      res.status(200).json({ walletAddress: newWallet.address });
     })
     .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
 });
@@ -142,7 +131,7 @@ router.put("/:walletId", (req, res, next) => {
 
 // POST coins
 router.post("/coins", (req, res, next) => {
-  const { amount, token } = req.body;
+  const { amount, token, publicKey, privateKey } = req.body;
   // key used to prevent user from being charged twice by mistake
   const [ publicKey, privateKey ] = genKeys();
   const idempotencyKey = publicKey;

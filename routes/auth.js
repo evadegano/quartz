@@ -1,15 +1,10 @@
 const express = require("express");
 const router = require("express").Router();
 const passport = require("passport");
-var hri = require('human-readable-ids').hri;
  
 // package for password encryption
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
-
-// helpers for wallet keys and address
-const genKeys = require("../helpers/keyGenerator");
-const getHash = require("../helpers/getHash");
 
 // database models
 const User = require("../models/User.model");
@@ -78,33 +73,8 @@ router.post("/signup", (req, res, next) => {
           return;
         }
 
-        // generate new keypairs
-        const [ publicKey, privateKey ] = genKeys();
-        // hash public key into a wallet address
-        const address = getHash(publicKey);
-        // generate random name
-        let randWalletName = hri.random();
-
-        // create new wallet
-        const newWallet = new Wallet({
-          user_id: req.user._id,
-          address,
-          name: randWalletName,
-          lastConnection: Date.now()
-        })
-
-        newWallet.save()
-          .then(() => {
-            res.status(200).json({
-              newUser: req.user,
-              walletAddress: newWallet.address,
-              keypair: { 
-                publicKey,
-                privateKey
-              }
-            });
-          })
-          .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
+        // return user
+        res.status(200).json({ newUser: req.user });
       })
     })
     .catch(() => res.status(500).json({ message: "Something went wrong during sign up." }))

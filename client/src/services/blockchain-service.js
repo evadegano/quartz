@@ -4,9 +4,6 @@ import Blockchain from "./classes/blockchain";
 import Block from "./classes/block";
 import Gun from  "gun";
 import SHA256 from "crypto-js/sha256";
-import * as elliptic from "elliptic";
-const EC = elliptic.ec;
-const ec  = new EC("secp256k1");
 const gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
 let transacsRef = gun.get("transactions");
 let blockchainRef = gun.get(Blockchain.instance);
@@ -33,31 +30,44 @@ function getWalletBalance(walletAddress) {
 }
 
 
-function sendCoins(amount, signingKeyPair, senderAddress, receiverAddress) {
+function sendCoins(amount, publicKey, privateKey, senderAddress, receiverAddress) {
   // make sure this wallet has enough funds
   const walletBalance = getWalletBalance(senderAddress);
   if (walletBalance < amount) {
-    throw new Error("Unsufficient funds.");
+    throw new Error("Insufficient funds.");
   }
 
   // create transaction
   const transaction = new Transaction(amount, senderAddress, receiverAddress);
   // sign transaction
-  transaction.signTransaction(senderAddress, signingKeyPair);
+  transaction.signTransaction(senderAddress, publicKey, privateKey);
 
   // add transaction to the decentralized database
   transacsRef.set(transaction);
 }
 
 
-function createPurchaseTx(amount, signingKeyPair, receiverAddress) {
+function createPurchaseTx(amount, receiverAddress) {
   // create transaction
   const transaction = new PurchaseTransaction(amount, receiverAddress);
-  // sign transaction
-  transaction.signTransaction(receiverAddress, signingKeyPair);
-  
-  // add transaction to the decentralized database
-  transacsRef.set(transaction);
+
+  // create one-time signing key pair
+  window.crypto.subtle.generateKey(
+    {
+      name: "ECDSA",
+      namedCurve: "P-384"
+    },
+    true,
+    ["sign", "verify"]
+    )
+    .then((keyPair) => {
+      const publicKey = keyPair.publicKey;
+      const privateKey = keyPair.privateKey;
+
+      // sign transaction
+      transaction.signTransaction(publicKey, privateKey);
+    })
+    .then(() => transacsRef.set(transaction))
 }
 
 
@@ -101,7 +111,7 @@ function processTx(transactions, minerAddress) {
   let confirmedTx = []
 
   // verify transactions
-  transactions.map(tx => {
+  for (let tx in transactions) {
     // set default validity to true
     tx.isValid = true;
 
@@ -131,7 +141,7 @@ function processTx(transactions, minerAddress) {
     if (tx.isValid) {
       confirmedTx.push(tx);
     }
-  })
+  }
 
   // build merkle tree with confirmed transactions
   const confirmedTxHashes = confirmedTx.map(tx => tx.hash);
@@ -149,27 +159,38 @@ function processTx(transactions, minerAddress) {
   // if first one to mine, add block to the blockchain
   if (!blocksRef.get(newBlock)) {
     // update transactions' status
-    transactions.map(tx => {
+    for (let tx in transactions) {
       if (tx.isValid) {
         // if transaction is valid, set status to confirmed
         gun.get(tx["_"]["#"]).put({ status: "confirmed" });
       } else {
         gun.get(tx["_"]["#"]).put({ status: "rejected" });
       }
-    });
+    }
 
     // add new block to the blockchain
     blocksRef.set(newBlock);
 
     // create one-time signing key pair
-    const keypair = ec.genKeyPair();
+    window.crypto.subtle.generateKey(
+      {
+        name: "ECDSA",
+        namedCurve: "P-384"
+      },
+      true,
+      ["sign", "verify"]
+      )
+      .then((keyPair) => {
+        const publicKey = keyPair.publicKey;
+        const privateKey = keyPair.privateKey;
 
-    // add reward transaction to the blockchain
-    const rewardTx = new RewardTransaction(miningReward, minerAddress, newBlock.hash);
-    rewardTx.signTransaction(keypair);
-    transacsRef.set(rewardTx);
+        // add reward transaction to the blockchain
+        const rewardTx = new RewardTransaction(miningReward, minerAddress, newBlock.hash);
+        rewardTx.signTransaction(publicKey, privateKey);
+        transacsRef.set(rewardTx);
 
-    return { confirmedTx, rejectedTx, rewardTx };
+        return { confirmedTx, rejectedTx, rewardTx };
+      });
   }
 
   throw new Error("Pending transactions have been validated by someone else.");
