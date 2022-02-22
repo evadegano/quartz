@@ -122,7 +122,7 @@ class RewardTransaction extends Transaction {
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(publicKey: CryptoKey, privateKey: CryptoKey) {
+  async signTransaction(walletAddress: string = "null - QRTZ reward", publicKey: CryptoKey, privateKey: CryptoKey) {
     // store transaction's public key
     this.publicKey = publicKey;
     
@@ -162,7 +162,7 @@ class PurchaseTransaction extends Transaction {
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(publicKey: CryptoKey, privateKey: CryptoKey) {
+  async signTransaction(walletAddress: string = "null - bank transfer", publicKey: CryptoKey, privateKey: CryptoKey) {
     // store transaction's public key
     this.publicKey = publicKey;
     
