@@ -18,7 +18,11 @@ const Wallet = require("../models/Wallet.model");
 
 // POST signup page
 router.post("/signup", (req, res, next) => {
-  const { email, password, passwordConfirm } = req.body;
+  let { email, password, passwordConfirm, timestamps } = req.body;
+
+  if (!timestamps) {
+    timestamps = Date.now();
+  }
 
   // make sure both email and password have been given
   if (!email | !password | !passwordConfirm) {
@@ -62,6 +66,7 @@ router.post("/signup", (req, res, next) => {
   const newUser = new User({
     email,
     password: hashedPwd,
+    timestamps
   });
 
   newUser.save()
@@ -74,11 +79,11 @@ router.post("/signup", (req, res, next) => {
         }
 
         // generate new keypairs
-        const keypair = genKeys();
+        const [ publicKey, privateKey ] = genKeys();
         // hash public key into a wallet address
-        const address = getHash(keypair.getPublic("hex"));
+        const address = getHash(publicKey);
         // generate random name
-        const randWalletName = hri.random();
+        let randWalletName = hri.random();
 
         // create new wallet
         const newWallet = new Wallet({
@@ -93,7 +98,10 @@ router.post("/signup", (req, res, next) => {
             res.status(200).json({
               newUser: req.user,
               walletAddress: newWallet.address,
-              keypair
+              keypair: { 
+                publicKey,
+                privateKey
+              }
             });
           })
           .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))

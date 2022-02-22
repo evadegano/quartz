@@ -101,8 +101,9 @@ router.post("/wallets", (req, res, next) => {
   const [ publicKey, privateKey ] = genKeys();
   // hash public key into a wallet address
   const address = getHash(publicKey);
+
   // generate random name
-  const randWalletName = hri.random();
+  let randWalletName = hri.random();
 
   // create new wallet
   const newWallet = new Wallet({
@@ -116,8 +117,10 @@ router.post("/wallets", (req, res, next) => {
     .then(() => {
       res.status(200).json({
         walletAddress: newWallet.address,
-        publicKey,
-        privateKey
+        keypair: {
+          publicKey,
+          privateKey
+        }
       });
     })
     .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
@@ -141,8 +144,8 @@ router.put("/:walletId", (req, res, next) => {
 router.post("/coins", (req, res, next) => {
   const { amount, token } = req.body;
   // key used to prevent user from being charged twice by mistake
-  const keypair = genKeys();
-  const idempotencyKey = keypair.getPublic("hex");
+  const [ publicKey, privateKey ] = genKeys();
+  const idempotencyKey = publicKey;
 
   // add user to user list
   stripe.customers.create({
@@ -156,7 +159,13 @@ router.post("/coins", (req, res, next) => {
       description: "Exchangnig fiat to QRTZ"
     }, {idempotencyKey});
   })
-    .then(() => res.status(200).json({ amount, keypair }))
+    .then(() => res.status(200).json({ 
+      amount, 
+      keypair: {
+        publicKey,
+        privateKey
+      } 
+    }))
     .catch(() => res.status(500).json({ message: "Money exchange failed."}))
 });
 

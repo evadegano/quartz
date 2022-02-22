@@ -93,6 +93,9 @@ function Homepage() {
           <div>
             <h1 className="title">The best of blockchains and databases</h1>
             <p>Quartz is a digital stablecoin that allows you too</p>
+            <p>Each user stores the subset of the data they need</p>
+            <p>Data between users is sync using Web RTC</p>
+            <p>Data is stored bu default on users' local storage. And backups are stored on relay servers.</p>
           </div>
         </section>
       </main>
