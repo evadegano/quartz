@@ -20,19 +20,23 @@ const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
 
 
 
-function run() {
+function runBackEnd() {
   // connect to database
   mongoose.connect('mongodb://localhost/quartz')
-    // .then(() => {
-    //   console.log("connected!!");
-    //   const users = createUsers();
-    //   return addUsersToDB(users);
-    // })
+    .then(() => {
+      console.log("connected!!");
+      const users = createUsers();
+      return addUsersToDB(users);
+    })
     .then(() => {
       console.log("connected!");
       return genWallets();
     })
     .catch(err => console.log("global err:", err))
+}
+
+function runFrontEnd() {
+  return;
 }
 
 
@@ -110,9 +114,9 @@ function genWallets() {
 
         for (let j = 0; j < rand; j++) {
           // generate new keypairs
-          const keypair = genKeys();
+          const [ publicKey, privateKey ] = genKeys();
           // hash public key into a wallet address
-          const address = getHash(keypair.getPublic("hex"));
+          const address = getHash(publicKey);
           // generate random name
           let randWalletName = hri.random() + Math.round(Math.random() * 100);
 
@@ -126,16 +130,13 @@ function genWallets() {
 
           const newTempWallet = new TempWallet({
             address,
-            keypair
+            publicKey,
+            privateKey
           })
 
           newWallet.save()
-            .then()
+            .then(() => newTempWallet.save())
             .catch(err => console.log("creating wallet err:", err))
-
-          newTempWallet.save()
-            .then()
-            .catch(err => console.log("creating temp wallet err:", err))
         }
       }
 
@@ -146,9 +147,16 @@ function genWallets() {
 
 
 // top up wallets
+function topUpWallet() {
+  // post transaction
+
+  // create transaction from there
+
+  return;
+}
 
 
 // create tx between wallets, verify them, mine block
 
 
-run();
+runFrontEnd()

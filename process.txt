@@ -31,6 +31,7 @@ Add:
 - displaying long addresses: jfjrji...dezfr
 - Seed file 
 
+=> modifier les keypairs en front
 
 cred:
 - user: 62052a1cd61396aa82262ba4

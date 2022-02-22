@@ -26,12 +26,10 @@ const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
 
 
 // generate new keypairs
-const keypair = genKeys();
+const [ publicKey, privateKey ] = genKeys();
 // hash public key into a wallet address
 const address = getHash(keypair.getPublic("hex"));
 
-let parsedKeypair = JSON.stringify(keypair);
-parsedKeypair = JSON.parse(parsedKeypair);
 
 console.log("parsedAddress =>", getHash(parsedKeypair.getPublic("hex")))
 
