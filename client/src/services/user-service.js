@@ -3,7 +3,7 @@ import SHA256 from "crypto-js/sha256";
 
 
 const service = axios.create({
-  baseURL: "http://localhost:5005/api",
+  baseURL: `${process.env.REACT_APP_API_URL}`,
   withCredentials: true
 })
 

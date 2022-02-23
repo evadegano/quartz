@@ -2,9 +2,10 @@ import axios from "axios";
 
 
 const service = axios.create({
-  baseURL: "http://localhost:5005/api",
+  baseURL: `${process.env.REACT_APP_API_URL}`,
   withCredentials: true
 });
+
 
 function signup(email, password, passwordConfirm) {
   return service.post("/signup", {email, password, passwordConfirm}).then(response => response.data);

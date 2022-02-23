@@ -34,7 +34,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "build-dev": "dotenv -e .env.development react-scripts build",
+    "build-prod": "dotenv -e .env.production react-scripts build",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "css-build": "node-sass src -o src",
     "css-watch": "npm run css-build -- --watch",
