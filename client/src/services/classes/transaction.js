@@ -1,3 +1,4 @@
+import SHA256 from "crypto-js/sha256";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import SHA256 from "crypto-js/sha256";
+
 // list of possible transaction's status
 var Status;
 (function (Status) {
@@ -42,6 +43,7 @@ class Transaction {
             }
             // get transaction's hash
             this.hash = this.getHash();
+            // encode hash
             let enc = new TextEncoder();
             let encodedTx = enc.encode(this.hash);
             // create signature
@@ -50,7 +52,6 @@ class Transaction {
                 hash: { name: "SHA-384" },
             }, privateKey, encodedTx);
             this.signature = signature;
-            console.log("signature", this.signature);
         });
     }
     // check whether the sender's public key belongs to their wallet address
@@ -88,10 +89,46 @@ class RewardTransaction extends Transaction {
         super(amount, "null - QRTZ reward", toAddress);
         this.header.minedBlock = blockHash;
     }
+    // sign transaction with the sender's private and public keys
+    signTransaction(walletAddress = "null - QRTZ reward", publicKey, privateKey) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // store transaction's public key
+            this.publicKey = publicKey;
+            // get transaction's hash
+            this.hash = this.getHash();
+            // encode hash
+            let enc = new TextEncoder();
+            let encodedTx = enc.encode(this.hash);
+            // create signature
+            const signature = yield window.crypto.subtle.sign({
+                name: "ECDSA",
+                hash: { name: "SHA-384" },
+            }, privateKey, encodedTx);
+            this.signature = signature;
+        });
+    }
 }
 class PurchaseTransaction extends Transaction {
     constructor(amount, toAddress) {
         super(amount, "null - bank transfer", toAddress);
+    }
+    // sign transaction with the sender's private and public keys
+    signTransaction(walletAddress = "null - bank transfer", publicKey, privateKey) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // store transaction's public key
+            this.publicKey = publicKey;
+            // get transaction's hash
+            this.hash = this.getHash();
+            // encode hash
+            let enc = new TextEncoder();
+            let encodedTx = enc.encode(this.hash);
+            // create signature
+            const signature = yield window.crypto.subtle.sign({
+                name: "ECDSA",
+                hash: { name: "SHA-384" },
+            }, privateKey, encodedTx);
+            this.signature = signature;
+        });
     }
 }
 export default Transaction;

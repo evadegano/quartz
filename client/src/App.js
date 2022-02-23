@@ -23,6 +23,7 @@ import WalletPages from "./WalletPages";
 import TxPages from './TxPages';
 import ResetRequest from "./components/recovery/reset-request";
 import ResetPwd from "./components/recovery/reset-pwd";
+import Seed from './bin/seed';
 
 // init global variables
 const quartzBlockchain = Blockchain.instance;
@@ -144,6 +145,7 @@ class App extends Component {
           <Route path="/wallets" render={(routerProps) => <WalletPages {...routerProps} updateNotifsStatus={this.updateNotifsStatus} newNotifs={this.state.newNotifs} user={this.state.loggedInUser} wallets={this.state.wallets} />} />
           <Route path="/request-reset" component={ResetRequest} />
           <Route path="/reset-password/:userId" component={ResetPwd} />
+          <Route path="/seed" component={Seed} />
         </Switch>
       </div>
   );}

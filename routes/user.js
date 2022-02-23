@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const router = require("express").Router();
 const stripe = require('stripe')("sk_test_51KUuGeD6SFhoou9ACHMG9MMkHMT5DKeJhlMEbqzh1GElp26nxVEbetozSgZVlxSdpDSZcyPAp8tL6aWHOWkHcdGL00SNDkbmii");
-const genKeys = require("../helpers/keyGenerator");
 var hri = require('human-readable-ids').hri;
 
 // package used for password hashing
@@ -133,13 +132,13 @@ router.put("/:walletId", (req, res, next) => {
 router.post("/coins", (req, res, next) => {
   const { amount, token, publicKey, privateKey } = req.body;
   // key used to prevent user from being charged twice by mistake
-  const [ publicKey, privateKey ] = genKeys();
   const idempotencyKey = publicKey;
 
   // add user to user list
   stripe.customers.create({
     email: token.email,
     source: token.id
+
   }).then(customer => {
     stripe.charges.create({
       amount: amount,
@@ -147,6 +146,7 @@ router.post("/coins", (req, res, next) => {
       customer: customer.id,
       description: "Exchangnig fiat to QRTZ"
     }, {idempotencyKey});
+    
   })
     .then(() => res.status(200).json({ 
       amount, 

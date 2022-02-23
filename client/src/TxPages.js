@@ -1,5 +1,4 @@
 import { Component } from "react";
-import { Switch, Route } from "react-router-dom";
 import SideNavbar from "./components/navbars/SideNavbar";
 import BottomNavbar from "./components/navbars/BottomNavbar";
 import Header from "./components/user/Header";

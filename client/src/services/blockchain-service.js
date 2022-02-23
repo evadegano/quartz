@@ -47,27 +47,15 @@ function sendCoins(amount, publicKey, privateKey, senderAddress, receiverAddress
 }
 
 
-function createPurchaseTx(amount, receiverAddress) {
+function createPurchaseTx(amount, receiverAddress, publicKey, privateKey) {
   // create transaction
   const transaction = new PurchaseTransaction(amount, receiverAddress);
 
-  // create one-time signing key pair
-  window.crypto.subtle.generateKey(
-    {
-      name: "ECDSA",
-      namedCurve: "P-384"
-    },
-    true,
-    ["sign", "verify"]
-    )
-    .then((keyPair) => {
-      const publicKey = keyPair.publicKey;
-      const privateKey = keyPair.privateKey;
+  // sign transaction
+  transaction.signTransaction(publicKey, privateKey);
 
-      // sign transaction
-      transaction.signTransaction(publicKey, privateKey);
-    })
-    .then(() => transacsRef.set(transaction))
+  // add transaction to blockchain
+  transacsRef.set(transaction);
 }
 
 
