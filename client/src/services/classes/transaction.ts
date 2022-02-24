@@ -1,6 +1,5 @@
 import SHA256 from "crypto-js/sha256";
 import EC from "elliptic";
-const ec = new EC.ec('secp256k1');
 
 // list of possible transaction's status
 enum Status {
@@ -18,7 +17,7 @@ class Transaction {
     toAddress: string,
     timestamps: number
   };
-  public signature: ArrayBuffer;
+  public signature: EC.ec.Signature;
   public isValid: boolean = false;
   public status: Status;
   public hash: string;
@@ -44,7 +43,7 @@ class Transaction {
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(walletAddress: string, keypair: any, publicKey: string, privateKey: string) {
+  async signTransaction(keypair: EC.ec.KeyPair, publicKey: string, privateKey: string, walletAddress: string) {
     // make sure the public key matches the sender wallet's address
     if (!this.isSenderValid(walletAddress, publicKey)) {
       throw new Error("This public key doesn't belong to this wallet.");
@@ -58,7 +57,7 @@ class Transaction {
     if (signature) {
       this.signature = signature;
       return signature;
-    } else {
+    } else {      
       throw new Error("There was an error while signing this transaction.");
     }
   }
@@ -117,7 +116,7 @@ class RewardTransaction extends Transaction {
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(walletAddress: string = "null - QRTZ reward", keypair: any, publicKey: string, privateKey: string) {
+  async signTransaction(keypair: EC.ec.KeyPair, publicKey: string, privateKey: string, walletAddress: string = "null - QRTZ reward") {
     // store transaction's public key
     this.publicKey = publicKey;
     
@@ -147,10 +146,12 @@ class PurchaseTransaction extends Transaction {
 
   constructor(amount: number, toAddress: string) {
     super(amount, "null - bank transfer", toAddress);
+    this.isValid = true;
+    this.status = Status.Confirmed;
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(walletAddress: string = "null - bank transfer", keypair: any, publicKey: string, privateKey: string) {
+  async signTransaction(keypair: EC.ec.KeyPair, publicKey: string, privateKey: string, walletAddress: string = "null - bank transfer") {
     // store transaction's public key
     this.publicKey = publicKey;
     
@@ -162,7 +163,7 @@ class PurchaseTransaction extends Transaction {
     if (signature) {
       this.signature = signature;
       return signature;
-    } else {
+    } else {      
       throw new Error("There was an error while signing this transaction.");
     }
   }

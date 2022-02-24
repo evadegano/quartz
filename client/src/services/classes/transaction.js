@@ -35,7 +35,7 @@ class Transaction {
         return SHA256(transacHeader).toString();
     }
     // sign transaction with the sender's private and public keys
-    signTransaction(walletAddress, publicKey, privateKey) {
+    signTransaction(keypair, publicKey, privateKey, walletAddress) {
         return __awaiter(this, void 0, void 0, function* () {
             // make sure the public key matches the sender wallet's address
             if (!this.isSenderValid(walletAddress, publicKey)) {
@@ -43,21 +43,20 @@ class Transaction {
             }
             // get transaction's hash
             this.hash = this.getHash();
-            // encode hash
-            let enc = new TextEncoder();
-            let encodedTx = enc.encode(this.hash);
-            // create signature
-            const signature = yield window.crypto.subtle.sign({
-                name: "ECDSA",
-                hash: { name: "SHA-384" },
-            }, privateKey, encodedTx);
-            this.signature = signature;
+            const signature = keypair.sign(this.hash);
+            if (signature) {
+                this.signature = signature;
+                return signature;
+            }
+            else {
+                throw new Error("There was an error while signing this transaction.");
+            }
         });
     }
     // check whether the sender's public key belongs to their wallet address
     isSenderValid(walletAddress, publicKey) {
         // hash public key
-        const hashedKey = SHA256(publicKey.toString()).toString();
+        const hashedKey = SHA256(publicKey).toString();
         // compare hashed key and wallet address
         if (hashedKey !== walletAddress)
             return false;
@@ -90,44 +89,44 @@ class RewardTransaction extends Transaction {
         this.header.minedBlock = blockHash;
     }
     // sign transaction with the sender's private and public keys
-    signTransaction(walletAddress = "null - QRTZ reward", publicKey, privateKey) {
+    signTransaction(keypair, publicKey, privateKey, walletAddress = "null - QRTZ reward") {
         return __awaiter(this, void 0, void 0, function* () {
             // store transaction's public key
             this.publicKey = publicKey;
             // get transaction's hash
             this.hash = this.getHash();
-            // encode hash
-            let enc = new TextEncoder();
-            let encodedTx = enc.encode(this.hash);
-            // create signature
-            const signature = yield window.crypto.subtle.sign({
-                name: "ECDSA",
-                hash: { name: "SHA-384" },
-            }, privateKey, encodedTx);
-            this.signature = signature;
+            const signature = keypair.sign(this.hash);
+            if (signature) {
+                this.signature = signature;
+                return signature;
+            }
+            else {
+                throw new Error("There was an error while signing this transaction.");
+            }
         });
     }
 }
 class PurchaseTransaction extends Transaction {
     constructor(amount, toAddress) {
         super(amount, "null - bank transfer", toAddress);
+        this.isValid = true;
+        this.status = Status.Confirmed;
     }
     // sign transaction with the sender's private and public keys
-    signTransaction(walletAddress = "null - bank transfer", publicKey, privateKey) {
+    signTransaction(keypair, publicKey, privateKey, walletAddress = "null - bank transfer") {
         return __awaiter(this, void 0, void 0, function* () {
             // store transaction's public key
             this.publicKey = publicKey;
             // get transaction's hash
             this.hash = this.getHash();
-            // encode hash
-            let enc = new TextEncoder();
-            let encodedTx = enc.encode(this.hash);
-            // create signature
-            const signature = yield window.crypto.subtle.sign({
-                name: "ECDSA",
-                hash: { name: "SHA-384" },
-            }, privateKey, encodedTx);
-            this.signature = signature;
+            const signature = keypair.sign(this.hash);
+            if (signature) {
+                this.signature = signature;
+                return signature;
+            }
+            else {
+                throw new Error("There was an error while signing this transaction.");
+            }
         });
     }
 }

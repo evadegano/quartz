@@ -40,7 +40,7 @@ async function topUpWallet(walletAddress) {
   const publicKey = keypair.getPublic("hex");
   const privateKey = keypair.getPrivate("hex");
 
-  createPurchaseTx(randAmount, walletAddress, publicKey, privateKey);
+  createPurchaseTx(randAmount, walletAddress, keypair, publicKey, privateKey);
 }
 
 

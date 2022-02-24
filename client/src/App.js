@@ -115,10 +115,14 @@ class App extends Component {
   fetchTransactions() {
     let transactionsCopy = [];
 
+    // loop through transactions and add them to the global state
     this.transacsRef.map().once(function(transac) {
-      let data = _.pick(transac, ["_.#", "amount", "header"]);
-      transactionsCopy.push(data);
+      transactionsCopy.push(transac);
     });
+
+    // this.gun.get("l01f59a9Ou4iXbXdqq0n").get("header").get("fromAddress").once(function(value) {
+    //   console.log("amount:", value);
+    // })
 
     this.setState({ transactions: transactionsCopy });
   }

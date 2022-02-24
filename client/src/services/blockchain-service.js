@@ -42,29 +42,49 @@ function sendCoins(amount, publicKey, privateKey, senderAddress, receiverAddress
   // sign transaction
   transaction.signTransaction(senderAddress, publicKey, privateKey);
 
+  
+
   // add transaction to the decentralized database
   transacsRef.set(transaction);
 }
 
+// adapt data format for GunJS
+// function taken from: https://github.com/amark/gun/issues/231
+function array2object(arr) {
+  var obj = {};
 
-function createPurchaseTx(amount, receiverAddress, publicKey, privateKey) {
+  Gun.list.map(arr, function(v,f,t) {
+
+    if (Gun.list.is(v) || Gun.obj.is(v)) {
+
+      obj[f] = array2object(v);
+      return;
+    }
+    obj[f] = v;
+  });
+
+  return obj;
+}
+
+
+async function createPurchaseTx(amount, receiverAddress, keypair, publicKey, privateKey) {
   // create transaction
   const transaction = new PurchaseTransaction(amount, receiverAddress);
-  console.log("transac created");
 
-  try {
-    // sign transaction
-    transaction.signTransaction(publicKey, privateKey);
-    console.log("transac signed");
+  // sign transaction
+  await transaction.signTransaction(keypair, publicKey, privateKey);
 
-  } catch(err) {
-    console.log(err);
-    return err;
-  }
-
-  // add transaction to blockchain
-  transacsRef.set(transaction);
-  console.log("transac added to gun");
+  // store transaction's hash as its id
+  const txId = transaction.hash;
+  // turn transaction into an object to git in GunJS
+  const objTx = array2object(transaction);
+  
+  // add transaction to db
+  const newTx = gun.get(`${txId}`).put(objTx);
+  // add transaction's header to db
+  newTx.get("header").put(transaction.header);
+  // link transaction to the transactions ledger
+  transacsRef.set(newTx);
 }
 
 
