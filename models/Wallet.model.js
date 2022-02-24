@@ -23,7 +23,10 @@ const walletSchema = new Schema({
     deactivationDate: {
       type: Date,
       default: null
-    }
+    },
+    keypair: {},
+    publicKey: String,
+    privateKey: String
   },
   {
     timestamps: true,

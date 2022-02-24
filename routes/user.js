@@ -94,18 +94,25 @@ router.get("/wallets", (req, res, next) => {
 
 // POST wallet 
 router.post("/wallets", (req, res, next) => {
-  const { userId, walletAddress } = req.body;
+  const { userId, walletAddress, keypair, publicKey, privateKey } = req.body;
 
   // generate random name
   let randWalletName = hri.random() + Math.round(Math.random() * 100);
 
+  console.log("randWalletName", randWalletName);
+
   // create new wallet
   const newWallet = new Wallet({
-    user_id: req.user._id,
-    address,
+    user_id: userId,
+    address: walletAddress,
     name: randWalletName,
-    lastConnection: Date.now()
+    lastConnection: Date.now(),
+    keypair,
+    publicKey,
+    privateKey
   })
+
+  console.log("hey");
 
   newWallet.save()
     .then(() => {

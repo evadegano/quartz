@@ -1,7 +1,9 @@
 const { Schema, model } = require("mongoose");
 
 const tempWalletSchema = new Schema({
+  
     address: String,
+    keypair: {},
     publicKey: String,
     privateKey: String
   }

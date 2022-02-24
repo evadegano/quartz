@@ -15,10 +15,10 @@ router.get("/users", (req, res, next) => {
 
 
 router.post("/temp-wallets", (req, res, next) => {
-  const { walletAddress, publicKey, privateKey } = req.body;
+  const { walletAddress, keypair, publicKey, privateKey } = req.body;
 
-  TempWallet.create({ walletAddress, publicKey, privateKey })
-    .then((walletsFromDB => res.status(200).json({ wallets: walletsFromDB })))
+  TempWallet.create({ walletAddress, keypair, publicKey, privateKey })
+    .then((walletFromDB => res.status(200).json({ wallets: walletFromDB })))
     .catch(err => res.status(500).json({ message: err }))
 })
 

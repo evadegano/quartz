@@ -16,7 +16,7 @@ const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
 
 
 
-function runBackEnd() {
+function run() {
   // connect to database
   mongoose.connect('mongodb://localhost/quartz')
     // .then(() => {
@@ -93,7 +93,7 @@ function addUsersToDB(usersArray) {
 }
 
 
-// create multiple wallets for each user
+// delete temporary wallets
 function deleteWallets() {
   Wallet.deleteMany({ })
     .then(() => TempWallet.deleteMany({ }))
@@ -102,4 +102,4 @@ function deleteWallets() {
 }
 
 
-runBackEnd()
+run()

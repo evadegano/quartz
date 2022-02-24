@@ -2,9 +2,12 @@ import { Component } from "react";
 import { SHA256 } from "crypto-js";
 import axios from "axios";
 import Gun from  "gun";
-import { generateWallet, postWallets, getCoins } from "../services/user-service";
+import { getCoins } from "../services/user-service";
 import { createPurchaseTx } from "../services/blockchain-service";
 import users from "./users.json";
+import EC from "elliptic";
+var ec = new EC.ec('secp256k1');
+
 
 // service to connect to the API
 const service = axios.create({
@@ -52,45 +55,17 @@ const token = {
 
 // create wallets for users
 async function createWallets(users) {
-  let tempWallets = [];
-  let wallets = [];
-
   // generate a rand amount of wallets for each user
   const rand = Math.round(Math.random() * 6);
 
   for (let userID of users) {
-    for (let i = 0; i < rand; i++) {
-      let walletAddress, publicKey, privateKey;
+    let keypair = ec.genKeyPair();
+    let publicKey = keypair.getPublic("hex");
+    let privateKey = keypair.getPrivate("hex");
+    let walletAddress = SHA256(publicKey).toString();
 
-      window.crypto.subtle.generateKey(
-        {
-          name: "ECDSA",
-          namedCurve: "P-384"
-        },
-        true,
-        ["sign", "verify"]
-        )
-        .then((keyPair) => {
-          walletAddress = SHA256(keyPair.publicKey.toString()).toString();
-          publicKey = keyPair.publicKey;
-          privateKey = keyPair.privateKey;
-
-          tempWallets.push({ 
-            address: walletAddress,
-            publicKey,
-            privateKey
-          });
-
-          wallets.push({
-            userID,
-            walletAddress
-          });
-
-          //gun.get(wallets).get(walletAddress).put({ userID, publicKey, privateKey });
-        })
-    }
+    await service.post("/wallets", { userID, walletAddress, keypair, publicKey, privateKey }).then(response => response.data)
   }
-
 }
 
 function topUpWallet(walletAddress) {
@@ -98,28 +73,14 @@ function topUpWallet(walletAddress) {
   const randAmount = Math.round(Math.random() * (25000 - 1000) + 1000);
 
   // create one-time signing key pair
-  window.crypto.subtle.generateKey(
-    {
-      name: "ECDSA",
-      namedCurve: "P-384"
-    },
-    true,
-    ["sign", "verify"]
-    )
-    .then((keyPair) => {
-      const publicKey = keyPair.publicKey;
-      const privateKey = keyPair.privateKey;
+  let keypair = ec.genKeyPair();
+  const publicKey = keypair.getPublic("hex");
+  const privateKey = keypair.getPrivate("hex");
 
-      return  getCoins(randAmount, token, publicKey, privateKey);
-    })
-    .then(response => {
-      // add transaction to the blockchain
-      const { amount, keypair } = response;
-      createPurchaseTx(amount, walletAddress, keypair.publicKey, keypair.privateKey);
+  getCoins(randAmount, token, publicKey, privateKey);
+  createPurchaseTx(randAmount, walletAddress, keypair.publicKey, keypair.privateKey);
 
-      console.log("wallet toped up");
-    })
-    .catch(err => console.log(err))
+ console.log("wallet toped up");
 }
 
 
@@ -137,29 +98,18 @@ class Seed extends Component {
   }
 
   test = (event) => {
-    let walletAddress, publicKey, privateKey;
+    const userID = users[2];
 
-    window.crypto.subtle.generateKey(
-      {
-        name: "ECDSA",
-        namedCurve: "P-384"
-      },
-      true,
-      ["sign", "verify"]
-      )
-      .then((keyPair) => {
-        walletAddress = SHA256(keyPair.publicKey.toString()).toString();
-        
-        
-      })
+    let keypair = ec.genKeyPair();
+    let walletAddress = SHA256(keypair.toString()).toString();
 
-      
+    service.post("/wallets", { userID, walletAddress, keypair, publicKey: keypair.getPublic("hex"), privateKey: keypair.getPrivate("hex") }).then(response => response.data)
   }
 
   render() {
     return (
       <div>
-        <button>Test</button>
+        <button onClick={(this.test)}>Test</button>
         <button onClick={this.run}>Seed</button>
       </div>
     );
