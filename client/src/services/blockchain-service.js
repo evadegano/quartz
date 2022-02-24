@@ -50,12 +50,21 @@ function sendCoins(amount, publicKey, privateKey, senderAddress, receiverAddress
 function createPurchaseTx(amount, receiverAddress, publicKey, privateKey) {
   // create transaction
   const transaction = new PurchaseTransaction(amount, receiverAddress);
+  console.log("transac created");
 
-  // sign transaction
-  transaction.signTransaction(publicKey, privateKey);
+  try {
+    // sign transaction
+    transaction.signTransaction(publicKey, privateKey);
+    console.log("transac signed");
+
+  } catch(err) {
+    console.log(err);
+    return err;
+  }
 
   // add transaction to blockchain
   transacsRef.set(transaction);
+  console.log("transac added to gun");
 }
 
 

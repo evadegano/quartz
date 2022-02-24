@@ -1,11 +1,14 @@
 import axios from "axios";
 import SHA256 from "crypto-js/sha256";
-
+import EC from "elliptic";
+var ec = new EC.ec('secp256k1');
 
 const service = axios.create({
   baseURL: `${process.env.REACT_APP_API_URL}`,
   withCredentials: true
 })
+
+
 
 function getWallets() {
   return service.get("/wallets", {}).then(response => response.data);
@@ -33,21 +36,12 @@ function getCoins(amount, token, publicKey, privateKey) {
 
 function generateWallet() {
 
-  window.crypto.subtle.generateKey(
-    {
-      name: "ECDSA",
-      namedCurve: "P-384"
-    },
-    true,
-    ["sign", "verify"]
-    )
-    .then((keyPair) => {
-      const walletAddress = SHA256(keyPair.publicKey.toString()).toString();
+  let keypair = ec.genKeyPair();
+  let publicKey = keypair.getPublic("hex");
+  let privateKey = keypair.getPrivate("hex");
+  let walletAddress = SHA256(publicKey).toString();
 
-      return [ walletAddress, keyPair.publicKey, keyPair.privateKey ];
-    });
-
-    throw new Error("Something went wrong when creating your wallet.")
+  return [ keypair, publicKey, privateKey, walletAddress ];
 }
 
 

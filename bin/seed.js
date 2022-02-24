@@ -1,6 +1,5 @@
 // packages
 const mongoose = require("mongoose");
-var hri = require('human-readable-ids').hri;
 
 // package for password encryption
 const bcrypt = require("bcryptjs");
@@ -9,7 +8,6 @@ const saltRounds = 10;
 // db models
 const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
-const TempWallet = require("../models/TempWallet.model")
 
 // variables
 const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
@@ -19,20 +17,15 @@ const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
 function run() {
   // connect to database
   mongoose.connect('mongodb://localhost/quartz')
-    // .then(() => {
-    //   console.log("connected!!");
-    //   const users = createUsers();
-    //   return addUsersToDB(users);
-    // })
     .then(() => {
-      console.log("connected!");
+      console.log("connected!!");
+      const users = createUsers();
+      return addUsersToDB(users);
+    })
+    .then(() => {
       return deleteWallets();
     })
     .catch(err => console.log("global err:", err))
-}
-
-function runFrontEnd() {
-  return;
 }
 
 
@@ -96,7 +89,6 @@ function addUsersToDB(usersArray) {
 // delete temporary wallets
 function deleteWallets() {
   Wallet.deleteMany({ })
-    .then(() => TempWallet.deleteMany({ }))
     .then(() => console.log("deleted wallets"))
     .catch(err => console.log("wallet deletion err:", err))
 }

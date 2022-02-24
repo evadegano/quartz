@@ -1,4 +1,6 @@
 import SHA256 from "crypto-js/sha256";
+import EC from "elliptic";
+const ec = new EC.ec('secp256k1');
 
 // list of possible transaction's status
 enum Status {
@@ -42,7 +44,7 @@ class Transaction {
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(walletAddress: string, publicKey: CryptoKey, privateKey: CryptoKey) {
+  async signTransaction(walletAddress: string, keypair: any, publicKey: string, privateKey: string) {
     // make sure the public key matches the sender wallet's address
     if (!this.isSenderValid(walletAddress, publicKey)) {
       throw new Error("This public key doesn't belong to this wallet.");
@@ -51,27 +53,20 @@ class Transaction {
     // get transaction's hash
     this.hash = this.getHash();
 
-    // encode hash
-    let enc = new TextEncoder();
-    let encodedTx = enc.encode(this.hash);
+    const signature = keypair.sign(this.hash);
 
-    // create signature
-    const signature = await window.crypto.subtle.sign(
-      {
-        name: "ECDSA",
-        hash: {name: "SHA-384"},
-      },
-      privateKey,
-      encodedTx
-    );
-
-    this.signature = signature;
+    if (signature) {
+      this.signature = signature;
+      return signature;
+    } else {
+      throw new Error("There was an error while signing this transaction.");
+    }
   }
 
   // check whether the sender's public key belongs to their wallet address
-  isSenderValid(walletAddress: string, publicKey: CryptoKey) {
+  isSenderValid(walletAddress: string, publicKey: string) {
     // hash public key
-    const hashedKey = SHA256(publicKey.toString()).toString()
+    const hashedKey = SHA256(publicKey).toString()
 
     // compare hashed key and wallet address
     if (hashedKey !== walletAddress) return false;
@@ -114,7 +109,7 @@ class RewardTransaction extends Transaction {
     minedBlock: string,
     timestamps: number
   };
-  public publicKey: CryptoKey;
+  public publicKey: string;
 
   constructor(amount: number, toAddress: string, blockHash: string) {
     super(amount, "null - QRTZ reward", toAddress);
@@ -122,28 +117,21 @@ class RewardTransaction extends Transaction {
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(walletAddress: string = "null - QRTZ reward", publicKey: CryptoKey, privateKey: CryptoKey) {
+  async signTransaction(walletAddress: string = "null - QRTZ reward", keypair: any, publicKey: string, privateKey: string) {
     // store transaction's public key
     this.publicKey = publicKey;
     
     // get transaction's hash
     this.hash = this.getHash();
 
-    // encode hash
-    let enc = new TextEncoder();
-    let encodedTx = enc.encode(this.hash);
+    const signature = keypair.sign(this.hash);
 
-    // create signature
-    const signature = await window.crypto.subtle.sign(
-      {
-        name: "ECDSA",
-        hash: {name: "SHA-384"},
-      },
-      privateKey,
-      encodedTx
-    );
-
-    this.signature = signature;
+    if (signature) {
+      this.signature = signature;
+      return signature;
+    } else {
+      throw new Error("There was an error while signing this transaction.");
+    }
   }
 }
 
@@ -155,35 +143,28 @@ class PurchaseTransaction extends Transaction {
     toAddress: string,
     timestamps: number
   }
-  public publicKey: CryptoKey;
+  public publicKey: string;
 
   constructor(amount: number, toAddress: string) {
     super(amount, "null - bank transfer", toAddress);
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(walletAddress: string = "null - bank transfer", publicKey: CryptoKey, privateKey: CryptoKey) {
+  async signTransaction(walletAddress: string = "null - bank transfer", keypair: any, publicKey: string, privateKey: string) {
     // store transaction's public key
     this.publicKey = publicKey;
     
     // get transaction's hash
     this.hash = this.getHash();
 
-    // encode hash
-    let enc = new TextEncoder();
-    let encodedTx = enc.encode(this.hash);
+    const signature = keypair.sign(this.hash);
 
-    // create signature
-    const signature = await window.crypto.subtle.sign(
-      {
-        name: "ECDSA",
-        hash: {name: "SHA-384"},
-      },
-      privateKey,
-      encodedTx
-    );
-
-    this.signature = signature;
+    if (signature) {
+      this.signature = signature;
+      return signature;
+    } else {
+      throw new Error("There was an error while signing this transaction.");
+    }
   }
 }
 

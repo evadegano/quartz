@@ -33,9 +33,6 @@ app.use("/api", userRoutes);
 const recoveryRoutes = require("./routes/recovery");
 app.use("/api", recoveryRoutes);
 
-const tempRoutes = require("./routes/temp");
-app.use("/api", tempRoutes);
-
 
 app.use((req, res, next) => {
   // If no routes match, send them the React HTML.
