@@ -7,9 +7,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
+
     });
 };
-
 const ec = new EC.ec('secp256k1');
 // list of possible transaction's status
 var Status;
@@ -19,13 +19,13 @@ var Status;
     Status["Rejected"] = "rejected";
 })(Status || (Status = {}));
 class Transaction {
-    constructor(amount, fromAddress, toAddress) {
+    constructor(amount, fromAddress, toAddress, timestamps = Date.now()) {
         this.isValid = false;
         this.header = {
             amount: amount,
             fromAddress: fromAddress,
             toAddress: toAddress,
-            timestamps: Date.now()
+            timestamps: timestamps
         };
         this.status = Status.Pending;
     }
@@ -104,8 +104,8 @@ class Transaction {
     }
 }
 class RewardTransaction extends Transaction {
-    constructor(amount, toAddress, blockHash) {
-        super(amount, "null - QRTZ reward", toAddress);
+    constructor(amount, toAddress, timestamps = Date.now(), blockHash) {
+        super(amount, "null - QRTZ reward", toAddress, timestamps);
         this.header.minedBlock = blockHash;
     }
     // sign transaction with the sender's private and public keys
@@ -138,8 +138,8 @@ class RewardTransaction extends Transaction {
     }
 }
 class PurchaseTransaction extends Transaction {
-    constructor(amount, toAddress) {
-        super(amount, "null - bank transfer", toAddress);
+    constructor(amount, toAddress, timestamps = Date.now()) {
+        super(amount, "null - bank transfer", toAddress, timestamps);
         this.isValid = true;
         this.status = Status.Confirmed;
     }

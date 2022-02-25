@@ -2,6 +2,7 @@
 import axios from "axios";
 import SHA256 from "crypto-js";
 import EC from "elliptic";
+import Gun from  "gun";
 
 // services
 import { getCoins } from "../services/user-service";
@@ -9,6 +10,8 @@ import { createPurchaseTx } from "../services/blockchain-service";
 
 // init variables
 const ec = new EC.ec('secp256k1');
+const gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
+window.gun = gun; //To have access to gun object in browser console
 
 // service to connect to the API
 const service = axios.create({
@@ -16,6 +19,18 @@ const service = axios.create({
   withCredentials: true
 })
 
+
+// delete transactions from db
+function deleteTx() {
+  gun.get("transactions").map().once(function(transac, idx) {
+    console.log(idx);
+
+    // delete transaction's header
+    gun.get(idx).get("header").put(null);
+    // delete transaction
+    gun.get(idx).put(null);
+  });
+}
 
 
 // create wallets for users
@@ -71,5 +86,9 @@ function hexToArray(hashArray, output = []) {
   return hexToArray(hashArray.slice(2), output);
 }
 
+function genRandomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
 
-export { createWallets, topUpWallet, hexToArray };
+
+export { createWallets, topUpWallet, hexToArray, genRandomDate, deleteTx };

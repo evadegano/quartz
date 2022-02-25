@@ -66,9 +66,9 @@ function array2object(arr) {
 }
 
 
-async function createPurchaseTx(amount, receiverAddress, keypair, publicKey) {
+async function createPurchaseTx(amount, receiverAddress, keypair, publicKey, timestamps) {
   // create transaction
-  const transaction = new PurchaseTransaction(amount, receiverAddress);
+  const transaction = new PurchaseTransaction(amount, receiverAddress, timestamps);
 
   // sign transaction
   await transaction.signTransaction(keypair, publicKey);

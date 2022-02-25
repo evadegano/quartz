@@ -26,13 +26,13 @@ class Transaction {
   public status: Status;
   public hash: string;
 
-  constructor(amount: number, fromAddress: string, toAddress: string) 
+  constructor(amount: number, fromAddress: string, toAddress: string, timestamps: number = Date.now()) 
   {
     this.header = {
       amount: amount,
       fromAddress: fromAddress,
       toAddress: toAddress,
-      timestamps: Date.now()
+      timestamps: timestamps
     };
     this.status = Status.Pending;
   }
@@ -138,8 +138,8 @@ class RewardTransaction extends Transaction {
   };
   public publicKey: string;
 
-  constructor(amount: number, toAddress: string, blockHash: string) {
-    super(amount, "null - QRTZ reward", toAddress);
+  constructor(amount: number, toAddress: string, timestamps: number = Date.now(), blockHash: string) {
+    super(amount, "null - QRTZ reward", toAddress, timestamps);
     this.header.minedBlock = blockHash;
   }
 
@@ -188,8 +188,8 @@ class PurchaseTransaction extends Transaction {
   }
   public publicKey: string;
 
-  constructor(amount: number, toAddress: string) {
-    super(amount, "null - bank transfer", toAddress);
+  constructor(amount: number, toAddress: string, timestamps: number = Date.now()) {
+    super(amount, "null - bank transfer", toAddress, timestamps);
     this.isValid = true;
     this.status = Status.Confirmed;
   }

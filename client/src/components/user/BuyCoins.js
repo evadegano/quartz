@@ -45,7 +45,7 @@ class BuyCoins extends Component {
     const publicKey = keypair.getPublic("hex");
 
     getCoins(amount, token, keypair, publicKey)
-      .then(response => {
+      .then(() => {
         const walletAddress = this.props.match.params.walletId;
 
         // add transaction to the blockchain

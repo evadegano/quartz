@@ -1,11 +1,11 @@
 // packages
 import { Component } from "react";
 import Gun from  "gun";
-import EC from "elliptic";
+import EC, { rand } from "elliptic";
 
 // helpers
 import { createPurchaseTx } from "../services/blockchain-service";
-import { hexToArray } from "./helpers";
+import { hexToArray, genRandomDate, deleteTx } from "./helpers";
 
 // jsons
 import users from "./users.json";
@@ -24,20 +24,37 @@ class Seed extends Component {
   }
 
   run = async (event) => {
-    return "yo";
+    return;
   }
 
-  test = (event) => {
-    for (let wallet in wallets) {
+  test = async (event) => {
+    const walletAddress = wallets[0].address;
+
+    const randDate = genRandomDate(new Date(2021, 10, 1), new Date());
+    const timestamps = randDate.getTime();
+
+    console.log("timestamps", timestamps);
       const amount = Math.round(Math.random() * (250000 - 1000) + 1000);
 
-      const walletAddress = wallet.address;
+ 
 
       const keypair = ec.genKeyPair();
       const publicKey = keypair.getPublic("hex");
 
-      createPurchaseTx(amount, walletAddress, keypair, publicKey);    
-    }
+      createPurchaseTx(amount, walletAddress, keypair, publicKey, timestamps);
+
+    // for (let wallet in wallets) {
+
+    //   const timestamps = genRandomDate(new Date(2021, 10, 1), new Date());
+    //   const amount = Math.round(Math.random() * (250000 - 1000) + 1000);
+
+    //   const walletAddress = wallet.address;
+
+    //   const keypair = ec.genKeyPair();
+    //   const publicKey = keypair.getPublic("hex");
+
+    //   createPurchaseTx(amount, walletAddress, keypair, publicKey, timestamps);    
+    // }
     
   }
 
