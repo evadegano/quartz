@@ -1,5 +1,8 @@
+import { sign } from "crypto";
 import SHA256 from "crypto-js/sha256";
 import EC from "elliptic";
+
+const ec = new EC.ec('secp256k1');
 
 // list of possible transaction's status
 enum Status {
@@ -17,7 +20,8 @@ class Transaction {
     toAddress: string,
     timestamps: number
   };
-  public signature: EC.ec.Signature;
+  public signature: string;
+  public publicKey: string;
   public isValid: boolean = false;
   public status: Status;
   public hash: string;
@@ -43,7 +47,7 @@ class Transaction {
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(keypair: EC.ec.KeyPair, publicKey: string, privateKey: string, walletAddress: string) {
+  async signTransaction(keypair: EC.ec.KeyPair, publicKey: string, walletAddress: string) {
     // make sure the public key matches the sender wallet's address
     if (!this.isSenderValid(walletAddress, publicKey)) {
       throw new Error("This public key doesn't belong to this wallet.");
@@ -52,13 +56,29 @@ class Transaction {
     // get transaction's hash
     this.hash = this.getHash();
 
+    // sign transaction
     const signature = keypair.sign(this.hash);
 
-    if (signature) {
-      this.signature = signature;
-      return signature;
+    // convert signature to der and then hex-string for storage
+    const derSign = signature.toDER();
+    let hexSign = "";
+
+    for (let int of derSign) {
+      let hex = int.toString(16);
+
+      if (hex.length === 1) {
+        hex = "0" + hex;
+      }
+
+      hexSign += hex;
+    }
+
+    if (hexSign.length > 0) {
+      this.signature = hexSign;
+      return hexSign;
+
     } else {      
-      throw new Error("There was an error while signing this transaction.");
+      throw new Error("There was an error while signing your transaction.");
     }
   }
 
@@ -79,7 +99,15 @@ class Transaction {
       return false;
     }
 
-    // add verification via public key, then add to blockchain-service
+    // get keypair from public key
+    const keypair = ec.keyFromPublic(this.publicKey, "hex");
+    // verify signature
+    const verified = keypair.verify(this.hash, this.signature);
+
+    if (!verified) {
+      this.isValid = false;
+      return false;
+    }
 
     this.isValid = true;
     return true;
@@ -116,18 +144,34 @@ class RewardTransaction extends Transaction {
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(keypair: EC.ec.KeyPair, publicKey: string, privateKey: string, walletAddress: string = "null - QRTZ reward") {
+  async signTransaction(keypair: EC.ec.KeyPair, publicKey: string) {
     // store transaction's public key
     this.publicKey = publicKey;
     
     // get transaction's hash
     this.hash = this.getHash();
 
+    // sign transaction
     const signature = keypair.sign(this.hash);
 
-    if (signature) {
-      this.signature = signature;
-      return signature;
+    // convert signature to der and then hex-string for storage
+    const derSign = signature.toDER();
+    let hexSign = "";
+
+    for (let int of derSign) {
+      let hex = int.toString(16);
+
+      if (hex.length === 1) {
+        hex = "0" + hex;
+      }
+
+      hexSign += hex;
+    }
+
+    if (hexSign.length > 0) {
+      this.signature = hexSign;
+      return hexSign;
+
     } else {
       throw new Error("There was an error while signing this transaction.");
     }
@@ -151,18 +195,34 @@ class PurchaseTransaction extends Transaction {
   }
 
   // sign transaction with the sender's private and public keys
-  async signTransaction(keypair: EC.ec.KeyPair, publicKey: string, privateKey: string, walletAddress: string = "null - bank transfer") {
+  async signTransaction(keypair: EC.ec.KeyPair, publicKey: string) {
     // store transaction's public key
     this.publicKey = publicKey;
     
     // get transaction's hash
     this.hash = this.getHash();
 
+    // sign transaction
     const signature = keypair.sign(this.hash);
 
-    if (signature) {
-      this.signature = signature;
-      return signature;
+    // convert signature to der and then hex-string for storage
+    const derSign = signature.toDER();
+    let hexSign = "";
+
+    for (let int of derSign) {
+      let hex = int.toString(16);
+
+      if (hex.length === 1) {
+        hex = "0" + hex;
+      }
+
+      hexSign += hex;
+    }
+
+    if (hexSign.length > 0) {
+      this.signature = hexSign;
+      return hexSign;
+
     } else {      
       throw new Error("There was an error while signing this transaction.");
     }

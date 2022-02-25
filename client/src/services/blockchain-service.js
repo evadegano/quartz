@@ -33,6 +33,7 @@ function getWalletBalance(walletAddress) {
 function sendCoins(amount, publicKey, privateKey, senderAddress, receiverAddress) {
   // make sure this wallet has enough funds
   const walletBalance = getWalletBalance(senderAddress);
+
   if (walletBalance < amount) {
     throw new Error("Insufficient funds.");
   }
@@ -41,8 +42,6 @@ function sendCoins(amount, publicKey, privateKey, senderAddress, receiverAddress
   const transaction = new Transaction(amount, senderAddress, receiverAddress);
   // sign transaction
   transaction.signTransaction(senderAddress, publicKey, privateKey);
-
-  
 
   // add transaction to the decentralized database
   transacsRef.set(transaction);
@@ -67,12 +66,12 @@ function array2object(arr) {
 }
 
 
-async function createPurchaseTx(amount, receiverAddress, keypair, publicKey, privateKey) {
+async function createPurchaseTx(amount, receiverAddress, keypair, publicKey) {
   // create transaction
   const transaction = new PurchaseTransaction(amount, receiverAddress);
 
   // sign transaction
-  await transaction.signTransaction(keypair, publicKey, privateKey);
+  await transaction.signTransaction(keypair, publicKey);
 
   // store transaction's hash as its id
   const txId = transaction.hash;
@@ -88,6 +87,7 @@ async function createPurchaseTx(amount, receiverAddress, keypair, publicKey, pri
 }
 
 
+// hash values from an array in pair
 function hashInPair(hashArray, output = []) {
   // if only one element left, hash it with itself and return result
   if (hashArray.length === 1) {
@@ -112,6 +112,8 @@ function hashInPair(hashArray, output = []) {
   return hashInPair(hashArray.slice(2), output);
 }
 
+
+// get the Merkle root of a tree of data
 function getMerkleRoot(txHashes) {
   const merkleRoot = hashInPair(txHashes);
 

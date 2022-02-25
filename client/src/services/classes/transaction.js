@@ -1,4 +1,5 @@
 import SHA256 from "crypto-js/sha256";
+import EC from "elliptic";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -9,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 
+const ec = new EC.ec('secp256k1');
 // list of possible transaction's status
 var Status;
 (function (Status) {
@@ -35,7 +37,7 @@ class Transaction {
         return SHA256(transacHeader).toString();
     }
     // sign transaction with the sender's private and public keys
-    signTransaction(keypair, publicKey, privateKey, walletAddress) {
+    signTransaction(keypair, publicKey, walletAddress) {
         return __awaiter(this, void 0, void 0, function* () {
             // make sure the public key matches the sender wallet's address
             if (!this.isSenderValid(walletAddress, publicKey)) {
@@ -43,13 +45,24 @@ class Transaction {
             }
             // get transaction's hash
             this.hash = this.getHash();
+            // sign transaction
             const signature = keypair.sign(this.hash);
-            if (signature) {
-                this.signature = signature;
-                return signature;
+            // convert signature to der and then hex-string for storage
+            const derSign = signature.toDER();
+            let hexSign = "";
+            for (let int of derSign) {
+                let hex = int.toString(16);
+                if (hex.length === 1) {
+                    hex = "0" + hex;
+                }
+                hexSign += hex;
+            }
+            if (hexSign.length > 0) {
+                this.signature = hexSign;
+                return hexSign;
             }
             else {
-                throw new Error("There was an error while signing this transaction.");
+                throw new Error("There was an error while signing your transaction.");
             }
         });
     }
@@ -68,7 +81,14 @@ class Transaction {
             this.isValid = false;
             return false;
         }
-        // add verification via public key, then add to blockchain-service
+        // get keypair from public key
+        const keypair = ec.keyFromPublic(this.publicKey, "hex");
+        // verify signature
+        const verified = keypair.verify(this.hash, this.signature);
+        if (!verified) {
+            this.isValid = false;
+            return false;
+        }
         this.isValid = true;
         return true;
     }
@@ -89,16 +109,27 @@ class RewardTransaction extends Transaction {
         this.header.minedBlock = blockHash;
     }
     // sign transaction with the sender's private and public keys
-    signTransaction(keypair, publicKey, privateKey, walletAddress = "null - QRTZ reward") {
+    signTransaction(keypair, publicKey) {
         return __awaiter(this, void 0, void 0, function* () {
             // store transaction's public key
             this.publicKey = publicKey;
             // get transaction's hash
             this.hash = this.getHash();
+            // sign transaction
             const signature = keypair.sign(this.hash);
-            if (signature) {
-                this.signature = signature;
-                return signature;
+            // convert signature to der and then hex-string for storage
+            const derSign = signature.toDER();
+            let hexSign = "";
+            for (let int of derSign) {
+                let hex = int.toString(16);
+                if (hex.length === 1) {
+                    hex = "0" + hex;
+                }
+                hexSign += hex;
+            }
+            if (hexSign.length > 0) {
+                this.signature = hexSign;
+                return hexSign;
             }
             else {
                 throw new Error("There was an error while signing this transaction.");
@@ -113,16 +144,27 @@ class PurchaseTransaction extends Transaction {
         this.status = Status.Confirmed;
     }
     // sign transaction with the sender's private and public keys
-    signTransaction(keypair, publicKey, privateKey, walletAddress = "null - bank transfer") {
+    signTransaction(keypair, publicKey) {
         return __awaiter(this, void 0, void 0, function* () {
             // store transaction's public key
             this.publicKey = publicKey;
             // get transaction's hash
             this.hash = this.getHash();
+            // sign transaction
             const signature = keypair.sign(this.hash);
-            if (signature) {
-                this.signature = signature;
-                return signature;
+            // convert signature to der and then hex-string for storage
+            const derSign = signature.toDER();
+            let hexSign = "";
+            for (let int of derSign) {
+                let hex = int.toString(16);
+                if (hex.length === 1) {
+                    hex = "0" + hex;
+                }
+                hexSign += hex;
+            }
+            if (hexSign.length > 0) {
+                this.signature = hexSign;
+                return hexSign;
             }
             else {
                 throw new Error("There was an error while signing this transaction.");

@@ -20,28 +20,56 @@ const service = axios.create({
 
 // create wallets for users
 async function createWallets(users) {
+
   for (let userID of users) {
+    // generate keypairs
     let keypair = ec.genKeyPair();
+
+    // get public and private keys
     let publicKey = keypair.getPublic("hex");
     let privateKey = keypair.getPrivate("hex");
+
+    // derive wallet address from public key
     let walletAddress = SHA256(publicKey).toString();
 
+    // create new wallet in MongoDB
     await service.post("/wallets", { userID, walletAddress, keypair, publicKey, privateKey }).then(response => response.data)
   }
 }
 
 
-async function topUpWallet(walletAddress) {
-  // random amount
-  const randAmount = Math.round(Math.random() * (25000 - 1000) + 1000);
+async function topUpWallet(wallets) {
 
-  // create one-time signing key pair
-  let keypair = ec.genKeyPair();
-  const publicKey = keypair.getPublic("hex");
-  const privateKey = keypair.getPrivate("hex");
+  for (let wallet of wallets) {
+    // generate a random amount
+    const amount = Math.round(Math.random() * (105000 - 1000) + 1000);
 
-  createPurchaseTx(randAmount, walletAddress, keypair, publicKey, privateKey);
+    // get the wallet's address
+    const walletAddresse = wallet.address;
+
+    // generate a one time signing keypair
+    const keypair = ec.genKeyPair();
+    const publicKey = keypair.getPublic("hex");
+
+    await createPurchaseTx(amount, walletAddresse, keypair, publicKey);
+  }
+}
+
+function hexToArray(hashArray, output = []) {
+  // if two elements left, hash them and return result
+  if (hashArray.length === 2) {
+    const int = parseInt(hashArray, 16);
+    output.push(int);
+
+    return output;
+  }
+
+  // else hash elmements and move on to the next
+  const int = parseInt(`${hashArray[0]}${hashArray[1]}`, 16);
+  output.push(int);
+
+  return hexToArray(hashArray.slice(2), output);
 }
 
 
-export { createWallets, topUpWallet };
+export { createWallets, topUpWallet, hexToArray };
