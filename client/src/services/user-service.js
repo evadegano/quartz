@@ -30,8 +30,8 @@ function deleteUser(userId) {
   return service.delete(`/${userId}`, {}).then(response => response.data);
 }
 
-function getCoins(amount, token, publicKey, privateKey) {
-  return service.post("/coins", { amount, token, publicKey, privateKey }).then(response => response.data);
+function getCoins(amount, token, keypair, publicKey) {
+  return service.post("/coins", { amount, token, keypair, publicKey }).then(response => response.data);
 }
 
 function generateWallet() {

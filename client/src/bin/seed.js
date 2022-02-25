@@ -24,45 +24,21 @@ class Seed extends Component {
   }
 
   run = async (event) => {
-    let walletAddresses = wallets.map(wallet => wallet.address);
-
-    const keypair = ec.genKeyPair();
-
-    const signature = keypair.sign(walletAddresses);
-    //console.log("signature", signature);
-
-    const derSign = signature.toDER();
-    console.log("derSign", derSign);
-
-    let hexSign = "";
-
-    for (let int of derSign) {
-      let hex = int.toString(16);
-
-      if (hex.length === 1) {
-        hex = "0" + hex;
-      }
-
-      hexSign += hex;
-    }
-    
-    console.log("hexSign", hexSign);
-    console.log("hexSign length", hexSign.length);
-
-    const derSign2 = hexToArray(hexSign);
-    console.log("derSign2", derSign2);
+    return "yo";
   }
 
   test = (event) => {
-    const amount = Math.round(Math.random() * (25000 - 1000) + 1000);
+    for (let wallet in wallets) {
+      const amount = Math.round(Math.random() * (250000 - 1000) + 1000);
 
-    const walletAddresses = wallets.map(wallet => wallet.address);
-    const receiverAddress = walletAddresses[0]
+      const walletAddress = wallet.address;
 
-    const keypair = ec.genKeyPair();
-    const publicKey = keypair.getPublic("hex");
+      const keypair = ec.genKeyPair();
+      const publicKey = keypair.getPublic("hex");
 
-    createPurchaseTx(amount, receiverAddress, keypair, publicKey);    
+      createPurchaseTx(amount, walletAddress, keypair, publicKey);    
+    }
+    
   }
 
   render() {

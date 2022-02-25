@@ -77,6 +77,8 @@ async function createPurchaseTx(amount, receiverAddress, keypair, publicKey) {
   const txId = transaction.hash;
   // turn transaction into an object to git in GunJS
   const objTx = array2object(transaction);
+
+  console.log("newTransac", transaction);
   
   // add transaction to db
   const newTx = gun.get(`${txId}`).put(objTx);

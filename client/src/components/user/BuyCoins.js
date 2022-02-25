@@ -2,7 +2,11 @@ import { Component } from "react";
 import { getCoins } from "../../services/user-service";
 import { createPurchaseTx } from "../../services/blockchain-service";
 import Gun from "gun";
+import EC from "elliptic";
 import StripeCheckout from "react-stripe-checkout";
+
+// init variables
+const ec = new EC.ec('secp256k1');
 
 
 class BuyCoins extends Component {
@@ -36,26 +40,16 @@ class BuyCoins extends Component {
   processTransfer = (token) => {
     const amount = this.state.amount;
 
-    // create one-time signing key pair
-    window.crypto.subtle.generateKey(
-      {
-        name: "ECDSA",
-        namedCurve: "P-384"
-      },
-      true,
-      ["sign", "verify"]
-      )
-      .then((keyPair) => {
-        const publicKey = keyPair.publicKey;
-        const privateKey = keyPair.privateKey;
+    // generate one-time signing keypair
+    const keypair = ec.genKeyPair();
+    const publicKey = keypair.getPublic("hex");
 
-        return  getCoins(amount, token, publicKey, privateKey);
-      })
+    getCoins(amount, token, keypair, publicKey)
       .then(response => {
+        const walletAddress = this.props.match.params.walletId;
+
         // add transaction to the blockchain
-        const { amount, keypair } = response;
-        const wallet = this.props.match.params.walletId;
-        createPurchaseTx(amount, wallet, keypair.publicKey, keypair.privateKey);
+        createPurchaseTx(amount, walletAddress, keypair, publicKey);
 
         // reset state
         this.setState({

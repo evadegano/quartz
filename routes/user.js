@@ -137,7 +137,7 @@ router.put("/:walletId", (req, res, next) => {
 
 // POST coins
 router.post("/coins", (req, res, next) => {
-  const { amount, token, publicKey, privateKey } = req.body;
+  const { amount, token, keypair, publicKey } = req.body;
   // key used to prevent user from being charged twice by mistake
   const idempotencyKey = publicKey;
 
@@ -151,16 +151,13 @@ router.post("/coins", (req, res, next) => {
       amount: amount,
       currency: "usd",
       customer: customer.id,
-      description: "Exchangnig fiat to QRTZ"
+      description: "Exchanging fiat to QRTZ"
     }, {idempotencyKey});
     
   })
     .then(() => res.status(200).json({ 
       amount, 
-      keypair: {
-        publicKey,
-        privateKey
-      } 
+      keypair
     }))
     .catch(() => res.status(500).json({ message: "Money exchange failed."}))
 });
