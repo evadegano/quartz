@@ -62,9 +62,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@faker-js/faker": "^6.0.0-alpha.7",
-    "@types/crypto-js": "^4.1.0"
   }
 }

@@ -1,7 +1,7 @@
 
 import { Component } from "react";
 import { Line } from "react-chartjs-2";
-import faker from "@faker-js/faker";
+
 
 import {
   Chart as ChartJS,
@@ -73,14 +73,14 @@ class LineChart extends Component {
 
   setData = () => {
     // labels defined by props
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    const labels = ['January', 'February', 'March'];
   
     const data = {
       labels,
       datasets: [
         {
           label: "Transactions",
-          data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+          data: [150000, 70000, 200000],
           borderColor: "#FE6601",
           backgroundColor: "#222222",
           fill: true,
