@@ -2,6 +2,7 @@ import Block from "./block";
 class Blockchain {
     constructor() {
         this.ledger = [this.createGenesisBlock()];
+        this.lastBlock = this.getLastBlockHash();
         this.difficulty = 4;
         this.miningReward = 100;
     }

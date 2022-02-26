@@ -1,6 +1,5 @@
 import SHA256 from "crypto-js/sha256";
 import EC from "elliptic";
-
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -83,33 +82,6 @@ class Transaction {
             return false;
         return true;
     }
-    // check whether the transaction has been signed correctly
-    isSigatureValid() {
-        if (!this.signature) {
-            this.isValid = false;
-            return false;
-        }
-        // get keypair from public key
-        const keypair = ec.keyFromPublic(this.publicKey, "hex");
-        // verify signature
-        const verified = keypair.verify(this.hash, this.signature);
-        if (!verified) {
-            this.isValid = false;
-            return false;
-        }
-        this.isValid = true;
-        return true;
-    }
-    // make sure the transaction's data hasn't been tampered with
-    isHeaderValid() {
-        const currentHash = this.getHash();
-        if (this.hash !== currentHash) {
-            this.isValid = false;
-            return false;
-        }
-        this.isValid = true;
-        return true;
-    }
 }
 class RewardTransaction extends Transaction {
     constructor(amount, toAddress, timestamps = Date.now(), blockHash) {
@@ -123,8 +95,8 @@ class RewardTransaction extends Transaction {
             amount: this.amount,
             fromAddress: this.fromAddress,
             toAddress: this.toAddress,
+            timestamps: this.timestamps,
             minedBlock: this.minedBlock,
-            timestamps: this.timestamps
         };
         const transacHeader = JSON.stringify(header);
         // hash transaction's header

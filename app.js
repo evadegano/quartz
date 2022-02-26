@@ -21,9 +21,6 @@ app.use(
 require('./passport/index')(app);
 
 // import routes
-const mainRoutes = require("./routes/index");
-app.use("/api", mainRoutes);
-
 const authRoutes = require("./routes/auth");
 app.use("/api", authRoutes);
 

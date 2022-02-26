@@ -95,40 +95,6 @@ class Transaction {
     if (hashedKey !== walletAddress) return false;
     return true;
   }
-
-  // check whether the transaction has been signed correctly
-  isSigatureValid() {
-    if (!this.signature) {
-      this.isValid = false;
-      return false;
-    }
-
-    // get keypair from public key
-    const keypair = ec.keyFromPublic(this.publicKey, "hex");
-    // verify signature
-    const verified = keypair.verify(this.hash, this.signature);
-
-    if (!verified) {
-      this.isValid = false;
-      return false;
-    }
-
-    this.isValid = true;
-    return true;
-  }
-
-  // make sure the transaction's data hasn't been tampered with
-  isHeaderValid() {
-    const currentHash = this.getHash();
-
-    if (this.hash !== currentHash) {
-      this.isValid = false;
-      return false;
-    }
-
-    this.isValid = true;
-    return true;
-  }
 }
 
 
@@ -147,8 +113,8 @@ class RewardTransaction extends Transaction {
       amount: this.amount,
       fromAddress: this.fromAddress,
       toAddress: this.toAddress,
+      timestamps: this.timestamps,
       minedBlock: this.minedBlock,
-      timestamps: this.timestamps
     }
     const transacHeader = JSON.stringify(header);
     

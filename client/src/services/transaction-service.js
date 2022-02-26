@@ -3,7 +3,7 @@ import Gun from  "gun";
 import EC from "elliptic";
 
 // helper functions
-import { getWalletBalance, array2object, getMerkleRoot } from "./helpers";
+import { getWalletBalance, getMerkleRoot, verifySignature, verifyHeader } from "./helpers";
 
 // classes
 import Transaction from "./classes/transaction";
@@ -81,25 +81,28 @@ async function processTx(transactions, minerAddress, timestamps) {
     // set default validity to true
     tx.isValid = true;
 
-    // make sure wallet has enough funds
-    const walletBalance = getWalletBalance(tx.fromAddress);
-    if (walletBalance < tx.amount) {
-      // if error, add it to the rejection object
-      rejectedTx[tx.hash].push("Insufficient funds.");
-      tx.isValid = false;
+    // make sure wallet has enough funds (ignore rewards and bank transfers)
+    if (tx.fromAddress !== "null - bank transfer" && tx.fromAddress !== "null - QRTZ reward") {
+      const walletBalance = getWalletBalance(tx.fromAddress);
+      
+      if (walletBalance < tx.amount) {
+        // if error, add it to the rejection object
+        rejectedTx[tx.hash] ? rejectedTx[tx.hash].push("Insufficient funds.") : rejectedTx[tx.hash] = ["Insufficient funds."];
+        tx.isValid = false;
+      }
     }
-
+    
     // check signature validity
-    if (!tx.isSignatureValid()) {
+    if (!verifySignature(tx)) {
       // if error, add it to the rejection object
-      rejectedTx[tx.hash].push("Invalid signature.");
+      rejectedTx[tx.hash] ? rejectedTx[tx.hash].push("Invalid signature.") : rejectedTx[tx.hash] = ["Invalid signature."];
       tx.isValid = false;
     }
 
     // check header's validity
-    if (!tx.isHeaderValid()) {
+    if (!verifyHeader(tx)) {
       // if error, add it to the rejection object
-      rejectedTx[tx.hash].push("Invalid header.");
+      rejectedTx[tx.hash] ? rejectedTx[tx.hash].push("Invalid header.") : rejectedTx[tx.hash] = ["Invalid header."];
       tx.isValid = false;
     }
 
@@ -116,7 +119,9 @@ async function processTx(transactions, minerAddress, timestamps) {
   // get blockchain data
   const difficulty = blockchainRef.get("difficulty");
   const miningReward = blockchainRef.get("miningReward");
-  const prevBlockHash = blockchainRef.getLastBlockHash();
+  const prevBlockHash = blockchainRef.get("lastBlock");
+
+  if (!difficulty) return "error: get blockchain data" // is this working?
 
   // create and mine a block
   const newBlock = new Block(prevBlockHash, merkleRoot, confirmedTx, difficulty, miningReward, timestamps);

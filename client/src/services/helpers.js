@@ -1,8 +1,10 @@
 // packages
 import Gun from  "gun";
 import SHA256 from "crypto-js/sha256";
+import EC from "elliptic";
 
 // init variables
+const ec = new EC.ec('secp256k1');
 const gun = Gun([`${process.env.REACT_APP_GUN_URL}`]);
 let transacsRef = gun.get("transactions");
 
@@ -111,5 +113,58 @@ function getMerkleRoot(txHashes) {
   return getMerkleRoot(merkleRoot);
 }
 
+function verifySignature(transaction) {
+  if (!transaction.signature) {
+    transaction.isValid = false;
+    return false;
+  }
 
-export { hexToArray, hashInPair, getWalletBalance, array2object, getMerkleRoot };
+  // get keypair from public key
+  const keypair = ec.keyFromPublic(transaction.publicKey, "hex");
+  // verify signature
+  const verified = keypair.verify(transaction.hash, transaction.signature);
+
+  if (!verified) {
+    transaction.isValid = false;
+    return false;
+  }
+
+  transaction.isValid = true;
+  return true;
+}
+
+function getHash(transaction) {
+  // store tx relevant data into an object for hashing
+  const header = {
+    amount: transaction.amount,
+    fromAddress: transaction.fromAddress,
+    toAddress: transaction.toAddress,
+    timestamps: transaction.timestamps
+  }
+
+  // add mined block's hash to header in case of a reward transaction
+  if (transaction.minedBlock) {
+    header.minedBlock = transaction.minedBlock;
+  }
+
+  // convert object to a JSON string for hashing
+  const transacHeader = JSON.stringify(header);
+  
+  // hash transaction's header
+  return SHA256(transacHeader).toString();
+}
+
+function verifyHeader(transaction) {
+  const currentHash = getHash(transaction);
+
+  if (transaction.hash !== currentHash) {
+    transaction.isValid = false;
+    return false;
+  }
+
+  transaction.isValid = true;
+  return true;
+}
+
+
+export { hexToArray, hashInPair, getWalletBalance, array2object, getMerkleRoot, verifySignature, verifyHeader };
