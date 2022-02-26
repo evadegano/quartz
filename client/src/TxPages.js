@@ -37,7 +37,8 @@ class TxPages extends Component {
 
           <PendingTransactions 
             pendingTx={pendingTx} 
-            gun={this.gun} />
+            gun={this.gun}
+            blockchain={this.props.blockchain} />
 
           <Transactions transactions={this.props.transactions} />
         </div>

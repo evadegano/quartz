@@ -27,7 +27,7 @@ class Transactions extends Component {
     const walletAddress = wallets[Math.round(Math.random() * wallets.length)].address;
 
     try {
-      const { confirmedTx, rejectedTx, rewardTx } = processTx(this.gun, this.blockchainRef, this.blocksRef, this.props.pendingTx, walletAddress, new Date(2021, 11, 20));
+      const { confirmedTx, rejectedTx, rewardTx } = processTx(this.gun, this.props.blockchain, this.blocksRef, this.props.pendingTx, walletAddress, new Date(2021, 11, 20));
 
       this.setState({
         error: rejectedTx,

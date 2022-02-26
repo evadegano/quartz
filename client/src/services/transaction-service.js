@@ -71,7 +71,7 @@ async function createPurchaseTx(gun, amount, receiverAddress, keypair, publicKey
 /*
   Verify transactions and mine them into a block
 */
-async function processTx(gun, blockchainRef, blocksRef, transactions, minerAddress, timestamps) {
+async function processTx(gun, blockchain, blocksRef, transactions, minerAddress, timestamps) {
   let rejectedTx = {};
   let confirmedTx = []
 
@@ -116,18 +116,14 @@ async function processTx(gun, blockchainRef, blocksRef, transactions, minerAddre
   const merkleRoot = getMerkleRoot(confirmedTxHashes);
 
   // get blockchain data
-  const difficulty = blockchainRef.get("difficulty");
-  const miningReward = blockchainRef.get("miningReward");
-  const prevBlockHash = blockchainRef.get("lastBlock");
+  const difficulty = blockchain.difficulty;
+  const miningReward = blockchain.miningReward;
+  const prevBlockHash = blockchain.lastBlock;
 
-  if (difficulty) {
-    console.log("difficulty", difficulty);
-    console.log("miningReward", miningReward);
-    console.log("prevBlockHash", prevBlockHash);
-    return;
+  if (typeof difficulty !== "number") {
+    console.log("difficulty", difficulty, typeof difficulty);
+    throw new Error("There was an error while fetching blockchain's data.")
   }
-
-  if (!difficulty) return "error: get blockchain data" // is this working?
 
   // create and mine a block
   const newBlock = new Block(prevBlockHash, merkleRoot, confirmedTx, difficulty, miningReward, timestamps);

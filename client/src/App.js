@@ -32,7 +32,7 @@ class App extends Component {
       this.gun = Gun([`${process.env.REACT_APP_GUN_URL}`]);
       window.gun = this.gun; //To have access to gun object in browser console
       this.blockchain = Blockchain.instance;
-      this.blockchainRef = this.gun.get(this.blockchain); // is it the right way to do it?
+      this.blockchainRef = this.gun.get(this.blockchain);
       this.blocksRef = this.blockchainRef.get("ledger").set(this.blockchain.ledger);
       this.transacsRef = this.gun.get("transactions");
 
@@ -78,7 +78,7 @@ class App extends Component {
   }
 
   fetchBlockchainData() {
-    const blockchainData = _.pick(this.blockchainRef["_"]["lex"], ["difficulty", "miningReward", "ledger"]);
+    const blockchainData = _.pick(this.blockchainRef["_"]["lex"], ["difficulty", "miningReward", "ledger", "lastBlock"]);
     
     this.setState({ blockchain: blockchainData });
   }
@@ -178,6 +178,7 @@ class App extends Component {
               updateNotifsStatus={this.updateNotifsStatus} 
               newNotifs={this.state.newNotifs} 
               user={this.state.loggedInUser} 
+              blockchain={this.state.blockchain} 
               transactions={this.state.transactions} />} />
 
           <Route path="/blocks" render={(routerProps) => 
