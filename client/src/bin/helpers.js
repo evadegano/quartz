@@ -2,15 +2,13 @@
 import axios from "axios";
 import SHA256 from "crypto-js";
 import EC from "elliptic";
-import Gun from  "gun";
+
 
 // services
-import { createPurchaseTx, sendCoins } from "../services/transaction-service";
+import { createPurchaseTx, sendCoins, processTx } from "../services/transaction-service";
 
 // init variables
 const ec = new EC.ec('secp256k1');
-const gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
-window.gun = gun; //To have access to gun object in browser console
 
 // service to connect to the API
 const service = axios.create({
@@ -18,6 +16,9 @@ const service = axios.create({
   withCredentials: true
 })
 
+function genRandomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
 
 // create wallets for users
 async function createWallets(users) {
@@ -39,7 +40,7 @@ async function createWallets(users) {
 }
 
 
-async function genCreditTx(wallets) {
+async function genCreditTx(gun, wallets) {
 
   for (let wallet of wallets) {
     //generate a random date
@@ -58,11 +59,11 @@ async function genCreditTx(wallets) {
     const publicKey = keypair.getPublic("hex");
 
     // create transaction
-    await createPurchaseTx(amount, walletAddress, keypair, publicKey, timestamps);    
+    await createPurchaseTx(gun, amount, walletAddress, keypair, publicKey, timestamps);    
   }
 }
 
-async function genDebitTx(wallets) {
+async function genDebitTx(gun, wallets) {
   for (let wallet of wallets) {
     //generate a random date
     const randDate = genRandomDate(new Date(2021, 11, 1), new Date(2021, 11, 20));
@@ -83,13 +84,14 @@ async function genDebitTx(wallets) {
     const publicKey = keypair.getPublic("hex");
 
     // create transaction
-    await sendCoins(amount, keypair, publicKey, senderAddress, receiverAddress, timestamps);    
+    await sendCoins(gun, amount, keypair, publicKey, senderAddress, receiverAddress, timestamps);    
   }
 }
 
-function genRandomDate(start, end) {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+async function verifTx(gun, blockchainRef, blocksRef, transactions, minerAddress, timestamps) {
+  
+  await processTx(gun, blockchainRef, blocksRef, transactions, minerAddress, timestamps);
 }
 
 
-export { createWallets, genDebitTx, genCreditTx, genRandomDate };
+export { createWallets, genDebitTx, genCreditTx, verifTx };

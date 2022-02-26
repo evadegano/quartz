@@ -1,13 +1,9 @@
 // packages
-import Gun from  "gun";
 import SHA256 from "crypto-js/sha256";
 import EC from "elliptic";
 
 // init variables
 const ec = new EC.ec('secp256k1');
-const gun = Gun([`${process.env.REACT_APP_GUN_URL}`]);
-let transacsRef = gun.get("transactions");
-
 
 
 /* 
@@ -59,30 +55,9 @@ function hashInPair(hashArray, output = []) {
 
 
 /*
-  Adapt data format for GunJS
-  --> function taken from: https://github.com/amark/gun/issues/231
-*/
-function array2object(arr) {
-  var obj = {};
-
-  Gun.list.map(arr, function(v,f,t) {
-
-    if (Gun.list.is(v) || Gun.obj.is(v)) {
-
-      obj[f] = array2object(v);
-      return;
-    }
-    obj[f] = v;
-  });
-
-  return obj;
-}
-
-
-/*
   Calculate a wallet's balance
 */
-function getWalletBalance(walletAddress) {
+function getWalletBalance(transacsRef, walletAddress) {
   let balance = 0;
 
   transacsRef.map().once(tx => {
@@ -167,4 +142,4 @@ function verifyHeader(transaction) {
 }
 
 
-export { hexToArray, hashInPair, getWalletBalance, array2object, getMerkleRoot, verifySignature, verifyHeader };
+export { hexToArray, hashInPair, getWalletBalance, getMerkleRoot, verifySignature, verifyHeader };

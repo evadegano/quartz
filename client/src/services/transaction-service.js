@@ -8,25 +8,21 @@ import { getWalletBalance, getMerkleRoot, verifySignature, verifyHeader } from "
 // classes
 import Transaction from "./classes/transaction";
 import { RewardTransaction, PurchaseTransaction } from "./classes/transaction";
-import Blockchain from "./classes/blockchain";
 import Block from "./classes/block";
 
 // init variables
 const ec = new EC.ec('secp256k1');
-const gun = Gun([`${process.env.REACT_APP_GUN_URL}`]);
-let transacsRef = gun.get("transactions");
-let blockchainRef = gun.get(Blockchain.instance);
-let ledgerRef = blockchainRef.get("ledger");
-let blocksRef = ledgerRef.get("blocks");
-
 
 
 /*
   Create transactions between wallets
 */
-async function sendCoins(amount, keypair, publicKey, senderAddress, receiverAddress, timestamps) {
+async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receiverAddress, timestamps) {
+  // set pointer to transactions on gun
+  const transacsRef = gun.get("transactions");
+
   // make sure this wallet has enough funds
-  const walletBalance = getWalletBalance(senderAddress);
+  const walletBalance = getWalletBalance(transacsRef, senderAddress);
 
   console.log("balance =>", walletBalance);
 
@@ -53,7 +49,10 @@ async function sendCoins(amount, keypair, publicKey, senderAddress, receiverAddr
 /*
   Create a transaction when a user tops up their wallet
 */
-async function createPurchaseTx(amount, receiverAddress, keypair, publicKey, timestamps) {
+async function createPurchaseTx(gun, amount, receiverAddress, keypair, publicKey, timestamps) {
+  // set pointer to transactions on gun
+  const transacsRef = gun.get("transactions");
+
   // create transaction
   const transaction = new PurchaseTransaction(amount, receiverAddress, timestamps);
   // sign transaction
@@ -72,7 +71,7 @@ async function createPurchaseTx(amount, receiverAddress, keypair, publicKey, tim
 /*
   Verify transactions and mine them into a block
 */
-async function processTx(transactions, minerAddress, timestamps) {
+async function processTx(gun, blockchainRef, blocksRef, transactions, minerAddress, timestamps) {
   let rejectedTx = {};
   let confirmedTx = []
 
@@ -121,6 +120,13 @@ async function processTx(transactions, minerAddress, timestamps) {
   const miningReward = blockchainRef.get("miningReward");
   const prevBlockHash = blockchainRef.get("lastBlock");
 
+  if (difficulty) {
+    console.log("difficulty", difficulty);
+    console.log("miningReward", miningReward);
+    console.log("prevBlockHash", prevBlockHash);
+    return;
+  }
+
   if (!difficulty) return "error: get blockchain data" // is this working?
 
   // create and mine a block
@@ -155,6 +161,8 @@ async function processTx(transactions, minerAddress, timestamps) {
 
     // add transaction to db
     const newTx = gun.get(`${txId}`).put(rewardTx);
+    // set pointer to transactions on gun
+    const transacsRef = gun.get("transactions");
     // link transaction to the transactions ledger
     transacsRef.set(newTx);
 

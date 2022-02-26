@@ -25,30 +25,29 @@ import ResetRequest from "./components/recovery/reset-request";
 import ResetPwd from "./components/recovery/reset-pwd";
 import Seed from './bin/seed';
 
-// init global variables
-const quartzBlockchain = Blockchain.instance;
-
 
 class App extends Component {
   constructor() {
     super();
       this.gun = Gun([`${process.env.REACT_APP_GUN_URL}`]);
       window.gun = this.gun; //To have access to gun object in browser console
-      this.blockchain = quartzBlockchain;
+      this.blockchain = Blockchain.instance;
       this.blockchainRef = this.gun.get(this.blockchain); // is it the right way to do it?
       this.blocksRef = this.blockchainRef.get("ledger").set(this.blockchain.ledger);
       this.transacsRef = this.gun.get("transactions");
+
+      this.state = {
+        loggedInUser: "",
+        blockchain: "",
+        wallets: [],
+        transactions: [],
+        blocks: [],
+        newNotifs: false,
+        error: ""
+      }
   }
 
-  state = {
-    loggedInUser: "",
-    blockchain: "",
-    wallets: [],
-    transactions: [],
-    blocks: [],
-    newNotifs: false,
-    error: ""
-  }
+  
 
   updateLoggedInUser = (userObj) => {
     this.setState({ loggedInUser: userObj });
@@ -85,8 +84,22 @@ class App extends Component {
   }
 
   fetchWallets() {
+
     getWallets()
-      .then(response => this.setState({ wallets: response}))
+      .then(response => {
+        let wallets = []
+
+        for (let wallet of response.walletsFromDB) {
+          wallets.push({
+            address: wallet.address,
+            name: wallet.name,
+            active: wallet.active,
+            lastConnection: wallet.lastConnection
+          })
+        }
+
+        this.setState({ wallets })
+      })
       .catch(err => {
         console.log(err);
 
@@ -147,13 +160,47 @@ class App extends Component {
         <Switch>
           <Route exact path="/" render={() => <Homepage />} />
           <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
-          <Route path="/user" render={(routerProps) => <UserPages  {...routerProps} updateNotifsStatus={this.updateNotifsStatus} newNotifs={this.state.newNotifs} updateUser={this.updateLoggedInUser} user={this.state.loggedInUser} transactions={this.state.transactions} wallets={this.state.wallets} blocks={this.state.blocks} />} />
-          <Route path="/transactions" render={(routerProps) => <TxPages {...routerProps} updateNotifsStatus={this.updateNotifsStatus} newNotifs={this.state.newNotifs} user={this.state.loggedInUser} transactions={this.state.transactions} />} />
-          <Route path="/blocks" render={(routerProps) => <BlockPages {...routerProps} updateNotifsStatus={this.updateNotifsStatus} newNotifs={this.state.newNotifs} user={this.state.loggedInUser} blockchain={this.state.blockchain} blocks={this.state.blocks} />} />
-          <Route path="/wallets" render={(routerProps) => <WalletPages {...routerProps} updateNotifsStatus={this.updateNotifsStatus} newNotifs={this.state.newNotifs} user={this.state.loggedInUser} wallets={this.state.wallets} />} />
+          
+          <Route  path="/user" render={(routerProps) => 
+            <UserPages  {...routerProps} 
+              updateNotifsStatus={this.updateNotifsStatus} 
+              newNotifs={this.state.newNotifs} 
+              gun={this.gun}
+              updateUser={this.updateLoggedInUser} 
+              user={this.state.loggedInUser} 
+              transactions={this.state.transactions} 
+              wallets={this.state.wallets} 
+              blocks={this.state.blocks} />} />
+
+          <Route path="/transactions" render={(routerProps) => 
+            <TxPages {...routerProps}
+              gun={this.gun}
+              updateNotifsStatus={this.updateNotifsStatus} 
+              newNotifs={this.state.newNotifs} 
+              user={this.state.loggedInUser} 
+              transactions={this.state.transactions} />} />
+
+          <Route path="/blocks" render={(routerProps) => 
+            <BlockPages {...routerProps} 
+              gun={this.gun}
+              updateNotifsStatus={this.updateNotifsStatus} 
+              newNotifs={this.state.newNotifs} 
+              user={this.state.loggedInUser} 
+              blockchain={this.state.blockchain} 
+              blocks={this.state.blocks} />} />
+
+          <Route path="/wallets" render={(routerProps) => 
+            <WalletPages {...routerProps}
+              gun={this.gun} 
+              updateNotifsStatus={this.updateNotifsStatus} 
+              newNotifs={this.state.newNotifs} 
+              user={this.state.loggedInUser} 
+              wallets={this.state.wallets} />} />
+
           <Route path="/request-reset" component={ResetRequest} />
           <Route path="/reset-password/:userId" component={ResetPwd} />
-          <Route path="/seed" component={Seed} />
+
+          <Route path="/seed" render={() => <Seed gun={this.gun} /> } />
         </Switch>
       </div>
   );}

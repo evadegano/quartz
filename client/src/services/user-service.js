@@ -4,7 +4,7 @@ import EC from "elliptic";
 var ec = new EC.ec('secp256k1');
 
 const service = axios.create({
-  baseURL: `${process.env.REACT_APP_API_URL}`,
+  baseURL: `${process.env.REACT_APP_API_URL || ""}`,
   withCredentials: true
 })
 

@@ -82,9 +82,10 @@ router.delete("/:userId", (req, res, next) => {
 
 // Get wallets
 router.get("/wallets", (req, res, next) => {
+  
   Wallet.find({})
     .then(walletsFromDB => {
-      res.status(200).json(walletsFromDB)
+      res.status(200).json({ walletsFromDB })
     })
     .catch(() => {
       res.status(500).json({ message: "Something went wrong when retrieving wallets." })

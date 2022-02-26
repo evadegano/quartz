@@ -17,7 +17,6 @@
     "bulma": "^0.9.3",
     "chart.js": "^3.7.1",
     "cors": "^2.8.5",
-    "crypto-js": "^4.1.1",
     "dotenv": "^15.0.0",
     "elliptic": "^6.5.4",
     "gsap": "^3.9.1",
@@ -35,7 +34,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "REACT_APP_API_URL=http://localhost:5005 react-scripts start",
+    "start": "REACT_APP_API_URL=http://localhost:5005/api react-scripts start",
     "build": "react-scripts build",
     "build-dev": "dotenv -e .env.development react-scripts build",
     "build-prod": "dotenv -e .env.production react-scripts build",
@@ -62,5 +61,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.1"
   }
 }
