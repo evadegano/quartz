@@ -1,7 +1,7 @@
 import SHA256 from "crypto-js/sha256";
 import MD5 from "crypto-js/md5";
 class Block {
-    constructor(prevHash, merkleRoot, transactions, difficulty, miningReward) {
+    constructor(prevHash, merkleRoot, transactions, difficulty, miningReward, timestamps = Date.now()) {
         this.header = {
             prevHash: prevHash,
             nonce: Math.round(Math.random() * 999999999),
@@ -10,7 +10,7 @@ class Block {
             difficulty: difficulty,
             height: transactions.length,
             merkleRoot: merkleRoot,
-            timestamps: Date.now()
+            timestamps: timestamps
         };
         this.transactions = transactions;
     }

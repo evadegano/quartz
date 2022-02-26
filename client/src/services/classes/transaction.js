@@ -7,9 +7,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
-
     });
 };
+
 const ec = new EC.ec('secp256k1');
 // list of possible transaction's status
 var Status;
@@ -141,7 +141,6 @@ class PurchaseTransaction extends Transaction {
     constructor(amount, toAddress, timestamps = Date.now()) {
         super(amount, "null - bank transfer", toAddress, timestamps);
         this.isValid = true;
-        this.status = Status.Confirmed;
     }
     // sign transaction with the sender's private and public keys
     signTransaction(keypair, publicKey) {

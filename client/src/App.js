@@ -32,7 +32,7 @@ const quartzBlockchain = Blockchain.instance;
 class App extends Component {
   constructor() {
     super();
-      this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
+      this.gun = Gun([`${process.env.REACT_APP_GUN_URL}`]);
       window.gun = this.gun; //To have access to gun object in browser console
       this.blockchain = quartzBlockchain;
       this.blockchainRef = this.gun.get(this.blockchain); // is it the right way to do it?

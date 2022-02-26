@@ -1,4 +1,3 @@
-import { sign } from "crypto";
 import SHA256 from "crypto-js/sha256";
 import EC from "elliptic";
 
@@ -191,7 +190,6 @@ class PurchaseTransaction extends Transaction {
   constructor(amount: number, toAddress: string, timestamps: number = Date.now()) {
     super(amount, "null - bank transfer", toAddress, timestamps);
     this.isValid = true;
-    this.status = Status.Confirmed;
   }
 
   // sign transaction with the sender's private and public keys

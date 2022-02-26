@@ -5,8 +5,7 @@ import EC from "elliptic";
 import Gun from  "gun";
 
 // services
-import { getCoins } from "../services/user-service";
-import { createPurchaseTx } from "../services/blockchain-service";
+import { createPurchaseTx, sendCoins } from "../services/transaction-service";
 
 // init variables
 const ec = new EC.ec('secp256k1');
@@ -53,37 +52,52 @@ async function createWallets(users) {
 }
 
 
-async function topUpWallet(wallets) {
+async function genDebitTx(wallets) {
 
   for (let wallet of wallets) {
+    //generate a random date
+    const randDate = genRandomDate(new Date(2021, 10, 1), new Date());
+    // convert date to timestamps
+    const timestamps = randDate.getTime();
+
     // generate a random amount
-    const amount = Math.round(Math.random() * (105000 - 1000) + 1000);
+    const amount = Math.round(Math.random() * (250000 - 1000) + 1000);
 
-    // get the wallet's address
-    const walletAddresse = wallet.address;
+    // store wallet address
+    const walletAddress = wallet.address;
 
-    // generate a one time signing keypair
+    // generate a one-time signing keypair
     const keypair = ec.genKeyPair();
     const publicKey = keypair.getPublic("hex");
 
-    await createPurchaseTx(amount, walletAddresse, keypair, publicKey);
+    // create transaction
+    await createPurchaseTx(amount, walletAddress, keypair, publicKey, timestamps);    
   }
 }
 
-function hexToArray(hashArray, output = []) {
-  // if two elements left, hash them and return result
-  if (hashArray.length === 2) {
-    const int = parseInt(hashArray, 16);
-    output.push(int);
+async function genCreditTx(wallets) {
+  for (let wallet of wallets) {
+    //generate a random date
+    const randDate = genRandomDate(new Date(2021, 11, 1), new Date(2021, 11, 20));
+    // convert date to timestamps
+    const timestamps = randDate.getTime();
 
-    return output;
+    // generate a random amount
+    const amount = Math.round(Math.random() * (10000 - 150) + 150);
+
+    // store wallet address
+    const senderAddress = wallet.address;
+    // get rand wallet address
+    const randIdx = Math.round(Math.random() * wallets.length);
+    const receiverAddress = wallets[ randIdx ].address;
+
+    // generate a one-time signing keypair
+    const keypair = ec.genKeyPair();
+    const publicKey = keypair.getPublic("hex");
+
+    // create transaction
+    await sendCoins(amount, keypair, publicKey, senderAddress, receiverAddress, timestamps);    
   }
-
-  // else hash elmements and move on to the next
-  const int = parseInt(`${hashArray[0]}${hashArray[1]}`, 16);
-  output.push(int);
-
-  return hexToArray(hashArray.slice(2), output);
 }
 
 function genRandomDate(start, end) {
@@ -91,4 +105,4 @@ function genRandomDate(start, end) {
 }
 
 
-export { createWallets, topUpWallet, hexToArray, genRandomDate, deleteTx };
+export { createWallets, genDebitTx, genCreditTx, genRandomDate, deleteTx };

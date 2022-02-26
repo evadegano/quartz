@@ -1,16 +1,16 @@
 // packages
 import { Component } from "react";
 import Gun from  "gun";
-import EC, { rand } from "elliptic";
+import EC from "elliptic";
 
 // helpers
-import { createPurchaseTx } from "../services/blockchain-service";
-import { hexToArray, genRandomDate, deleteTx } from "./helpers";
+import { createPurchaseTx } from "../services/transaction-service";
+import { genRandomDate } from "./helpers";
 
 // jsons
 import users from "./users.json";
 import wallets from "./wallets.json";
-import { SHA256 } from "crypto-js";
+
 
 // init variables
 const ec = new EC.ec('secp256k1');
