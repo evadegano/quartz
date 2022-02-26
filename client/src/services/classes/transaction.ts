@@ -112,7 +112,7 @@ class Transaction {
     return true;
   }
 
-  // make sure the transaction's data hasen't been tampered with
+  // make sure the transaction's data hasn't been tampered with
   isHeaderValid() {
     const currentHash = this.getHash();
 

@@ -25,9 +25,9 @@ function deleteTx() {
     console.log(idx);
 
     // delete transaction's header
-    gun.get(idx).get("header").put(null);
+    gun.get("transactions").get(idx).get("header").put(null);
     // delete transaction
-    gun.get(idx).put(null);
+    gun.get("transactions").get(idx).put(null);
   });
 }
 

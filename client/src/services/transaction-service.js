@@ -42,13 +42,23 @@ async function sendCoins(amount, keypair, publicKey, senderAddress, receiverAddr
 
   // store transaction's hash as its id
   const txId = transaction.hash;
+  // reformat transaction to fit in GunJS
+  const objTx = {
+    amount: transaction.header.amount,
+    fromAddress: transaction.header.fromAddress,
+    toAddress: transaction.header.toAddress,
+    timestamps: transaction.header.timestamps,
+    signature: transaction.signature,
+    publicKey: transaction.publicKey,
+    isValid: transaction.isValid,
+    status: transaction.status,
+    hash: txId
+  }
   // turn transaction into an object to fit in GunJS
-  const objTx = array2object(transaction);
+  //const objTx = array2object(transaction);
 
   // add transaction to db
   const newTx = gun.get(`${txId}`).put(objTx);
-  // add transaction's header to db
-  newTx.get("header").put(transaction.header);
   // link transaction to the transactions ledger
   transacsRef.set(newTx);
 }
@@ -65,13 +75,21 @@ async function createPurchaseTx(amount, receiverAddress, keypair, publicKey, tim
 
   // store transaction's hash as its id
   const txId = transaction.hash;
-  // turn transaction into an object to fit in GunJS
-  const objTx = array2object(transaction);
+  // reformat transaction to fit in GunJS
+  const objTx = {
+    amount: transaction.header.amount,
+    fromAddress: transaction.header.fromAddress,
+    toAddress: transaction.header.toAddress,
+    timestamps: transaction.header.timestamps,
+    signature: transaction.signature,
+    publicKey: transaction.publicKey,
+    isValid: transaction.isValid,
+    status: transaction.status,
+    hash: txId
+  }
   
   // add transaction to db
   const newTx = gun.get(`${txId}`).put(objTx);
-  // add transaction's header to db
-  newTx.get("header").put(transaction.header);
   // link transaction to the transactions ledger
   transacsRef.set(newTx);
 }
@@ -155,13 +173,21 @@ async function processTx(transactions, minerAddress, timestamps) {
     
     // store transaction's hash as its id
     const txId = rewardTx.hash;
-    // turn transaction into an object to fit in GunJS
-    const objTx = array2object(rewardTx);
+    // reformat transaction to fit in GunJS
+    const objTx = {
+      amount: rewardTx.header.amount,
+      fromAddress: rewardTx.header.fromAddress,
+      toAddress: rewardTx.header.toAddress,
+      timestamps: rewardTx.header.timestamps,
+      signature: rewardTx.signature,
+      publicKey: rewardTx.publicKey,
+      isValid: rewardTx.isValid,
+      status: rewardTx.status,
+      hash: txId
+    }
     
     // add transaction to db
     const newTx = gun.get(`${txId}`).put(objTx);
-    // add transaction's header to db
-    newTx.get("header").put(rewardTx.header);
     // link transaction to the transactions ledger
     transacsRef.set(newTx);
 

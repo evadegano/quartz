@@ -40,13 +40,12 @@ class Transactions extends Component {
         {filteredTx.map((tx, idx) => {
           return <Transaction 
                     key={idx} 
-                    /*hash={tx.hash} 
+                    hash={tx.hash} 
                     from={tx.header.fromAddress} 
-                    to={tx.header.toAddress} */
-                    amount={tx.amount} 
-                    /*date={tx.header.timestamps}
-                    isValid={tx.isValid}
-                    status={tx.status}*//>
+                    /*to={tx.header.toAddress} */
+                    amount={tx.header.amount} 
+                    /*date={tx.header.timestamps}*/
+                    status={tx.status} />
         })}
       </div>
     );

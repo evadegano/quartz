@@ -5,7 +5,7 @@ import EC from "elliptic";
 
 // helpers
 import { createPurchaseTx } from "../services/transaction-service";
-import { genRandomDate, genDebitTx } from "./helpers";
+import { genRandomDate, genDebitTx, deleteTx } from "./helpers";
 
 // jsons
 import users from "./users.json";
@@ -28,7 +28,7 @@ class Seed extends Component {
   }
 
   test = async (event) => {
-    return;
+    deleteTx();
     
   }
 

@@ -117,11 +117,10 @@ class App extends Component {
 
     // loop through transactions and add them to the global state
     this.transacsRef.map().once(function(transac) {
-
+      // only add non-null transactions
       if (transac) {
         transactionsCopy.push(transac);
       }
-
     });
 
     // function to fetch transaction header data

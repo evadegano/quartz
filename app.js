@@ -33,10 +33,14 @@ app.use("/api", userRoutes);
 const recoveryRoutes = require("./routes/recovery");
 app.use("/api", recoveryRoutes);
 
+// Serve static files from client/build folder
+app.use(express.static('client/build'));
 
+// For any other routes: serve client/build/index.html SPA
 app.use((req, res, next) => {
-  // If no routes match, send them the React HTML.
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(`${__dirname}/client/build/index.html`, err => {
+    if (err) next(err)
+  })
 });
 
 
