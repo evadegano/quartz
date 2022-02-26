@@ -28,12 +28,15 @@ async function sendCoins(amount, keypair, publicKey, senderAddress, receiverAddr
   // make sure this wallet has enough funds
   const walletBalance = getWalletBalance(senderAddress);
 
+  console.log("balance =>", walletBalance);
+
   if (walletBalance < amount) {
     throw new Error("Insufficient funds.");
   }
 
   // create transaction
   const transaction = new Transaction(amount, senderAddress, receiverAddress, timestamps);
+  console.log("transaction =>", transaction);
   // sign transaction
   await transaction.signTransaction(keypair, publicKey, senderAddress);
 

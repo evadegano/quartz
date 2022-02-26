@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { processTx } from "../../services/blockchain-service";
+import { processTx } from "../../services/transaction-service";
 import Transaction from "./Transaction";
 
 

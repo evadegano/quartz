@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { getCoins } from "../../services/user-service";
-import { createPurchaseTx } from "../../services/blockchain-service";
+import { createPurchaseTx } from "../../services/transaction-service";
 import Gun from "gun";
 import EC from "elliptic";
 import StripeCheckout from "react-stripe-checkout";

@@ -5,7 +5,7 @@ import EC from "elliptic";
 
 // helpers
 import { createPurchaseTx } from "../services/transaction-service";
-import { genRandomDate } from "./helpers";
+import { genRandomDate, genDebitTx } from "./helpers";
 
 // jsons
 import users from "./users.json";
@@ -24,25 +24,11 @@ class Seed extends Component {
   }
 
   run = async (event) => {
-    return;
+    genDebitTx(wallets);
   }
 
   test = async (event) => {
-    for (let wallet of wallets) {
-
-      const randDate = genRandomDate(new Date(2021, 10, 1), new Date());
-      const timestamps = randDate.getTime();
-
-      const amount = Math.round(Math.random() * (250000 - 1000) + 1000);
-
-      const walletAddress = wallet.address;
-      console.log("walletAddress", wallet.address);
-
-      const keypair = ec.genKeyPair();
-      const publicKey = keypair.getPublic("hex");
-
-      await createPurchaseTx(amount, walletAddress, keypair, publicKey, timestamps);    
-    }
+    return;
     
   }
 

@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { getWalletBalance } from "../../services/blockchain-service";
+import { getWalletBalance } from "../../services/helpers";
 import { postWallets, putWallet, generateWallet } from "../../services/user-service";
 import Header from "./Header";
 import TransferBtns from "./TransferBtns";

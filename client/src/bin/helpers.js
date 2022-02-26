@@ -52,7 +52,7 @@ async function createWallets(users) {
 }
 
 
-async function genDebitTx(wallets) {
+async function genCreditTx(wallets) {
 
   for (let wallet of wallets) {
     //generate a random date
@@ -75,7 +75,7 @@ async function genDebitTx(wallets) {
   }
 }
 
-async function genCreditTx(wallets) {
+async function genDebitTx(wallets) {
   for (let wallet of wallets) {
     //generate a random date
     const randDate = genRandomDate(new Date(2021, 11, 1), new Date(2021, 11, 20));

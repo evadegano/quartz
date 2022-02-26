@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Gun from  "gun";
-import { sendCoins } from "../../services/blockchain-service";
+import { sendCoins } from "../../services/transaction-service";
 
 
 class SendCoins extends Component {
