@@ -5,7 +5,7 @@ import EC from "elliptic";
 
 // helpers
 import { createPurchaseTx } from "../services/transaction-service";
-import { genRandomDate, genDebitTx, deleteTx } from "./helpers";
+import { genDebitTx, genCreditTx } from "./helpers";
 
 // jsons
 import users from "./users.json";
@@ -23,20 +23,16 @@ class Seed extends Component {
     tempWallets: []
   }
 
-  run = async (event) => {
-    genDebitTx(wallets);
-  }
-
-  test = async (event) => {
-    deleteTx();
-    
+  topUpWallets = (event) => {
+    genCreditTx(wallets);
   }
 
   render() {
     return (
       <div>
-        <button onClick={(this.test)}>Test</button>
-        <button onClick={this.run}>Seed</button>
+        <button onClick={this.topUpWallets}>top up wallets</button>
+        <button>verif pending transac
+          <br/> & mine block</button>
       </div>
     );
   }

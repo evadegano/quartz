@@ -180,6 +180,10 @@ li * {
 }
 
 /* Containers */
+.no-overflow-container {
+  overflow: hidden;
+  height: 30vh;
+}
 .outer-container {
   display: flex;
   padding: 10px;
@@ -360,6 +364,7 @@ li * {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  overflow: hidden;
 }
 .filled-table * {
   color: white;

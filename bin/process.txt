@@ -36,3 +36,8 @@ Add:
 cred:
 - user: 62052a1cd61396aa82262ba4
 - wallet: e20717c4fa5f63b2773236b41564c8532117cf966b86bf6498a2f44b60719de9
+
+To delete data on Gun:
+- localStorage.clear()
+- remove radata files
+- restart servers

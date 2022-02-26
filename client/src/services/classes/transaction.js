@@ -1,5 +1,6 @@
 import SHA256 from "crypto-js/sha256";
 import EC from "elliptic";
+
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -21,18 +22,22 @@ var Status;
 class Transaction {
     constructor(amount, fromAddress, toAddress, timestamps = Date.now()) {
         this.isValid = false;
-        this.header = {
-            amount: amount,
-            fromAddress: fromAddress,
-            toAddress: toAddress,
-            timestamps: timestamps
-        };
+        this.amount = amount;
+        this.fromAddress = fromAddress;
+        this.toAddress = toAddress;
+        this.timestamps = timestamps;
         this.status = Status.Pending;
     }
     // hash transaction's header
     getHash() {
-        // convert object to a JSON string for hashing    
-        const transacHeader = JSON.stringify(this.header);
+        // convert object to a JSON string for hashing
+        const header = {
+            amount: this.amount,
+            fromAddress: this.fromAddress,
+            toAddress: this.toAddress,
+            timestamps: this.timestamps
+        };
+        const transacHeader = JSON.stringify(header);
         // hash transaction's header
         return SHA256(transacHeader).toString();
     }
@@ -67,7 +72,10 @@ class Transaction {
         });
     }
     // check whether the sender's public key belongs to their wallet address
-    isSenderValid(walletAddress, publicKey) {
+    isSenderValid(walletAddress = this.fromAddress, publicKey) {
+        // validate null senders in case of rewards and QRTZ purchase
+        if (walletAddress === "null - QRTZ reward" || walletAddress === "null - bank transfer")
+            return true;
         // hash public key
         const hashedKey = SHA256(publicKey).toString();
         // compare hashed key and wallet address
@@ -92,7 +100,7 @@ class Transaction {
         this.isValid = true;
         return true;
     }
-    // make sure the transaction's data hasen't been tampered with
+    // make sure the transaction's data hasn't been tampered with
     isHeaderValid() {
         const currentHash = this.getHash();
         if (this.hash !== currentHash) {
@@ -106,7 +114,21 @@ class Transaction {
 class RewardTransaction extends Transaction {
     constructor(amount, toAddress, timestamps = Date.now(), blockHash) {
         super(amount, "null - QRTZ reward", toAddress, timestamps);
-        this.header.minedBlock = blockHash;
+        this.minedBlock = blockHash;
+    }
+    // hash transaction's header
+    getHash() {
+        // convert object to a JSON string for hashing
+        const header = {
+            amount: this.amount,
+            fromAddress: this.fromAddress,
+            toAddress: this.toAddress,
+            minedBlock: this.minedBlock,
+            timestamps: this.timestamps
+        };
+        const transacHeader = JSON.stringify(header);
+        // hash transaction's header
+        return SHA256(transacHeader).toString();
     }
     // sign transaction with the sender's private and public keys
     signTransaction(keypair, publicKey) {

@@ -17,7 +17,7 @@ class Transactions extends Component {
   }
 
   filterTx = () => {
-    const filteredTx = this.props.transactions.filter(tx => tx.hash.includes(this.state.query) || tx.header.fromAddress.includes(this.state.query) || tx.header.toAddress.includes(this.state.query));
+    const filteredTx = this.props.transactions.filter(tx => tx.hash.includes(this.state.query) || tx.fromAddress.includes(this.state.query) || tx.toAddress.includes(this.state.query));
 
     return filteredTx;
   }
@@ -41,10 +41,10 @@ class Transactions extends Component {
           return <Transaction 
                     key={idx} 
                     hash={tx.hash} 
-                    from={tx.header.fromAddress} 
-                    /*to={tx.header.toAddress} */
-                    amount={tx.header.amount} 
-                    /*date={tx.header.timestamps}*/
+                    from={tx.fromAddress} 
+                    to={tx.toAddress}
+                    amount={tx.amount} 
+                    date={tx.timestamps}
                     status={tx.status} />
         })}
       </div>

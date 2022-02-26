@@ -13,12 +13,10 @@ enum Status {
 
 
 class Transaction {
-  public header: {
-    amount: number,
-    fromAddress: string,
-    toAddress: string,
-    timestamps: number
-  };
+  public amount: number;
+  public fromAddress: string;
+  public toAddress: string;
+  public timestamps: number;
   public signature: string;
   public publicKey: string;
   public isValid: boolean = false;
@@ -27,19 +25,23 @@ class Transaction {
 
   constructor(amount: number, fromAddress: string, toAddress: string, timestamps: number = Date.now()) 
   {
-    this.header = {
-      amount: amount,
-      fromAddress: fromAddress,
-      toAddress: toAddress,
-      timestamps: timestamps
-    };
+    this.amount = amount;
+    this.fromAddress = fromAddress;
+    this.toAddress = toAddress;
+    this.timestamps = timestamps;
     this.status = Status.Pending;
   }
 
   // hash transaction's header
   getHash() {
-    // convert object to a JSON string for hashing    
-    const transacHeader = JSON.stringify(this.header);
+    // convert object to a JSON string for hashing
+    const header = {
+      amount: this.amount,
+      fromAddress: this.fromAddress,
+      toAddress: this.toAddress,
+      timestamps: this.timestamps
+    }
+    const transacHeader = JSON.stringify(header);
     
     // hash transaction's header
     return SHA256(transacHeader).toString();
@@ -82,7 +84,10 @@ class Transaction {
   }
 
   // check whether the sender's public key belongs to their wallet address
-  isSenderValid(walletAddress: string, publicKey: string) {
+  isSenderValid(walletAddress: string = this.fromAddress, publicKey: string) {
+    // validate null senders in case of rewards and QRTZ purchase
+    if (walletAddress === "null - QRTZ reward" || walletAddress === "null - bank transfer") return true;
+    
     // hash public key
     const hashedKey = SHA256(publicKey).toString()
 
@@ -128,18 +133,27 @@ class Transaction {
 
 
 class RewardTransaction extends Transaction {
-  public header: {
-    amount: number,
-    fromAddress: string,
-    toAddress: string,
-    minedBlock: string,
-    timestamps: number
-  };
-  public publicKey: string;
+  public minedBlock: string;
 
   constructor(amount: number, toAddress: string, timestamps: number = Date.now(), blockHash: string) {
     super(amount, "null - QRTZ reward", toAddress, timestamps);
-    this.header.minedBlock = blockHash;
+    this.minedBlock = blockHash;
+  }
+
+  // hash transaction's header
+  getHash() {
+    // convert object to a JSON string for hashing
+    const header = {
+      amount: this.amount,
+      fromAddress: this.fromAddress,
+      toAddress: this.toAddress,
+      minedBlock: this.minedBlock,
+      timestamps: this.timestamps
+    }
+    const transacHeader = JSON.stringify(header);
+    
+    // hash transaction's header
+    return SHA256(transacHeader).toString();
   }
 
   // sign transaction with the sender's private and public keys
@@ -179,13 +193,6 @@ class RewardTransaction extends Transaction {
 
 
 class PurchaseTransaction extends Transaction {
-  public header: {
-    amount: number,
-    fromAddress: string,
-    toAddress: string,
-    timestamps: number
-  }
-  public publicKey: string;
 
   constructor(amount: number, toAddress: string, timestamps: number = Date.now()) {
     super(amount, "null - bank transfer", toAddress, timestamps);

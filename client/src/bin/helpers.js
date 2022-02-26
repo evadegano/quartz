@@ -19,19 +19,6 @@ const service = axios.create({
 })
 
 
-// delete transactions from db
-function deleteTx() {
-  gun.get("transactions").map().once(function(transac, idx) {
-    console.log(idx);
-
-    // delete transaction's header
-    gun.get("transactions").get(idx).get("header").put(null);
-    // delete transaction
-    gun.get("transactions").get(idx).put(null);
-  });
-}
-
-
 // create wallets for users
 async function createWallets(users) {
 
@@ -56,7 +43,7 @@ async function genCreditTx(wallets) {
 
   for (let wallet of wallets) {
     //generate a random date
-    const randDate = genRandomDate(new Date(2021, 10, 1), new Date());
+    const randDate = genRandomDate(new Date(2021, 9, 1), new Date(2021, 10, 31));
     // convert date to timestamps
     const timestamps = randDate.getTime();
 
@@ -105,4 +92,4 @@ function genRandomDate(start, end) {
 }
 
 
-export { createWallets, genDebitTx, genCreditTx, genRandomDate, deleteTx };
+export { createWallets, genDebitTx, genCreditTx, genRandomDate };

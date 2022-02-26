@@ -2,6 +2,8 @@ import { Component } from "react";
 import { processTx } from "../../services/transaction-service";
 import Transaction from "./Transaction";
 
+// remove once in prod
+import wallets from "../../bin/wallets.json";
 
 class Transactions extends Component {
   state = {
@@ -10,8 +12,10 @@ class Transactions extends Component {
   };
 
   processTx = (event) => {
+    const walletAddress = wallets[Math.round(Math.random() * wallets.length)].address;
+
     try {
-      const { confirmedTx, rejectedTx, rewardTx } = processTx();
+      const { confirmedTx, rejectedTx, rewardTx } = processTx(this.props.pendingTx, walletAddress, new Date(2021, 11, 20));
 
       this.setState({
         error: rejectedTx,
@@ -32,32 +36,23 @@ class Transactions extends Component {
         <h2>Pending transactions</h2>
 
         <div className="inner-container filled-table">
-          <table>
-            <thead>
-              <tr>
-                <th>From</th>
-                <th>To</th>
-                <th>Amount</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.pendingTx.map(tx => {
-                return (
-                  <tr key={tx.hash}>
-                    <td className="trunc-txt">{tx.header.fromAddress}</td>
-                    <td className="trunc-txt">{tx.header.toAddress}</td>
-                    <td>{tx.header.amount}</td>
-                    <td>{tx.header.timestamps}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <h3>{this.props.pendingTx.length} transactions pending</h3>
 
+          <div className="no-overflow-container">
+            {this.props.pendingTx.map((tx, idx) => {
+              return <Transaction 
+                        key={idx} 
+                        hash={tx.hash} 
+                        from={tx.fromAddress} 
+                        to={tx.toAddress}
+                        amount={tx.amount} 
+                        date={tx.timestamps}
+                        status={tx.status} />
+            })}
+          </div>
+          
           <button className="main-btn" onClick={this.processTx}>VERIFY & MINE</button>
         </div>
-        
       </div>
     );
   }

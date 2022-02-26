@@ -112,7 +112,7 @@ class App extends Component {
     this.setState({ blocks: blocksCopy });
   }
 
-  fetchTransactions() {
+  async fetchTransactions() {
     let transactionsCopy = [];
 
     // loop through transactions and add them to the global state
