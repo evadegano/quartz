@@ -44,7 +44,7 @@ class Wallets extends Component {
             address={wallet.address}
             name={wallet.name}
             active={wallet.active}
-            lastSeen={wallet.lastSeen} />
+            lastSeen={wallet.lastConnection} />
         })}
       </div>
     </div>

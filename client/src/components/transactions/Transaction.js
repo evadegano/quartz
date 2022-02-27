@@ -1,8 +1,10 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import { timestampsToDate } from "../../services/helpers";
 
 
 class Transaction extends Component {
+
   render() {
     return (
       <div className="table-row">

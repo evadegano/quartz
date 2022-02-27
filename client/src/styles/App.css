@@ -183,6 +183,7 @@ li * {
 .no-overflow-container {
   overflow: hidden;
   height: 30vh;
+  width: 100%;
 }
 .outer-container {
   display: flex;
@@ -387,11 +388,17 @@ table td {
 }
 .table-row {
   padding-top: 20px;
-  border-top: 1px solid rgba(34,34,34, 0.3);
   width: 100%;
   display: flex;
   column-gap: 20px;
 }
+.hollow-table .table-row {
+  border-top: 1px solid rgba(34,34,34, 0.3);
+}
+.filled-table .table-row {
+  border-top: 1px solid white;
+}
+.black-separator
 .table-col {
   flex: 1;
   text-align: left;
@@ -470,6 +477,14 @@ table td {
   background: none;
   border: none;
   cursor: pointer;
+}
+.time-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.time-btn.active {
+  color: #FE6601;
 }
 
 /* Forms */

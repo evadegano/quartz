@@ -177,4 +177,24 @@ function verifyHeader(transaction) {
 }
 
 
-export { hexToArray, hashInPair, getWalletBalance, getMerkleRoot, verifySignature, verifyHeader, getMinedBlocks, getBalance };
+/*
+  Convert timestamps to date
+*/
+function timestampsToDate(timestamps) {
+  const date = new Date(timestamps);
+  let day = date.getDate();
+  let month = date.getMonth();
+
+  if (day < 10) {
+    day = "0" + day;
+  }
+
+  if (month < 10) {
+    month = "0" + month;
+  }
+
+  return `${day}/${month}/${date.getFullYear()}`
+}
+
+
+export { hexToArray, hashInPair, getWalletBalance, getMerkleRoot, verifySignature, verifyHeader, getMinedBlocks, getBalance, timestampsToDate };

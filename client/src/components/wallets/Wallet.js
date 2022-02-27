@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 import { UilCopy } from '@iconscout/react-unicons';
-import { getBalance, getMinedBlocks } from "../../services/helpers";
+import { getBalance, getMinedBlocks, timestampsToDate } from "../../services/helpers";
 
 
 class Wallet extends Component {
@@ -9,6 +9,7 @@ class Wallet extends Component {
     displayInfo: false,
     balance: 0,
     minedBlocks: 0,
+    date: "",
     tooltipTxt: "Copy to clipboard"
   }
 
@@ -22,10 +23,12 @@ class Wallet extends Component {
   componentDidMount() {
     const balance = getBalance(this.props.transactions, this.props.address);
     const minedBlocks = getMinedBlocks(this.props.blocks, this.props.address);
+    const date = timestampsToDate(this.props.lastSeen);
 
     this.setState({
       balance,
-      minedBlocks
+      minedBlocks,
+      date
     })
   }
 
@@ -66,8 +69,8 @@ class Wallet extends Component {
         </div>
 
         <div className="table-col desktop-only">
-          <div><b>Active: </b>{this.state.active}</div>
-          <div><b>Last seen: </b>{this.state.lastSeen}</div>
+          <div><b>Active: </b>{this.props.active}</div>
+          <div><b>Last seen: </b>{this.state.date}</div>
         </div>
 
       </div>
