@@ -8,7 +8,7 @@ import BlockchainStats from "./BlockchainStats";
 class Blockchain extends Component {
   render() {
     return (
-      <div className="inner-container">
+      <div className="inner-container inner-page">
         <Header title="Quartz blockchain" subtitle="" />
 
         <div className="row-container">

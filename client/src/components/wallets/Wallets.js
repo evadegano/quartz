@@ -27,7 +27,7 @@ class Wallets extends Component {
     const filteredWallets = this.filterWallets();
 
     return (
-    <div className="inner-container">
+    <div className="inner-container inner-page">
       <Header userId={this.props.userId} title="Wallets" subtitle="" />
       
       <div className="inner-container hollow-table">
@@ -42,7 +42,9 @@ class Wallets extends Component {
             blocks={this.props.blocks} 
             key={wallet.address}
             address={wallet.address}
-            name={wallet.name} />
+            name={wallet.name}
+            active={wallet.active}
+            lastSeen={wallet.lastSeen} />
         })}
       </div>
     </div>

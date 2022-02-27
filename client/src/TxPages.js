@@ -32,12 +32,13 @@ class TxPages extends Component {
       <div className="outer-container">
         <SideNavbar user={this.props.user} />
 
-        <div className="inner-container">
+        <div className="inner-container inner-page">
           <Header userId={this.props.user._id} title="Transactions" subtitle="" />
 
           <PendingTransactions 
             pendingTx={pendingTx} 
             gun={this.gun}
+            transactions={this.props.transactions}
             blockchain={this.props.blockchain} />
 
           <Transactions transactions={this.props.transactions} />

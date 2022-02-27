@@ -32,6 +32,7 @@ class Wallet extends Component {
   render() {
     return (
       <div className="table-row">
+
         <div className="table-col">
           <div className="small-row-container tooltip">
             <div className="trunc-txt">
@@ -63,6 +64,12 @@ class Wallet extends Component {
           <div><b>Balance: </b>{this.state.balance} QRTZ</div>
           <div><b>Blocks mined: </b>{this.state.minedBlocks}</div>
         </div>
+
+        <div className="table-col desktop-only">
+          <div><b>Active: </b>{this.state.active}</div>
+          <div><b>Last seen: </b>{this.state.lastSeen}</div>
+        </div>
+
       </div>
     );
   }
