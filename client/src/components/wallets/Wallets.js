@@ -37,7 +37,12 @@ class Wallets extends Component {
         </div>
 
         {filteredWallets.map(wallet => {
-          return <Wallet key={wallet.address} address={wallet.address} name={wallet.name} />
+          return <Wallet 
+            transactions={this.props.transactions}
+            blocks={this.props.blocks} 
+            key={wallet.address}
+            address={wallet.address}
+            name={wallet.name} />
         })}
       </div>
     </div>

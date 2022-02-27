@@ -7,14 +7,33 @@ import WalletDetails from "./components/wallets/WalletDetails";
 
 
 class WalletPages extends Component {
+  constructor({ gun }) {
+    super()
+    this.gun = gun;
+    this.transacsRef = this.gun.get("transactions");
+  }
+
   render() {
     return (
       <div className="outer-container">
         <SideNavbar user={this.props.user} />
 
         <Switch>
-          <Route exact path="/wallets" render={() => <Wallets wallets={this.props.wallets} userId={this.props.user._id} />} />
-          <Route path="/wallets/:walletId" render={() => <WalletDetails wallets={this.props.wallets} userId={this.props.user._id} />} />
+          <Route exact path="/wallets" render={() => 
+            <Wallets 
+              transactions={this.props.transactions}
+              blocks={this.props.blocks}
+              gun={this.props.gun} 
+              wallets={this.props.wallets} 
+              userId={this.props.user._id} />} />
+
+          <Route path="/wallets/:walletId" render={() => 
+            <WalletDetails 
+              transactions={this.props.transactions}
+              blocks={this.props.blocks} 
+              gun={this.props.gun} 
+              wallets={this.props.wallets} 
+              userId={this.props.user._id} />} />
         </Switch>
 
         <BottomNavbar user={this.props.user} />

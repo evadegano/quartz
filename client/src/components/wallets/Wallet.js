@@ -1,11 +1,14 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
-import { UilCopy } from '@iconscout/react-unicons'
+import { UilCopy } from '@iconscout/react-unicons';
+import { getBalance, getMinedBlocks } from "../../services/helpers";
 
 
 class Wallet extends Component {
   state = {
     displayInfo: false,
+    balance: 0,
+    minedBlocks: 0,
     tooltipTxt: "Copy to clipboard"
   }
 
@@ -15,6 +18,16 @@ class Wallet extends Component {
       tooltipTxt: "Address copied to  clipboard!"
     })
   };
+
+  componentDidMount() {
+    const balance = getBalance(this.props.transactions, this.props.address);
+    const minedBlocks = getMinedBlocks(this.props.blocks, this.props.address);
+
+    this.setState({
+      balance,
+      minedBlocks
+    })
+  }
 
   render() {
     return (
@@ -47,8 +60,8 @@ class Wallet extends Component {
         </div>
 
         <div className="table-col">
-          <div><b>Balance:</b> QRTZ</div>
-          <div><b>Blocks mined:</b> </div>
+          <div><b>Balance: </b>{this.state.balance} QRTZ</div>
+          <div><b>Blocks mined: </b>{this.state.minedBlocks}</div>
         </div>
       </div>
     );

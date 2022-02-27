@@ -74,6 +74,41 @@ function getWalletBalance(transacsRef, walletAddress) {
 
   return balance;
 }
+function getBalance(transactions, walletAddress) {
+  let balance = 0;
+
+  for (let tx of transactions) {
+    if (tx.status === "confirmed") {
+      if (tx.header.fromAddress === walletAddress) {
+        balance -= tx.header.amount;
+      }
+
+      if (tx.header.toAddress === walletAddress) {
+        balance += tx.header.amount;
+      }
+    }
+  }
+
+  return balance;
+}
+
+
+/*
+  Calculate the amount of blocks mined by a wallet
+*/
+function getMinedBlocks(blocks, walletAddress) {
+  let blocksMined = 0;
+
+  for (let block of blocks) {
+
+    if (block.header.miner === walletAddress) {
+      blocksMined ++;
+    }
+  }
+
+  return blocksMined;
+}
+
 
 /* 
   Get the Merkle root of a tree of data
@@ -142,4 +177,4 @@ function verifyHeader(transaction) {
 }
 
 
-export { hexToArray, hashInPair, getWalletBalance, getMerkleRoot, verifySignature, verifyHeader };
+export { hexToArray, hashInPair, getWalletBalance, getMerkleRoot, verifySignature, verifyHeader, getMinedBlocks, getBalance };

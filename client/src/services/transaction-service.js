@@ -129,44 +129,47 @@ async function processTx(gun, blockchain, blocksRef, transactions, minerAddress,
   const newBlock = new Block(prevBlockHash, merkleRoot, confirmedTx, difficulty, miningReward, timestamps);
   newBlock.mine(minerAddress);
 
-  // if first one to mine, add block to the blockchain
-  if (!blocksRef.get(newBlock)) {
-    // update transactions' status
-    for (let tx of transactions) {
-      if (tx.isValid) {
-        // if transaction is valid, set status to confirmed
-        gun.get(`${tx.hash}`).put({ status: "confirmed" });
-      } else {
-        gun.get(`${tx.hash}`).put({ status: "rejected" });
-      }
-    }
-
-    // add new block to the blockchain
-    blocksRef.set(newBlock);
-
-    // generate a one-time signing keypair
-    const keypair = ec.genKeyPair();
-    const publicKey = keypair.getPublic("hex");
-
-    // create new transaction
-    const rewardTx = new RewardTransaction(miningReward, minerAddress, timestamps, newBlock.hash);
-    await rewardTx.signTransaction(keypair, publicKey);
-    
-    // store transaction's hash as its id
-    const txId = rewardTx.hash;
-
-    // add transaction to db
-    const newTx = gun.get(`${txId}`).put(rewardTx);
-    // set pointer to transactions on gun
-    const transacsRef = gun.get("transactions");
-    // link transaction to the transactions ledger
-    transacsRef.set(newTx);
-
-    return { confirmedTx, rejectedTx, rewardTx };
+  // throw an error if block has already been added to the blockchain
+  if (blockchain.lastBlock === newBlock.hash) {
+    // throw error if block has already been mined by someone else
+    throw new Error("Pending transactions have been validated by someone else.");
   }
 
-  // throw error if block has already been mined by someone else
-  throw new Error("Pending transactions have been validated by someone else.");
+  // update transactions' status
+  for (let tx of transactions) {
+    if (tx.isValid) {
+      // if transaction is valid, set status to confirmed
+      gun.get(`${tx.hash}`).put({ status: "confirmed" });
+    } else {
+      gun.get(`${tx.hash}`).put({ status: "rejected" });
+    }
+  }
+
+  // add new block to the blockchain
+  blocksRef.set(newBlock);
+
+  // update blockchain's last block hash
+  
+
+  // generate a one-time signing keypair
+  const keypair = ec.genKeyPair();
+  const publicKey = keypair.getPublic("hex");
+
+  // create new transaction
+  const rewardTx = new RewardTransaction(miningReward, minerAddress, timestamps, newBlock.hash);
+  await rewardTx.signTransaction(keypair, publicKey);
+  
+  // store transaction's hash as its id
+  const txId = rewardTx.hash;
+
+  // add transaction to db
+  const newTx = gun.get(`${txId}`).put(rewardTx);
+  // set pointer to transactions on gun
+  const transacsRef = gun.get("transactions");
+  // link transaction to the transactions ledger
+  transacsRef.set(newTx);
+
+  return { confirmedTx, rejectedTx, rewardTx };
 }
 
 

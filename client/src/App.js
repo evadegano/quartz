@@ -83,6 +83,10 @@ class App extends Component {
     this.setState({ blockchain: blockchainData });
   }
 
+  updateBlockchain(blockHash) {
+    this.blockchain.ledger.push()
+  }
+
   fetchWallets() {
 
     getWallets()
@@ -192,7 +196,9 @@ class App extends Component {
 
           <Route path="/wallets" render={(routerProps) => 
             <WalletPages {...routerProps}
-              gun={this.gun} 
+              gun={this.gun}
+              transactions={this.state.transactions}
+              blocks={this.state.blocks} 
               updateNotifsStatus={this.updateNotifsStatus} 
               newNotifs={this.state.newNotifs} 
               user={this.state.loggedInUser} 
