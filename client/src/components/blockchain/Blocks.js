@@ -5,7 +5,8 @@ import Block from "./Block";
 
 class Blocks extends Component {
   state = {
-    query: ""
+    query: "",
+    filter: "hash"
   }
 
   handleChange = (event) => {
@@ -16,8 +17,16 @@ class Blocks extends Component {
     })
   }
 
+  updateFilter = (event) => {
+    const { value } = event.target;
+
+    this.setState({
+      filter: value
+    })
+  }
+
   filterBlocks = () => {
-    const filteredBlocks = this.props.blocks.filter(block => block.hash.includes(this.state.query) || block.header.miner.includes(this.state.query));
+    const filteredBlocks = this.props.blocks.filter(block => String(block[`${this.state.filter}`]).includes(this.state.query));
 
     return filteredBlocks;
   }
@@ -30,33 +39,35 @@ class Blocks extends Component {
         <div className="row-container">
           <h2>Blocks</h2>
 
-            <div className="search-container">
+          <div className="search-container">
+
             <UilSearch className="search-icon" />
+
+            <select onChange={this.updateFilter} >
+              <option name="hash" value="hash">Hash</option>
+              <option name="prevHash" value="prevHash">Prev block</option>
+              <option name="miner" value="miner">Miner</option>
+              <option name="miningReward" value="miningReward">Amount</option>
+              <option name="status" value="status">Status</option>
+              <option name="date" value="timestamps">Date</option>
+            </select>
+
             <input className="search-bar" name="query" format="text" value={this.state.query} placeholder="Search..." onChange={this.handleChange} />
           </div>
         </div>
         
 
-        <table>
-          <thead>
-            <tr>
-              <th>Hash</th>
-              <th>Hash of previous block</th>
-              <th>Miner</th>
-              <th>Height</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredBlocks.map(block => {
-              return <Block 
-                        key={block.hash} 
-                        hash={block.hash} 
-                        prevHash={block.header.prevHash} 
-                        miner={block.header.miner} 
-                        height={block.header.height} />
-            })}
-          </tbody>
-        </table>
+        {filteredBlocks.map(block => {
+          return <Block 
+                    key={block.hash} 
+                    hash={block.hash} 
+                    prevBlock={block.header.prevHash} 
+                    miner={block.header.miner}
+                    reward={block.header.miningReward} 
+                    height={block.header.height}
+                    date={block.header.timestamps}/>
+        })}
+
       </div>
     );
   }

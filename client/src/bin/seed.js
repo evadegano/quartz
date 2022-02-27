@@ -37,7 +37,9 @@ class Seed extends Component {
       <div>
         <button onClick={this.topUpWallets}>top up wallets</button>
         <button onClick={this.mineBlock}>verif pending transac
-          <br/> & mine block</button>
+          <br/> & mine block
+        </button>
+        <button>init blockchain</button>
       </div>
     );
   }

@@ -69,7 +69,7 @@ class Wallet extends Component {
         </div>
 
         <div className="table-col desktop-only">
-          <div><b>Active: </b>{this.props.active}</div>
+          <div><b>Active: </b>{this.props.active ? "true" : "false"}</div>
           <div><b>Last seen: </b>{this.state.date}</div>
         </div>
 

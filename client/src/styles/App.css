@@ -216,8 +216,10 @@ li * {
 .small-row-container {
   display: flex;
   align-items: flex-start;
+  justify-content: flex-start;
   width: 100%;
   column-gap: 5px;
+  text-align: left;
 }
 .row-container {
   display: flex;
@@ -274,6 +276,13 @@ li * {
   .search-container {
     width: 100%;
   }
+}
+.search-container select {
+  margin-left: 5px;
+  border: 1px solid #FE6601;
+  border-radius: 4px;
+  background: none;
+  color: #FE6601;
 }
 .auth-container {
   width: 40%;
@@ -398,7 +407,6 @@ table td {
 .filled-table .table-row {
   border-top: 1px solid white;
 }
-.black-separator
 .table-col {
   flex: 1;
   text-align: left;

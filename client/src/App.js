@@ -159,6 +159,7 @@ class App extends Component {
   render() {
     if (!this.state.blockchain || !this.state.wallets || !this.state.transactions || !this.state.blocks) return <div>Loading...</div>
 
+    console.log("this.blockchain", this.blocksRef);
     return (
       <div className="App">
         <Switch>

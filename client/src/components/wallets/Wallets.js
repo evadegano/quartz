@@ -25,6 +25,7 @@ class Wallets extends Component {
 
   render() {
     const filteredWallets = this.filterWallets();
+    console.log(filteredWallets[0].active);
 
     return (
     <div className="inner-container inner-page">
@@ -38,9 +39,9 @@ class Wallets extends Component {
 
         {filteredWallets.map(wallet => {
           return <Wallet 
+            key={wallet.address}
             transactions={this.props.transactions}
             blocks={this.props.blocks} 
-            key={wallet.address}
             address={wallet.address}
             name={wallet.name}
             active={wallet.active}
