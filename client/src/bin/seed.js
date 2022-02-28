@@ -23,7 +23,7 @@ class Seed extends Component {
   constructor({ gun }) {
     super()
     this.gun = gun;
-    this.blockchainRef = this.props.blockchainRef;
+    this.blockchainRef = this.gun.get("blockchain");
     this.blocksRef = this.blockchainRef.get("ledger");
     this.transacsRef = this.gun.get("transactions");
     
@@ -42,11 +42,15 @@ class Seed extends Component {
   }
 
   topUpWallets = (event) => {
-    genCreditTx(wallets);
+    genCreditTx(this.gun, wallets);
   }
 
   mineBlock = (event) => {
     verifTx(this.gun, this.blockchainRef, this.blocksRef);
+  }
+
+  genTx = (event) => {
+    genDebitTx(this.gun, wallets);
   }
 
   render() {
@@ -57,7 +61,7 @@ class Seed extends Component {
         <button onClick={this.mineBlock}>verif pending transac
           <br/> & mine block
         </button>
-        <button>init blockchain</button>
+        <button onClick={this.genTx}>gen transactions</button>
       </div>
     );
   }

@@ -64,6 +64,7 @@ async function genCreditTx(gun, wallets) {
 }
 
 async function genDebitTx(gun, wallets) {
+
   for (let wallet of wallets) {
     //generate a random date
     const randDate = genRandomDate(new Date(2021, 11, 1), new Date(2021, 11, 20));
@@ -88,9 +89,9 @@ async function genDebitTx(gun, wallets) {
   }
 }
 
-async function verifTx(gun, blockchainRef, blocksRef, transactions, minerAddress, timestamps) {
+async function verifTx(gun, blockchain, blockchainRef, blocksRef, transactions, minerAddress, timestamps) {
   
-  await processTx(gun, blockchainRef, blocksRef, transactions, minerAddress, timestamps);
+  await processTx(gun, blockchain, blockchainRef, blocksRef, transactions, minerAddress, timestamps);
 }
 
 

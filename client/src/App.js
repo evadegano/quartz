@@ -21,8 +21,7 @@ import UserPages from './UserPages';
 import BlockPages from './BlockPages';
 import WalletPages from "./WalletPages";
 import TxPages from './TxPages';
-import ResetRequest from "./components/recovery/reset-request";
-import ResetPwd from "./components/recovery/reset-pwd";
+import RecoveryPages from './RecoveryPages';
 import Seed from './bin/seed';
 
 
@@ -207,9 +206,8 @@ class App extends Component {
               user={this.state.loggedInUser} 
               wallets={this.state.wallets} />} />
 
-          <Route path="/request-reset" component={ResetRequest} />
-          <Route path="/reset-password/:userId" component={ResetPwd} />
-
+          
+          <Route path="/recovery" render={() => <RecoveryPages /> } />
           <Route path="/seed" render={() => <Seed gun={this.gun} /> } />
         </Switch>
       </div>

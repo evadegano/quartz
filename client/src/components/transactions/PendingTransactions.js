@@ -26,10 +26,7 @@ class Transactions extends Component {
     const walletAddress = wallets[Math.round(Math.random() * wallets.length)].address;
 
     try {
-      const [ confirmedTx, rejectedTx, rewardTx, newBlockHash ] = processTx(this.gun, this.props.blockchain, this.blockchainRef, this.blocksRef, this.props.pendingTx, walletAddress, new Date(2021, 11, 20));
-      
-      // update blockchain on gunjs
-      this.blockchainRef.put({ lastBlock: newBlockHash });
+      const [ confirmedTx, rejectedTx, rewardTx ] = processTx(this.gun, this.props.blockchain, this.blockchainRef, this.blocksRef, this.props.pendingTx, walletAddress, new Date().getTime());
 
       this.setState({
         error: rejectedTx,

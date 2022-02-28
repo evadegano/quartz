@@ -1,13 +1,17 @@
 import { Component } from "react";
+import EC from "elliptic";
 import Gun from  "gun";
 import { sendCoins } from "../../services/transaction-service";
 
+// init variables
+const ec = new EC.ec('secp256k1');
+
+
 
 class SendCoins extends Component {
-  constructor() {
+  constructor({ gun }) {
     super();
-    this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
-    window.gun = this.gun; //To have access to gun object in browser console
+    this.gun = gun;
     this.transacsRef = this.gun.get("transactions");
   }
 
@@ -33,11 +37,14 @@ class SendCoins extends Component {
     // get data
     const { toAddress, amount } = this.state;
     const walletAddress = this.props.match.params.walletId;
-    const signingKeyPair = localStorage.getItem(walletAddress.keypair);
+
+    // generate a one-time signing keypair
+    const keypair = ec.genKeyPair();
+    const publicKey = keypair.getPublic("hex");
 
     // create new transaction
     try {
-      sendCoins(amount, signingKeyPair, walletAddress, toAddress);
+      sendCoins(this.gun, amount, keypair, publicKey, walletAddress, toAddress);
       this.setState({
         toAddress: "",
         amount: "",

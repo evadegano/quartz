@@ -34,7 +34,7 @@ async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receive
   const transaction = new Transaction(amount, senderAddress, receiverAddress, timestamps);
   console.log("transaction =>", transaction);
   // sign transaction
-  await transaction.signTransaction(keypair, publicKey, senderAddress);
+  await transaction.signTransaction(keypair, publicKey);
 
   // store transaction's hash as its id
   const txId = transaction.hash;
@@ -113,7 +113,7 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, transactions
 
   // build merkle tree with confirmed transactions
   const confirmedTxHashes = confirmedTx.map(tx => tx.hash);
-  const merkleRoot = getMerkleRoot(confirmedTxHashes);
+  const merkleRoot = getMerkleRoot(confirmedTxHashes); // where is the Merkle tree stored?
 
   // get blockchain data
   const difficulty = blockchain.difficulty;
@@ -138,18 +138,23 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, transactions
   // else, update blockchain's last block hash
   blockchainRef.put({ lastBlock: newBlock.hash });
 
-  // update transactions' status
+  // update transactions' status and block hash
   for (let tx of transactions) {
     if (tx.isValid) {
       // if transaction is valid, set status to confirmed
-      gun.get(`${tx.hash}`).put({ status: "confirmed" });
+      gun.get(`${tx.hash}`).put({ 
+        status: "confirmed",
+        block: newBlock.hash
+      });
     } else {
-      gun.get(`${tx.hash}`).put({ status: "rejected" });
+      gun.get(`${tx.hash}`).put({ status: "rejected",
+      block: newBlock.hash
+     });
     }
   }
 
   // add new block to the blockchain
-  blocksRef.set(newBlock);
+  blocksRef.set(gun.get(newBlock.hash).put(newBlock));
 
   // generate a one-time signing keypair
   const keypair = ec.genKeyPair();
