@@ -26,14 +26,14 @@ import ResetPwd from "./components/recovery/reset-pwd";
 import Seed from './bin/seed';
 
 
+
 class App extends Component {
   constructor() {
     super();
       this.gun = Gun([`${process.env.REACT_APP_GUN_URL}`]);
       window.gun = this.gun; //To have access to gun object in browser console
-      this.blockchain = Blockchain.instance;
-      this.blockchainRef = this.gun.get(this.blockchain);
-      this.blocksRef = this.blockchainRef.get("ledger").set(this.blockchain.ledger);
+      this.blockchainRef = this.gun.get("blockchain");
+      this.blocksRef = this.blockchainRef.get("ledger");
       this.transacsRef = this.gun.get("transactions");
 
       this.state = {
@@ -46,8 +46,6 @@ class App extends Component {
         error: ""
       }
   }
-
-  
 
   updateLoggedInUser = (userObj) => {
     this.setState({ loggedInUser: userObj });
@@ -78,13 +76,22 @@ class App extends Component {
   }
 
   fetchBlockchainData() {
-    const blockchainData = _.pick(this.blockchainRef["_"]["lex"], ["difficulty", "miningReward", "ledger", "lastBlock"]);
-    
+    let blockchainData = {};
+
+    this.blockchainRef.map().once(function(val, key) {
+
+      if (key !== "ledger") {
+        console.log("object", key, val);
+        blockchainData[key] = val;
+      }
+
+    });
+
     this.setState({ blockchain: blockchainData });
   }
 
-  updateBlockchain(blockHash) {
-    this.blockchain.ledger.push()
+  updateBlockchain(block) {
+    this.blockchainRef.get("ledger").set(block);
   }
 
   fetchWallets() {
@@ -117,14 +124,11 @@ class App extends Component {
   fetchBlocks() {
     let blocksCopy = [];
 
-    // console.log("ledger =>", this.blockchainRef.get("ledger"))
+    this.blockchainRef.get("ledger").map().once(function(block) {
+      blocksCopy.push(block);
+    });
 
-    // this.blocksRef.map().once(function(block) {
-    //   let data = _.pick(block);
-    //   blocksCopy.push(data);
-    // });
-
-    this.blockchain.ledger.map(block => blocksCopy.push(block));
+    // this.blockchain.ledger.map(block => blocksCopy.push(block));
 
     this.setState({ blocks: blocksCopy });
   }
@@ -159,7 +163,6 @@ class App extends Component {
   render() {
     if (!this.state.blockchain || !this.state.wallets || !this.state.transactions || !this.state.blocks) return <div>Loading...</div>
 
-    console.log("this.blockchain", this.blocksRef);
     return (
       <div className="App">
         <Switch>
@@ -193,7 +196,8 @@ class App extends Component {
               newNotifs={this.state.newNotifs} 
               user={this.state.loggedInUser} 
               blockchain={this.state.blockchain} 
-              blocks={this.state.blocks} />} />
+              blocks={this.state.blocks}
+              transactions={this.state.transactions} />} />
 
           <Route path="/wallets" render={(routerProps) => 
             <WalletPages {...routerProps}

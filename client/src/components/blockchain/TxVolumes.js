@@ -6,6 +6,35 @@ class TxVolumes extends Component {
     timePeriod: "year"
   }
 
+  updateChart = () => {
+    let labels, data;
+
+    if (this.state.timePeriod === "year") {
+      labels = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+    }
+
+    if (this.state.timePeriod === "month") {
+      return;
+    }
+
+    if (this.state.timePeriod === "week") {
+      let monday = 0;
+
+      labels = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
+
+      for (let tx of this.props.transactions) {
+        return;
+        
+      }
+    }
+
+    return [ labels, data ];
+  }
+
+  componentDidMount() {
+    this.updateChart();
+  }
+
   render() {
     return (
       <div className="chart-container">

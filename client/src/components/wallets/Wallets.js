@@ -6,7 +6,8 @@ import Header from "../user/Header";
 
 class Wallets extends Component {
   state = {
-    query: ""
+    query: "",
+    filter: "address"
   }
 
   handleChange = (event) => {
@@ -17,15 +18,22 @@ class Wallets extends Component {
     })
   }
 
+  updateFilter = (event) => {
+    const { value } = event.target;
+
+    this.setState({
+      filter: value
+    })
+  }
+
   filterWallets = () => {
-    const filteredWallets = this.props.wallets.filter(wallet => wallet.address.includes(this.state.query) || wallet.name.includes(this.state.query));
+    const filteredWallets = this.props.wallets.filter(wallet => wallet[`${this.state.filter}`].includes(this.state.query));
 
     return filteredWallets;
   }
 
   render() {
     const filteredWallets = this.filterWallets();
-    console.log(filteredWallets[0].active);
 
     return (
     <div className="inner-container inner-page">
@@ -34,6 +42,12 @@ class Wallets extends Component {
       <div className="inner-container hollow-table">
         <div className="search-container">
           <UilSearch className="search-icon" />
+
+          <select onChange={this.updateFilter} >
+            <option name="address" value="address">Address</option>
+            <option name="name" value="name">Name</option>
+          </select>
+
           <input className="search-bar" name="query" format="text" value={this.state.query} placeholder="Search..." onChange={this.handleChange} />
         </div>
 

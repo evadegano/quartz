@@ -71,7 +71,7 @@ async function createPurchaseTx(gun, amount, receiverAddress, keypair, publicKey
 /*
   Verify transactions and mine them into a block
 */
-async function processTx(gun, blockchain, blocksRef, transactions, minerAddress, timestamps) {
+async function processTx(gun, blockchain, blockchainRef, blocksRef, transactions, minerAddress, timestamps) {
   let rejectedTx = {};
   let confirmedTx = []
 
@@ -135,6 +135,9 @@ async function processTx(gun, blockchain, blocksRef, transactions, minerAddress,
     throw new Error("Pending transactions have been validated by someone else.");
   }
 
+  // else, update blockchain's last block hash
+  blockchainRef.put({ lastBlock: newBlock.hash });
+
   // update transactions' status
   for (let tx of transactions) {
     if (tx.isValid) {
@@ -147,9 +150,6 @@ async function processTx(gun, blockchain, blocksRef, transactions, minerAddress,
 
   // add new block to the blockchain
   blocksRef.set(newBlock);
-
-  // update blockchain's last block hash
-  
 
   // generate a one-time signing keypair
   const keypair = ec.genKeyPair();
@@ -169,7 +169,7 @@ async function processTx(gun, blockchain, blocksRef, transactions, minerAddress,
   // link transaction to the transactions ledger
   transacsRef.set(newTx);
 
-  return { confirmedTx, rejectedTx, rewardTx };
+  return [ confirmedTx, rejectedTx, rewardTx, newBlock.hash ] ;
 }
 
 

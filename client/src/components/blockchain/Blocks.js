@@ -61,11 +61,11 @@ class Blocks extends Component {
           return <Block 
                     key={block.hash} 
                     hash={block.hash} 
-                    prevBlock={block.header.prevHash} 
-                    miner={block.header.miner}
-                    reward={block.header.miningReward} 
-                    height={block.header.height}
-                    date={block.header.timestamps}/>
+                    prevBlock={block.prevHash} 
+                    miner={block.miner}
+                    reward={block.miningReward} 
+                    height={block.height}
+                    date={block.timestamps}/>
         })}
 
       </div>

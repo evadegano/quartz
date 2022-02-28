@@ -13,7 +13,7 @@ class BlockPages extends Component {
         <SideNavbar user={this.props.user} />
 
         <Switch>
-          <Route exact path="/blocks" render={() => <Blockchain blockchain={this.props.blockchain} blocks={this.props.blocks} />} />
+          <Route exact path="/blocks" render={() => <Blockchain blockchain={this.props.blockchain} blocks={this.props.blocks} transactions={this.props.transactions} />} />
           <Route path="/blocks/:blockId" render={() => <BlockDetails blocks={this.props.blocks} />} />
         </Switch>
 

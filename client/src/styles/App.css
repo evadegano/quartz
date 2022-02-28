@@ -181,7 +181,8 @@ li * {
 
 /* Containers */
 .no-overflow-container {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
   height: 30vh;
   width: 100%;
 }
@@ -414,8 +415,7 @@ li * {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 .filled-table * {
   color: white;
@@ -442,6 +442,7 @@ table td {
 }
 .filled-table .table-row {
   border-top: 1px solid white;
+  padding-bottom: 20px;
 }
 .table-col {
   flex: 1;

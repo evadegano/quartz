@@ -2,22 +2,30 @@ import SHA256 from "crypto-js/sha256";
 import MD5 from "crypto-js/md5";
 class Block {
     constructor(prevHash, merkleRoot, transactions, difficulty, miningReward, timestamps = Date.now()) {
-        this.header = {
-            prevHash: prevHash,
-            nonce: Math.round(Math.random() * 999999999),
-            miner: null,
-            miningReward: miningReward,
-            difficulty: difficulty,
-            height: transactions.length,
-            merkleRoot: merkleRoot,
-            timestamps: timestamps
-        };
+        this.prevHash = prevHash;
+        this.nonce = Math.round(Math.random() * 999999999);
+        this.miner = null;
+        this.miningReward = miningReward;
+        this.difficulty = difficulty;
+        this.height = transactions.length;
+        this.merkleRoot = merkleRoot;
+        this.timestamps = timestamps;
         this.transactions = transactions;
     }
     // hash block's content
     getHash() {
         // convert object to a JSON string for hashing
-        const blockHeader = JSON.stringify(this.header);
+        const header = {
+            prevHash: this.prevHash,
+            nonce: this.nonce,
+            miner: this.miner,
+            miningReward: this.miningReward,
+            difficulty: this.difficulty,
+            height: this.height,
+            merkleRoot: this.merkleRoot,
+            timestamps: this.timestamps,
+        };
+        const blockHeader = JSON.stringify(header);
         // hash block's header
         return SHA256(blockHeader).toString();
     }
@@ -28,20 +36,20 @@ class Block {
         console.log("⛏ mining...");
         while (true) {
             // hash nonce
-            const attempt = MD5(String(this.header.nonce)).toString();
+            const attempt = MD5(String(this.nonce)).toString();
             // solution to match based on difficulty
-            const substToMatch = new Array(this.header.difficulty).fill(0).join("");
+            const substToMatch = new Array(this.difficulty).fill(0).join("");
             // return solution if found
-            if (attempt.substr(0, this.header.difficulty) === substToMatch) {
+            if (attempt.substr(0, this.difficulty) === substToMatch) {
                 // update miner's wallet address
-                this.header.miner = minerWalletAddress;
+                this.miner = minerWalletAddress;
                 // calculate block header's hash
                 this.hash = this.getHash();
                 console.log(`Block mined: ${this.hash}`);
                 return;
             }
             // else, try another solution
-            this.header.nonce++;
+            this.nonce++;
         }
     }
     // verify all transactions in the block via their merkle hash

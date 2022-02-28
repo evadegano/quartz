@@ -12,7 +12,7 @@ class Blockchain extends Component {
         <Header title="Quartz blockchain" subtitle="" />
 
         <div className="row-container">
-          <TxVolumes />
+          <TxVolumes transactions={this.props.transactions} />
           <BlockchainStats blockchain={this.props.blockchain} blocks={this.props.blocks.length}/>
         </div>
 

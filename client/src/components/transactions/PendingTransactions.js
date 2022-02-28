@@ -1,7 +1,6 @@
 import { Component } from "react";
 import { processTx } from "../../services/transaction-service";
 import Transaction from "./Transaction";
-import Blockchain from "../../services/classes/blockchain";
 
 // remove once in prod
 import wallets from "../../bin/wallets.json";
@@ -12,9 +11,8 @@ class Transactions extends Component {
   constructor({ gun }) {
     super()
     this.gun = gun;
-    this.blockchain = Blockchain.instance;
-    this.blockchainRef = gun.get(this.blockchain); // is it the right way to do it?
-    this.blocksRef = this.blockchainRef.get("ledger").set(this.blockchain.ledger);
+    this.blockchainRef = gun.get("blockchain");
+    this.blocksRef = this.blockchainRef.get("ledger");
     this.transacsRef = this.gun.get("transactions");
     
     this.state = {
@@ -24,10 +22,14 @@ class Transactions extends Component {
   }
 
   processTx = (event) => {
+    // delete once in prod
     const walletAddress = wallets[Math.round(Math.random() * wallets.length)].address;
 
     try {
-      const { confirmedTx, rejectedTx, rewardTx } = processTx(this.gun, this.props.blockchain, this.blocksRef, this.props.pendingTx, walletAddress, new Date(2021, 11, 20));
+      const [ confirmedTx, rejectedTx, rewardTx, newBlockHash ] = processTx(this.gun, this.props.blockchain, this.blockchainRef, this.blocksRef, this.props.pendingTx, walletAddress, new Date(2021, 11, 20));
+      
+      // update blockchain on gunjs
+      this.blockchainRef.put({ lastBlock: newBlockHash });
 
       this.setState({
         error: rejectedTx,
