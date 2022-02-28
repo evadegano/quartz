@@ -585,10 +585,12 @@ table td {
   font-weight: 600;
   font-family: 'IBM Plex Mono', monospace;
 }
-.animated-svg * {
+.animated-path {
   stroke-dasharray: 1500;
   stroke-dashoffset: 1500;
-  fill-opacity: 0;
+}
+.appearing-path {
+  opacity: 0;
 }
 
 /* Separators */
