@@ -33,7 +33,6 @@ class Transactions extends Component {
 
   render() {
     const filteredTx = this.filterTx();
-    // const filteredTx = this.props.transactions;
 
     return (
       <div className="inner-container hollow-table">

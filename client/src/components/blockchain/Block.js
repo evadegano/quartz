@@ -28,7 +28,11 @@ class Block extends Component {
 
             <div className="trunc-txt">
               <b>Prev block: </b>
-              <Link to={`/blocks/${this.props.prevBlock}`}>{this.props.prevBlock}</Link>
+              { 
+                this.props.prevBlock === "null - genesis block" 
+                ? <span>{this.props.prevBlock}</span>
+                : <Link to={`/blocks/${this.props.prevBlock}`}>{this.props.prevBlock}</Link>
+              }
             </div>
 
             <div><b>Date:</b> {this.state.date}</div>

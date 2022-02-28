@@ -9,7 +9,7 @@ class Blockchain {
   public miningReward: number = 100;
 
   createGenesisBlock() {
-    const genesisBlock = new Block("null - genesis blocks", "null - genesis blocks", [], 4, 100, new Date(2021, 10, 1).getTime());
+    const genesisBlock = new Block("null - genesis block", "null - genesis block", [], 4, 100, new Date(2021, 10, 1).getTime());
     genesisBlock.hash = genesisBlock.getHash();
 
     return genesisBlock;
