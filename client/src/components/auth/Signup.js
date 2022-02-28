@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import { GoogleLogin } from "react-google-login";
 import { signup } from "../../services/auth-service";
 import { postWallets, generateWallet } from "../../services/user-service";
 import { UilInfoCircle } from '@iconscout/react-unicons'
@@ -76,6 +77,11 @@ class Signup extends Component {
         }})
   }
 
+  responseGoogle = (response) => {
+    console.log("Google response", response);
+    console.log("Google profile resp", response.profileObj);
+  }
+
   render() {
     return (
       <div className="auth-page">
@@ -83,9 +89,20 @@ class Signup extends Component {
           <h1 className="title">Sign up</h1>
 
           <div className="auth-container">
-            <Link className="oAuth-btn" to="/auth/google">
-              <img src="https://d3ptyyxy2at9ui.cloudfront.net/google-32ae27.svg" alt="Google logo"/>Sign up with Google
-            </Link>
+            <GoogleLogin 
+              clientId="320266929740-ksdq1ug9o9abvl3752gfh21hpmd0elg3.apps.googleusercontent.com"
+              render={renderProps => (
+                <button className="oAuth-btn" onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                  <img src="https://d3ptyyxy2at9ui.cloudfront.net/google-32ae27.svg" alt="Google logo"/>
+                  Sign up with Google
+                </button>
+              )}
+              buttonText="Sign up with Google"
+              onSuccess={this.responseGoogle}
+              onFailure={this.responseGoogle}
+              isSignedIn={true}
+              cookiePolicy={'single_host_origin'}
+            />
 
             <div className="line-separator">
               <div>OR</div>

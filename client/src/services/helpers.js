@@ -62,12 +62,12 @@ function getWalletBalance(transacsRef, walletAddress) {
 
   transacsRef.map().once(tx => {
     if (tx.status === "confirmed") {
-      if (tx.header.fromAddress === walletAddress) {
-        balance -= tx.header.amount;
+      if (tx.fromAddress === walletAddress) {
+        balance -= tx.amount;
       }
 
-      if (tx.header.toAddress === walletAddress) {
-        balance += tx.header.amount;
+      if (tx.toAddress === walletAddress) {
+        balance += tx.amount;
       }
     }
   })
@@ -79,12 +79,12 @@ function getBalance(transactions, walletAddress) {
 
   for (let tx of transactions) {
     if (tx.status === "confirmed") {
-      if (tx.header.fromAddress === walletAddress) {
-        balance -= tx.header.amount;
+      if (tx.fromAddress === walletAddress) {
+        balance -= tx.amount;
       }
 
-      if (tx.header.toAddress === walletAddress) {
-        balance += tx.header.amount;
+      if (tx.toAddress === walletAddress) {
+        balance += tx.amount;
       }
     }
   }
@@ -101,7 +101,7 @@ function getMinedBlocks(blocks, walletAddress) {
 
   for (let block of blocks) {
 
-    if (block.header.miner === walletAddress) {
+    if (block.miner === walletAddress) {
       blocksMined ++;
     }
   }

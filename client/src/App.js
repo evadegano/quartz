@@ -81,10 +81,8 @@ class App extends Component {
     this.blockchainRef.map().once(function(val, key) {
 
       if (key !== "ledger") {
-        console.log("object", key, val);
         blockchainData[key] = val;
       }
-
     });
 
     this.setState({ blockchain: blockchainData });
