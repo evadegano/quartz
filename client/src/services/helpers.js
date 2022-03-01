@@ -57,23 +57,23 @@ function hashInPair(hashArray, output = []) {
 /*
   Calculate a wallet's balance
 */
-function getWalletBalance(transacsRef, walletAddress) {
-  let balance = 0;
+// function getWalletBalance(transacsRef, walletAddress) {
+//   let balance = 0;
 
-  transacsRef.map().once(tx => {
-    if (tx.status === "confirmed") {
-      if (tx.fromAddress === walletAddress) {
-        balance -= tx.amount;
-      }
+//   transacsRef.map().once(tx => {
+//     if (tx.status === "confirmed") {
+//       if (tx.fromAddress === walletAddress) {
+//         balance -= tx.amount;
+//       }
 
-      if (tx.toAddress === walletAddress) {
-        balance += tx.amount;
-      }
-    }
-  })
+//       if (tx.toAddress === walletAddress) {
+//         balance += tx.amount;
+//       }
+//     }
+//   })
 
-  return balance;
-}
+//   return balance;
+// }
 function getBalance(transactions, walletAddress) {
   let balance = 0;
 
@@ -197,4 +197,4 @@ function timestampsToDate(timestamps) {
 }
 
 
-export { hexToArray, hashInPair, getWalletBalance, getMerkleRoot, verifySignature, verifyHeader, getMinedBlocks, getBalance, timestampsToDate };
+export { hexToArray, hashInPair, getMerkleRoot, verifySignature, verifyHeader, getMinedBlocks, getBalance, timestampsToDate };

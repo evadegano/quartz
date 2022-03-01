@@ -102,7 +102,8 @@ router.post("/wallets", async (req, res, next) => {
   const randWalletName = await hri.random() + Math.round(Math.random() * 100);
 
   // turn it into a wallet address
-  const walletAddress = crypto.createHash('sha256').update(randWalletName).digest();
+  const walletAddress = crypto.createHash('sha256').update(randWalletName).digest("hex");
+  return res.status(200).json({ walletAddress });
 
   // create new wallet
   const newWallet = new Wallet({

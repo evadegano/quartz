@@ -106,7 +106,7 @@ async function createWallets(usersFromDB) {
     const randWalletName = await hri.random() + Math.round(Math.random() * 100);
 
     // turn it into a wallet address
-    const walletAddress = crypto.createHash('sha256').update(randWalletName).digest();
+    const walletAddress = crypto.createHash('sha256').update(randWalletName).digest("hex");
 
     wallets.push({
       user_id: user._id,

@@ -3,7 +3,7 @@ import Gun from  "gun";
 import EC from "elliptic";
 
 // helper functions
-import { getWalletBalance, getMerkleRoot, verifySignature, verifyHeader } from "./helpers";
+import { getBalance, getMerkleRoot, verifySignature, verifyHeader } from "./helpers";
 
 // classes
 import Transaction from "./classes/transaction";
@@ -17,12 +17,12 @@ const ec = new EC.ec('secp256k1');
 /*
   Create transactions between wallets
 */
-async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receiverAddress, timestamps) {
+async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receiverAddress, timestamps, transactions) {
   // set pointer to transactions on gun
   const transacsRef = gun.get("transactions");
 
   // make sure this wallet has enough funds
-  const walletBalance = getWalletBalance(transacsRef, senderAddress);
+  const walletBalance = getBalance(transactions, senderAddress);
 
   console.log("balance =>", walletBalance);
 
@@ -71,18 +71,18 @@ async function createPurchaseTx(gun, amount, receiverAddress, keypair, publicKey
 /*
   Verify transactions and mine them into a block
 */
-async function processTx(gun, blockchain, blockchainRef, blocksRef, transactions, minerAddress, timestamps) {
+async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTransactions, minerAddress, timestamps, allTransactions) {
   let rejectedTx = {};
   let confirmedTx = []
 
   // verify transactions
-  for (let tx of transactions) {
+  for (let tx of pendingTransactions) {
     // set default validity to true
     tx.isValid = true;
 
     // make sure wallet has enough funds (ignore rewards and bank transfers)
     if (tx.fromAddress !== "null - bank transfer" && tx.fromAddress !== "null - QRTZ reward") {
-      const walletBalance = getWalletBalance(tx.fromAddress);
+      const walletBalance = getBalance(allTransactions, tx.fromAddress);
       
       if (walletBalance < tx.amount) {
         // if error, add it to the rejection object
@@ -139,7 +139,7 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, transactions
   blockchainRef.put({ lastBlock: newBlock.hash });
 
   // update transactions' status and block hash
-  for (let tx of transactions) {
+  for (let tx of pendingTransactions) {
     if (tx.isValid) {
       // if transaction is valid, set status to confirmed
       gun.get(`${tx.hash}`).put({ 

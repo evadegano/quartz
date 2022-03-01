@@ -222,6 +222,15 @@ li * {
   column-gap: 5px;
   text-align: left;
 }
+.center-row-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  column-gap: 40px;
+  row-gap: 40px;
+}
 .row-container {
   display: flex;
   justify-content: space-between;
@@ -238,25 +247,21 @@ li * {
     align-items: center;
     row-gap: 20px;
   }
+
+  #dashboard .row-container {
+    flex-direction: column-reverse;
+    align-items: center;
+    row-gap: 20px;
+  }
 }
 .header-container {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 }
-@media screen and (max-width: 800px) {
-  .header-container {
-    flex-direction: column;
-    row-gap: 40px;
-  }
 
-  .header-container * {
-    text-align: center;
-  }
-}
 
 .homepage .row-container,
 .homepage .header-container {
@@ -572,6 +577,13 @@ table td {
 }
 .time-btn.active {
   color: #FE6601;
+}
+.transfer-btn {
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: #222222;
 }
 
 /* Forms */

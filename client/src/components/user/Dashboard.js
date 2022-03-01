@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { getWalletBalance } from "../../services/helpers";
+import { getBalance } from "../../services/helpers";
 import { postWallets, putWallet } from "../../services/user-service";
 import Header from "./Header";
 import TransferBtns from "./TransferBtns";
@@ -32,7 +32,7 @@ class Dashboard extends Component {
   // calculate wallet's balance
   fetchWalletBalance = () => {
     const walletAddress = this.props.match.params.walletId;
-    const balance = getWalletBalance(walletAddress);
+    const balance = getBalance(this.props.transactions, walletAddress);
 
     this.setState({ balance });
   }
@@ -88,15 +88,13 @@ class Dashboard extends Component {
   render() {
     const walletAddress = this.props.match.params.walletId;
     const userTransactions = this.filterTransactions(walletAddress);
-    //const userBalance = getWalletBalance(this.props.transactions, this.props.userWallet);
 
     return (
-      <div className="inner-container">
+      <div id="dashboard" className="inner-container inner-page">
         <Header title={this.state.greeting} userId={this.props.user._id} />
 
         <div>
-          <h2 className="subtitle">Wallet: {walletAddress}</h2>
-
+          <label>Current wallet:</label>
           <select name="wallets" onChange={this.updateWallet}>
             {this.props.userWallets.map(wallet => <option key={wallet.address} value={wallet.address}>{wallet.address}</option>)}
           </select>
@@ -104,17 +102,13 @@ class Dashboard extends Component {
           <button onClick={this.createNewWallet}>ADD WALLET</button>
         </div>
 
-        <div className="columns centered-row-container">
-          <div className="column">
-            <Balance balance={this.state.balance} />
-            <Transactions transactions={userTransactions} />
-          </div>
-
-          <div className="column">
-            <TransferBtns walletAddress={walletAddress} />
-            <MiningStats />
-          </div>
+        <div className="row-container">
+          <Balance balance={this.state.balance} />
+          
+          <TransferBtns walletAddress={walletAddress} />
         </div>
+
+        <Transactions transactions={userTransactions} />
       </div>
     );
   }
