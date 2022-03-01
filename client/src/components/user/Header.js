@@ -8,6 +8,7 @@ class Header extends Component {
   state = {
     viewSettings: false,
     viewNotifs: false,
+    newNotifs: false,
     notifications: ""
   };
 
@@ -45,15 +46,21 @@ class Header extends Component {
         
         <div className="settings-container">
           <button 
-            className={`settings-btn ${this.state.viewSettings ? "active" : "" }`} 
+            className={
+              `settings-btn 
+              ${this.state.viewSettings ? "active" : "" }`} 
             onClick={() => this.setState({ viewSettings: !this.state.viewSettings })}>
+
             <UilSetting/>
           </button>
 
           <button 
             className={`settings-btn ${this.state.viewNotifs ? "active" : "" }`}
             onClick={this.fetchNotifs}>
+
             <UilBell size="27"/>
+
+            {this.state.newNotifs && <div className="new-notif">!</div>}
           </button>
         </div>
 

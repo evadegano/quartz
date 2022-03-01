@@ -23,6 +23,7 @@
     "gun": "^0.2020.1235",
     "lodash": "^4.17.21",
     "node-sass": "^7.0.1",
+    "qrcode": "^1.5.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.2",
     "react-chartjs-2": "^4.0.1",

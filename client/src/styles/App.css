@@ -183,7 +183,7 @@ li * {
 .no-overflow-container {
   overflow-x: hidden;
   overflow-y: scroll;
-  height: 30vh;
+  max-height: 30vh;
   width: 100%;
 }
 .outer-container {
@@ -517,6 +517,7 @@ table td {
 
 /* Buttons */
 .settings-btn {
+  position: relative;
   background: white;
   border: none;
   cursor: pointer;
@@ -526,6 +527,17 @@ table td {
   background: #222222;
   border-radius: 4px;
   color: white;
+}
+.new-notif {
+  position: absolute;
+  top: 22%;
+  right: 27%;
+  background: #FE6601;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  color: white;
+  font-size: 10px;
 }
 .main-btn {
   border-radius: 4px;

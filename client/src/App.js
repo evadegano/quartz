@@ -32,6 +32,7 @@ class App extends Component {
       this.blockchainRef = this.gun.get("blockchain");
       this.blocksRef = this.blockchainRef.get("ledger");
       this.transacsRef = this.gun.get("transactions");
+      this.notifsRef = this.gun.get("notifications");
 
       this.state = {
         loggedInUser: "",
@@ -39,17 +40,13 @@ class App extends Component {
         wallets: [],
         transactions: [],
         blocks: [],
-        newNotifs: false,
+        notifs: [],
         error: ""
       }
   }
 
   updateLoggedInUser = (userObj) => {
     this.setState({ loggedInUser: userObj });
-  }
-
-  updateNotifsStatus = (bool) => {
-    this.setState({ newNotifs: bool });
   }
 
   getUserWallets = () => {
@@ -83,6 +80,16 @@ class App extends Component {
     });
 
     this.setState({ blockchain: blockchainData });
+  }
+
+  fetchNotifs() {
+    let notifs = [];
+
+    this.notifsRef.map().once(function(notif) {
+      notifs.push(notif);
+    })
+
+    this.setState({ notifs });
   }
 
   updateBlockchain(block) {
@@ -153,6 +160,7 @@ class App extends Component {
     this.fetchBlockchainData();
     this.fetchBlocks();
     this.fetchTransactions();
+    this.fetchNotifs();
   }
 
   render() {
@@ -166,43 +174,39 @@ class App extends Component {
           
           <Route  path="/user" render={(routerProps) => 
             <UserPages  {...routerProps} 
-              updateNotifsStatus={this.updateNotifsStatus} 
-              newNotifs={this.state.newNotifs} 
               gun={this.gun}
               updateUser={this.updateLoggedInUser} 
               user={this.state.loggedInUser} 
               transactions={this.state.transactions} 
               wallets={this.state.wallets} 
-              blocks={this.state.blocks} />} />
+              blocks={this.state.blocks}
+              notifs={this.state.notifs} />} />
 
           <Route path="/transactions" render={(routerProps) => 
             <TxPages {...routerProps}
               gun={this.gun}
-              updateNotifsStatus={this.updateNotifsStatus} 
-              newNotifs={this.state.newNotifs} 
               user={this.state.loggedInUser} 
               blockchain={this.state.blockchain} 
-              transactions={this.state.transactions} />} />
+              transactions={this.state.transactions}
+              notifs={this.state.notifs} />} />
 
           <Route path="/blocks" render={(routerProps) => 
             <BlockPages {...routerProps} 
               gun={this.gun}
-              updateNotifsStatus={this.updateNotifsStatus} 
-              newNotifs={this.state.newNotifs} 
               user={this.state.loggedInUser} 
               blockchain={this.state.blockchain} 
               blocks={this.state.blocks}
-              transactions={this.state.transactions} />} />
+              transactions={this.state.transactions}
+              notifs={this.state.notifs} />} />
 
           <Route path="/wallets" render={(routerProps) => 
             <WalletPages {...routerProps}
               gun={this.gun}
               transactions={this.state.transactions}
               blocks={this.state.blocks} 
-              updateNotifsStatus={this.updateNotifsStatus} 
-              newNotifs={this.state.newNotifs} 
               user={this.state.loggedInUser} 
-              wallets={this.state.wallets} />} />
+              wallets={this.state.wallets}
+              notifs={this.state.notifs} />} />
 
           
           <Route path="/recovery" render={() => <RecoveryPages /> } />

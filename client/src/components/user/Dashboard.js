@@ -1,11 +1,12 @@
 import { Component } from "react";
 import { getBalance } from "../../services/helpers";
+import QRCode from "qrcode";
 import { postWallets, putWallet } from "../../services/user-service";
 import Header from "./Header";
 import TransferBtns from "./TransferBtns";
 import Transactions from "../transactions/Transactions";
 import Balance from "./Balance";
-import MiningStats from "./MiningStats";
+
 
 
 class Dashboard extends Component {
@@ -106,6 +107,7 @@ class Dashboard extends Component {
           <Balance balance={this.state.balance} />
           
           <TransferBtns walletAddress={walletAddress} />
+          
         </div>
 
         <Transactions transactions={userTransactions} />

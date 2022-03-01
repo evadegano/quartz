@@ -14,6 +14,7 @@ class Transactions extends Component {
     this.blockchainRef = gun.get("blockchain");
     this.blocksRef = this.blockchainRef.get("ledger");
     this.transacsRef = this.gun.get("transactions");
+    this.notifsRef = this.gun.get("notifications");
     
     this.state = {
       error: "",
@@ -27,6 +28,31 @@ class Transactions extends Component {
 
     try {
       const [ confirmedTx, rejectedTx, rewardTx ] = processTx(this.gun, this.props.blockchain, this.blockchainRef, this.blocksRef, this.props.pendingTx, walletAddress, new Date().getTime());
+
+      for (let tx of confirmedTx) {
+
+        if (!tx.fromAddress.includes("null")) {
+          const newNotif1 = {
+            message: `Your transaction of ${tx.amount} QRTZ has been confirmed.`,
+            user: tx.fromAddress
+          };
+
+          const newNotif2 = {
+            message: `You have received ${tx.amount} QRTZ.`,
+            user: tx.toAddress
+          };
+
+          this.notifsRef.set(newNotif1);
+          this.notifsRef.set(newNotif2);
+        }
+
+        const newNotif = {
+          message: `${tx.amount} QRTZ were added to your account.`,
+          user: tx.toAddress
+        };
+        
+        this.notifsRef.set(newNotif);
+      }
 
       this.setState({
         error: rejectedTx,
@@ -62,7 +88,7 @@ class Transactions extends Component {
             })}
           </div>
           
-          <button className="main-btn" onClick={this.processTx}>VERIFY & MINE</button>
+          {this.props.pendingTx.length > 0 && <button className="main-btn" onClick={this.processTx}>VERIFY & MINE</button>}
         </div>
       </div>
     );
