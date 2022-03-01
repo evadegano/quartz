@@ -1,5 +1,7 @@
 // packages
 const mongoose = require("mongoose");
+const crypto = require('crypto');
+const hri = require('human-readable-ids').hri;
 
 // package for password encryption
 const bcrypt = require("bcryptjs");
@@ -53,7 +55,7 @@ function createUsers() {
 
   for (let i = 0; i < 271; i++) {
     const [ pwd, email ] = randomEmailAndPwd();
-    const timestamps = randomDate(new Date(2021, 6, 1), new Date());
+    const timestamps = randomDate(new Date(2021, 9, 1), new Date()).getTime();
 
     // hash pwd
     const salt = bcrypt.genSaltSync(saltRounds);
@@ -72,17 +74,49 @@ function createUsers() {
   return users;
 }
 
+function deleteUsers() {
+  // delete users if any
+  User.deleteMany({ })
+    .then(() => console.log("deleted users"))
+    .catch(err => console.log("user deletion err:", err))
+}
+
 
 // sign up fake users
 function addUsersToDB(usersArray) {
   // delete users if any
-  User.deleteMany({ email: {$ne: "eva.degano@gmail.com"} })
-    .then(() => console.log("deleted users"))
-    .then(() => {
-      return User.create(usersArray)
-    })
+  User.create(usersArray)
     .then(() => console.log("users added to db"))
-    .catch(err => console.log("user deletion err:", err))
+    .catch(err => console.log("adding users err:", err))
+}
+
+
+function getUserIds() {
+  User.find({ })
+    .then(usersFromDB => usersFromDB)
+    .catch(err => console.log("searching for users err:", err))
+}
+
+
+async function createWallets(usersFromDB) {
+  let wallets = [];
+
+  for (let user of usersFromDB) {
+    // generate random name
+    const randWalletName = await hri.random() + Math.round(Math.random() * 100);
+
+    // turn it into a wallet address
+    const walletAddress = crypto.createHash('sha256').update(randWalletName).digest();
+
+    wallets.push({
+      user_id: user._id,
+      address: walletAddress,
+      name: randWalletName,
+      lastConnection: user.timestamps,
+    })
+  }
+
+  return wallets;
 }
 
 
@@ -91,6 +125,14 @@ function deleteWallets() {
   Wallet.deleteMany({ })
     .then(() => console.log("deleted wallets"))
     .catch(err => console.log("wallet deletion err:", err))
+}
+
+// sign up fake users
+function addWalletsToDB(walletsArray) {
+  // delete users if any
+  Wallet.create(walletsArray)
+    .then(() => console.log("wallets added to db"))
+    .catch(err => console.log("adding wallets err:", err))
 }
 
 

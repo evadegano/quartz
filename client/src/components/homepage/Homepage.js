@@ -102,7 +102,7 @@ function Homepage() {
         <section className="header-container">
           <div className="column left-align large-col">
             <h1 className="title">Meet the future of banking</h1>
-            <p>Quartz is a decentralized banking system that allows anyone to make fast and secure transactions. 
+            <p>Quartz is a decentralized cash system that allows anyone with a wifi connection to make fast and secure worldwide transactions. 
               <br/>While it is built like a blockchain, Quartz stores its data on a graph database that is distributed among all users.
               <br/>No need to download a whole copy of the blockchain. Every user stores part of the data and can validate and mine blocks if they want to. 
               

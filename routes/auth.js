@@ -20,20 +20,20 @@ router.post("/signup", (req, res, next) => {
 
   // make sure both email and password have been given
   if (!email | !password | !passwordConfirm) {
-    res.status(400).json({ message: "Email and password are required." });
+    res.status(400).json({ message: "Both an email and password are required." });
     return;
   }
 
   // make sure that passwords match
   if (password !== passwordConfirm) {
-    res.status(400).json({ message: "Confirmation password doesn't match password." });
+    res.status(400).json({ message: "Your confirmation password doesn't match you password." });
     return;
   }
 
   // verify password format
   const pwdRgex = /^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$/;
   if (!pwdRgex.test(password)) {
-    res.status(400).json({ message: "Password must contain at least 8 characters, one cap letter, one number and one special character." });
+    res.status(400).json({ message: "Your password must contain at least 8 characters, one cap letter, one number and one special character." });
     return;
   }
 
@@ -76,7 +76,7 @@ router.post("/signup", (req, res, next) => {
         res.status(200).json({ newUser: req.user });
       })
     })
-    .catch(() => res.status(500).json({ message: "Something went wrong during sign up." }))
+    .catch(() => res.status(500).json({ message: "Something went wrong while signing you up." }))
 });
 
 
@@ -86,7 +86,7 @@ router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, failureDetails) => {
     // return error if any
     if (err) {
-      res.status(500).json({ message: "Something went wrong when authenticating user." });
+      res.status(500).json({ message: "Something went wrong. Please try again." });
       return;
     }
 
@@ -99,20 +99,20 @@ router.post("/login", (req, res, next) => {
     // save user in session
     req.login(user, (err) => {
       if (err) {
-        res.status(500).json({ message: "Something went wrong when saving your session." });
+        res.status(500).json({ message: "Something went wrong while saving your session." });
         return;
       }
 
       // find user's active wallet
       Wallet.findOneAndUpdate(
         { user_id: user._id },
-        { lastConnection: Date.now() },
+        { lastConnection: new Date().getTime() },
         { new: true }
         ).sort({ lastConnection: -1 })
         .then(walletFromDB => {
           res.status(200).json({ user, walletAddress: walletFromDB.address });
         })
-        .catch(() => res.status(500).json({ message: "Something went wrong when retrieving user wallets." }))
+        .catch(() => res.status(500).json({ message: "Something went wrong while retrieving your wallet." }))
     })
   })(req, res, next);
 });
@@ -125,13 +125,13 @@ router.get("/loggedin", (req, res, next) => {
     // find user's active wallet
     Wallet.findOneAndUpdate(
       { user_id: req.user._id },
-      { lastConnection: Date.now() },
+      { lastConnection: new Date().getTime() },
       { new: true }
       ).sort({ lastConnection: -1 })
       .then(walletFromDB => {
         res.status(200).json({ user: req.user, walletAddress: walletFromDB.address });
       })
-      .catch(() => res.status(500).json({ message: "Something went wrong when retrieving your wallet." }))
+      .catch(() => res.status(500).json({ message: "Something went wrong while retrieving your wallet." }))
   }
 
   else {

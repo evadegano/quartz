@@ -14,8 +14,8 @@ function getWallets() {
   return service.get("/wallets", {}).then(response => response.data);
 }
 
-function postWallets(userId, walletAddress) {
-  return service.post("/wallets", { userId, walletAddress }).then(response => response.data);
+function postWallets(userId) {
+  return service.post("/wallets", { userId }).then(response => response.data);
 }
 
 function putWallet(walletId) {
@@ -34,15 +34,5 @@ function getCoins(amount, token, keypair, publicKey) {
   return service.post("/coins", { amount, token, keypair, publicKey }).then(response => response.data);
 }
 
-function generateWallet() {
 
-  let keypair = ec.genKeyPair();
-  let publicKey = keypair.getPublic("hex");
-  let privateKey = keypair.getPrivate("hex");
-  let walletAddress = SHA256(publicKey).toString();
-
-  return [ keypair, publicKey, privateKey, walletAddress ];
-}
-
-
-export { getWallets, postWallets, putWallet, generateWallet, updateUser, deleteUser, getCoins };
+export { getWallets, postWallets, putWallet, updateUser, deleteUser, getCoins };

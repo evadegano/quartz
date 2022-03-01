@@ -31,7 +31,7 @@ router.post("/request", (req, res, next) => {
           html: recoveryTemplate(user._id)
         })
         .then(() => { 
-          res.status(200).json({ message: `An email has been sent to ${email}.` })
+          res.status(200).json({ message: `An email has been sent to ${email}. Please check out your inbox.` })
         })
     })
     .catch(() => res.status(500).json({ message: "Something went wrong." }))
@@ -51,14 +51,14 @@ router.post("/reset-password/:userId", (req, res, next) => {
 
   // make sure both passwords are the same
   if (password !== passwordConfirm) {
-    res.status(400).json({ message: "Confirmation password doesn't match password." });
+    res.status(400).json({ message: "Your confirmation password doesn't match your password." });
     return;
   }
 
   // make sure password has the right format
   const pwdRgex = /^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$/;
   if (!pwdRgex.test(password)) {
-    res.status(400).json({ message: "Password must contain at least 8 characters, one cap letter, one number and one special character." });
+    res.status(400).json({ message: "Your password must contain at least 8 characters, one cap letter, one number and one special character." });
     return;
   }
 
@@ -69,7 +69,7 @@ router.post("/reset-password/:userId", (req, res, next) => {
   // update user profile
   User.findByIdAndUpdate(userId, { password: hashedPwd }, { new: true })
     .then(() => res.status(200).json({ message: "Your password has been updated successfully." }))
-    .catch(() => res.status(500).json({ message: "Something went wrong." }))
+    .catch(() => res.status(500).json({ message: "Something went wrong. Your account could not be updated." }))
 })
 
 

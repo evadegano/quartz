@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const router = require("express").Router();
 const stripe = require('stripe')("sk_test_51KUuGeD6SFhoou9ACHMG9MMkHMT5DKeJhlMEbqzh1GElp26nxVEbetozSgZVlxSdpDSZcyPAp8tL6aWHOWkHcdGL00SNDkbmii");
-var hri = require('human-readable-ids').hri;
+const crypto = require('crypto');
+const hri = require('human-readable-ids').hri;
 
 // package used for password hashing
 const bcrypt = require("bcryptjs");
@@ -71,7 +72,7 @@ router.delete("/:userId", (req, res, next) => {
   // turn wallet's status into inactive
   const p2 = Wallet.findOneAndUpdate({ user_id: userId }, {
     active: false,
-    deactivationDate: Date.now()
+    deactivationDate: new Date().getTime()
   });
 
   Promise.all([p1, p2])
@@ -94,26 +95,22 @@ router.get("/wallets", (req, res, next) => {
 
 
 // POST wallet 
-router.post("/wallets", (req, res, next) => {
-  const { userId, walletAddress, keypair, publicKey, privateKey } = req.body;
+router.post("/wallets", async (req, res, next) => {
+  const { userId } = req.body;
 
   // generate random name
-  let randWalletName = hri.random() + Math.round(Math.random() * 100);
+  const randWalletName = await hri.random() + Math.round(Math.random() * 100);
 
-  console.log("randWalletName", randWalletName);
+  // turn it into a wallet address
+  const walletAddress = crypto.createHash('sha256').update(randWalletName).digest();
 
   // create new wallet
   const newWallet = new Wallet({
     user_id: userId,
     address: walletAddress,
     name: randWalletName,
-    lastConnection: Date.now(),
-    keypair,
-    publicKey,
-    privateKey
+    lastConnection: new Date().getTime(),
   })
-
-  console.log("hey");
 
   newWallet.save()
     .then(() => {
@@ -160,7 +157,7 @@ router.post("/coins", (req, res, next) => {
       amount, 
       keypair
     }))
-    .catch(() => res.status(500).json({ message: "Money exchange failed."}))
+    .catch(() => res.status(500).json({ message: "Your money transfer failed. Please try again."}))
 });
 
 

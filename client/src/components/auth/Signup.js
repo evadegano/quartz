@@ -2,7 +2,7 @@ import { Component } from "react";
 import { Link } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import { signup } from "../../services/auth-service";
-import { postWallets, generateWallet } from "../../services/user-service";
+import { postWallets } from "../../services/user-service";
 import { UilInfoCircle } from '@iconscout/react-unicons'
 
 
@@ -45,22 +45,13 @@ class Signup extends Component {
         userData = response.newUser;
       })
       .then(() => {
-        // generate a new wallet
-        const [ walletAddress, publicKey, privateKey ] = generateWallet();
-
-        // store wallet signing keys in local storage
-        localStorage.setItem(walletAddress, {
-          publicKey,
-          privateKey
-        });
-
-        // set new wallet as user's active wallet
-        userData["activeWallet"] = walletAddress;
-
         // add wallet to the database
-        return postWallets(userData._id, walletAddress);
+        return postWallets(userData._id);
       })
-      .then(() => {
+      .then(response => {
+        // set new wallet as user's active wallet
+        userData["activeWallet"] = response.walletAddress;
+
         // update global user state
         this.props.updateUser(userData);
 
