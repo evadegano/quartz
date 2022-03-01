@@ -2,7 +2,6 @@
 import { Component } from 'react';
 import { Switch, Route } from "react-router-dom";
 import Gun from  "gun";
-import _ from "lodash";
 
 
 // styles
@@ -12,7 +11,6 @@ import "./mystyles.css";
 // services
 import { loggedIn } from './services/auth-service';
 import { getWallets } from "./services/user-service";
-import Blockchain from "./services/classes/blockchain";
 
 // components
 import Homepage from './components/homepage/Homepage';

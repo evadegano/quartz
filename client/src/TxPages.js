@@ -4,7 +4,6 @@ import BottomNavbar from "./components/navbars/BottomNavbar";
 import Header from "./components/user/Header";
 import PendingTransactions from "./components/transactions/PendingTransactions";
 import Transactions from "./components/transactions/Transactions";
-import gun from "gun";
 import Blockchain from "./services/classes/blockchain";
 
 

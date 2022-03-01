@@ -1,7 +1,5 @@
 import axios from "axios";
-import SHA256 from "crypto-js/sha256";
-import EC from "elliptic";
-var ec = new EC.ec('secp256k1');
+
 
 const service = axios.create({
   baseURL: `${process.env.REACT_APP_API_URL || ""}`,

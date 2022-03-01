@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { getWalletBalance } from "../../services/helpers";
-import { postWallets, putWallet, generateWallet } from "../../services/user-service";
+import { postWallets, putWallet } from "../../services/user-service";
 import Header from "./Header";
 import TransferBtns from "./TransferBtns";
 import Transactions from "../transactions/Transactions";
@@ -45,21 +45,14 @@ class Dashboard extends Component {
 
   // create a new wallet for the user
   createNewWallet = (event) => {
-    const [ walletAddress, publicKey, privateKey ] = generateWallet();
     const userId = this.props.user._id;
     let loggedInUserCopy = this.props.user;
 
-    // store wallet signing keys in local storage
-    localStorage.setItem(walletAddress, {
-      publicKey,
-      privateKey
-    });
-
-    // set new wallet as user's active wallet
-    loggedInUserCopy["activeWallet"] = walletAddress;
-
-    postWallets(userId, walletAddress)
+    postWallets(userId)
       .then(response => {
+        // set new wallet as user's active wallet
+        loggedInUserCopy["activeWallet"] = response.walletAddress;
+
         // update active wallet in logged in user global state
         this.props.updateUser(loggedInUserCopy);
 
