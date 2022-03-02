@@ -92,7 +92,12 @@ class Dashboard extends Component {
 
     return (
       <div id="dashboard" className="inner-container inner-page">
-        <Header title={this.state.greeting} userId={this.props.user._id} notifs={this.props.notifs} fetchNotifs={this.props.fetchNotifs} />
+        <Header 
+          title={this.state.greeting} 
+          userId={this.props.user._id} 
+          notifs={this.props.notifs} 
+          fetchNotifs={this.props.fetchNotifs}
+          gun={this.props.gun} />
 
         <div>
           <label>Current wallet:</label>

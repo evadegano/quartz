@@ -6,6 +6,13 @@ import { UilSetting, UilBell, UilUser, UilSignout } from "@iconscout/react-unico
 
 // make settings menu only appear if user is loggedin
 class Header extends Component {
+  constructor({ gun }) {
+    super()
+    this.gun = gun;
+    this.notifsRef = this.gun.get("notifications");
+  }
+
+
   state = {
     viewSettings: false,
     viewNotifs: false,

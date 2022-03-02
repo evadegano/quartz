@@ -4,20 +4,9 @@ import BottomNavbar from "./components/navbars/BottomNavbar";
 import Header from "./components/user/Header";
 import PendingTransactions from "./components/transactions/PendingTransactions";
 import Transactions from "./components/transactions/Transactions";
-import Blockchain from "./services/classes/blockchain";
-
 
 
 class TxPages extends Component {
-  constructor({ gun }) {
-    super()
-    this.gun = gun;
-    this.blockchain = Blockchain.instance;
-    this.blockchainRef = gun.get(this.blockchain); // is it the right way to do it?
-    this.blocksRef = this.blockchainRef.get("ledger").set(this.blockchain.ledger);
-    this.transacsRef = this.gun.get("transactions");
-  }
-
   getPendingTx = () => {
     const pendingTx = this.props.transactions.filter(tx => tx.status === "pending");
 
