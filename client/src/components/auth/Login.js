@@ -39,6 +39,8 @@ class Login extends Component {
         const userData = response.user;
         userData["activeWallet"] = response.walletAddress;
 
+        console.log("user =>", userData);
+
         // update global logged in user state
         this.props.updateUser(userData);
         // redirect user to their dashboard

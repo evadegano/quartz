@@ -546,6 +546,10 @@ table td {
   padding: 10px;
   cursor: pointer;
 }
+.main-btn:disabled {
+  background: #ffc299;
+  cursor: not-allowed;
+}
 .signup-btn {
   border: 1px solid #FE6601;
   background: #FE6601;
@@ -680,4 +684,67 @@ table td {
   border: solid 2px #FF6D6D;
   border-radius: 4px;
   background: #FFC0C06B;
+}
+
+/* Loading animation */
+/* Source: https://github.com/nzbin/three-dots */
+.dot-collision {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #FE6601;
+  color: #FE6601;
+}
+
+.dot-collision::before, .dot-collision::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
+.dot-collision::before {
+  left: -10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #FE6601;
+  color: #FE6601;
+  animation: dotCollisionBefore 2s infinite ease-in;
+}
+
+.dot-collision::after {
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #FE6601;
+  color: #FE6601;
+  animation: dotCollisionAfter 2s infinite ease-in;
+  animation-delay: 1s;
+}
+
+@keyframes dotCollisionBefore {
+  0%,
+  50%,
+  75%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-15px);
+  }
+}
+
+@keyframes dotCollisionAfter {
+  0%,
+  50%,
+  75%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(15px);
+  }
 }

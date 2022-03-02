@@ -18,11 +18,15 @@ class Transactions extends Component {
     
     this.state = {
       error: "",
-      success: ""
+      success: "",
+      isMining: true
     };
   }
 
   processTx = (event) => {
+    // update state
+    this.setState({ isMining: true });
+
     // delete once in prod
     const walletAddress = wallets[Math.round(Math.random() * wallets.length)].address;
 
@@ -59,7 +63,8 @@ class Transactions extends Component {
         success: {
           confirmedTx,
           rewardTx
-        }
+        },
+        isMining: false
       });
 
       // update notifs global state
@@ -76,10 +81,15 @@ class Transactions extends Component {
         <h2>Pending transactions</h2>
 
         <div className="inner-container filled-table">
-          <h3>{this.props.pendingTx.length} transactions pending</h3>
-
+          {
+            this.state.isMining
+            ? <h3>Mining in progress</h3>
+            : <h3>{this.props.pendingTx.length} transactions pending</h3>
+          }
+          
           <div className="no-overflow-container">
-            {this.props.pendingTx.map((tx, idx) => {
+
+            {!this.state.isMining && this.props.pendingTx.map((tx, idx) => {
               return <Transaction 
                         key={idx} 
                         hash={tx.hash} 
@@ -89,16 +99,29 @@ class Transactions extends Component {
                         date={tx.timestamps}
                         status={tx.status} />
             })}
+
+            {
+              this.state.isMining && 
+              <div className="center-row-container">
+                <div className="dot-collision"></div>
+              </div>
+            }
           </div>
           
-          {this.props.pendingTx.length > 0 && <button className="main-btn" onClick={this.processTx}>VERIFY & MINE</button>}
+          {
+            this.props.pendingTx.length > 0 && !this.state.isMining
+            && <button className="main-btn" onClick={this.processTx}>VERIFY & MINE</button>
+          }
+          {
+            this.state.isMining
+            && <button className="main-btn" disabled="true">VERIFY & MINE</button>
+          }
+          
         </div>
       </div>
     );
   }
 }
 
-// add error, success message
-// display something when no pending tx
 
 export default Transactions;

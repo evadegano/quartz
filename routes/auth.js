@@ -72,6 +72,8 @@ router.post("/signup", (req, res, next) => {
           return;
         }
 
+        
+
         // return user
         res.status(200).json({ newUser: req.user });
       })

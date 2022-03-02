@@ -43,6 +43,8 @@ class Signup extends Component {
 
         // store user data
         userData = response.newUser;
+
+
       })
       .then(() => {
         // add wallet to the database
