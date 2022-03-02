@@ -86,8 +86,9 @@ class App extends Component {
     let notifs = [];
     const last2Days = Math.round(new Date().getTime() / 1000) - (72 * 3600);
 
+    // get user's notifs that haven't been seen yet or are less than two days old
     this.notifsRef.map().once(function(notif) {
-      if (notif.timestamps < last2Days || notif.read === true) {
+      if (notif.user === this.state.loggedInUser.activeWallet && (notif.timestamps < last2Days || notif.isRead === true)) {
         notifs.push(notif);
       }
     })

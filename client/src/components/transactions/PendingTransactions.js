@@ -38,12 +38,16 @@ class Transactions extends Component {
         if (!tx.fromAddress.includes("null")) {
           const newNotif1 = {
             message: `Your transaction of ${tx.amount} QRTZ has been confirmed.`,
-            user: tx.fromAddress
+            user: tx.fromAddress,
+            isRead: false,
+            timestamps: new Date().getTime()
           };
 
           const newNotif2 = {
             message: `You have received ${tx.amount} QRTZ.`,
-            user: tx.toAddress
+            user: tx.toAddress,
+            isRead: false,
+            timestamps: new Date().getTime()
           };
 
           this.notifsRef.set(newNotif1);
@@ -52,7 +56,9 @@ class Transactions extends Component {
 
         const newNotif = {
           message: `${tx.amount} QRTZ were added to your account.`,
-          user: tx.toAddress
+          user: tx.toAddress,
+          isRead: false,
+          timestamps: new Date().getTime()
         };
         
         this.notifsRef.set(newNotif);

@@ -10,12 +10,40 @@ class Header extends Component {
     viewSettings: false,
     viewNotifs: false,
     newNotifs: false,
-    notifications: ""
   };
 
   logUserOut = () => {
     logout()
       .then(response => console.log("User logged out"))
+  }
+
+  updateNotifs = () => {
+    if (this.state.viewNotifs) {
+      // update local state
+      this.setState({
+        viewSettings: false, 
+        viewNotifs: false,
+        newNotifs: false
+      });
+
+      // update notifs from unread to read
+      for (let notif of this.props.notifs) {
+        if (!notif.isRead) {
+          this.notifsRef.get(notif["_"]["#"]).put({ isRead: true });
+        }
+      }
+      
+      // update global notifs state
+      this.props.fetchNotifs();
+
+    } else {
+      // update local state
+      this.setState({
+        viewSettings: false, 
+        viewNotifs: true, 
+        newNotifs: false
+      });
+    }
   }
 
   render() {
@@ -30,18 +58,18 @@ class Header extends Component {
             className={
               `settings-btn 
               ${this.state.viewSettings ? "active" : "" }`} 
-            onClick={() => this.setState({ viewNotifs: false, viewSettings: !this.state.viewSettings })}>
+            onClick={() => this.setState({ viewSettings: !this.state.viewSettings, viewNotifs: false })}>
 
             <UilSetting/>
           </button>
 
           <button 
             className={`settings-btn ${this.state.viewNotifs ? "active" : "" }`}
-            onClick={() => this.setState({ viewSettings: false, viewNotifs: !this.state.viewNotifs })}>
+            onClick={this.updateNotifs}>
 
             <UilBell size="27"/>
 
-            {this.state.newNotifs && <div className="new-notif">!</div>}
+            {this.state.newNotifs && <div className="notif-alert">!</div>}
           </button>
         </div>
 
@@ -51,6 +79,24 @@ class Header extends Component {
             <ul>
               <li><Link to={`/user/${this.props.userId}`}><UilUser size="30"/>Profile</Link></li>
               <li><Link to="/" onClick={this.logUserOut}><UilSignout size="30"/>Log out</Link></li>
+            </ul>
+          </div>
+        }
+
+        {
+          this.state.viewNotifs && 
+          <div className="toggle-menu">
+            <ul>
+              {
+                this.props.notifs.length === 0
+                ? <li><p>Nothing new going on here...</p></li>
+                : this.props.notifs.map(notif => 
+                  <li>
+                    <p>{notif.message}</p>
+                    <div className={`${!notif.isRead ? "unread-notif" : ""}`}></div>
+                  </li>
+                )
+              }
             </ul>
           </div>
         }

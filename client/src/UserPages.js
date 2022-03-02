@@ -30,7 +30,8 @@ class UserPages extends Component {
             user={this.props.user} 
             userWallets={userWallets} 
             transactions={this.props.transactions}
-            notifs={this.props.notifs} />} />
+            notifs={this.props.notifs}
+            fetchNotifs={this.props.fetchNotifs} />} />
             
           <Route exact path="/user/:walletId/send-coins" render={(routerProps) => <SendCoins {...routerProps} fetchNotifs={this.props.fetchNotifs}/>} />
           <Route exact path="/user/:walletId/get-coins" render={(routerProps) => <BuyCoins {...routerProps} fetchNotifs={this.props.fetchNotifs} />} />
