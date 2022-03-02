@@ -49,7 +49,7 @@ async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receive
 /*
   Create a transaction when a user tops up their wallet
 */
-async function createPurchaseTx(gun, amount, receiverAddress, keypair, publicKey, timestamps) {
+async function createPurchaseTx(gun, amount, receiverAddress, keypair, publicKey, timestamps = new Date().getTime()) {
   // set pointer to transactions on gun
   const transacsRef = gun.get("transactions");
 

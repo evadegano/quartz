@@ -1,7 +1,6 @@
 import { Component } from "react";
 import { getCoins } from "../../services/user-service";
 import { createPurchaseTx } from "../../services/transaction-service";
-import Gun from "gun";
 import EC from "elliptic";
 import StripeCheckout from "react-stripe-checkout";
 
@@ -10,9 +9,9 @@ const ec = new EC.ec('secp256k1');
 
 
 class BuyCoins extends Component {
-  constructor() {
+  constructor({ gun }) {
     super();
-    this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
+    this.gun = gun;
     this.transacsRef = this.gun.get("transactions");
     this.notifsRef = this.gun.get("notifications");
   }
@@ -50,10 +49,7 @@ class BuyCoins extends Component {
         const walletAddress = this.props.match.params.walletId;
 
         // add transaction to the blockchain
-        createPurchaseTx(amount, walletAddress, keypair, publicKey);
-
-        // update notifs global state
-        this.props.fetchNotifs();
+        createPurchaseTx(this.gun, amount, walletAddress, keypair, publicKey);
 
         // reset state
         this.setState({

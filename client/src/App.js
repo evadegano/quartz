@@ -150,11 +150,6 @@ class App extends Component {
       }
     });
 
-    // function to fetch transaction header data
-    // this.gun.get("l01f59a9Ou4iXbXdqq0n").get("header").get("fromAddress").once(function(value) {
-    //   console.log("amount:", value);
-    // })
-
     this.setState({ transactions: transactionsCopy });
   }
 
@@ -194,7 +189,8 @@ class App extends Component {
               blockchain={this.state.blockchain} 
               transactions={this.state.transactions}
               notifs={this.state.notifs}
-              fetchNotifs={this.fetchNotifs} />} />
+              fetchNotifs={this.fetchNotifs}
+              fetchTx={this.fetchTransactions} />} />
 
           <Route path="/blocks" render={(routerProps) => 
             <BlockPages {...routerProps} 

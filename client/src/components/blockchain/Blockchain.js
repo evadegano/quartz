@@ -9,7 +9,12 @@ class Blockchain extends Component {
   render() {
     return (
       <div className="inner-container inner-page">
-        <Header userId={this.props.userId} title="Quartz blockchain" notifs={this.props.notifs} />
+        <Header 
+          userId={this.props.userId} 
+          title="Quartz blockchain" 
+          notifs={this.props.notifs} 
+          fetchNotifs={this.props.fetchNotifs}
+          gun={this.props.gun} />
 
         <div className="row-container">
           <TxVolumes transactions={this.props.transactions} />

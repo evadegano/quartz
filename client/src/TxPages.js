@@ -21,14 +21,21 @@ class TxPages extends Component {
         <SideNavbar user={this.props.user} />
 
         <div className="inner-container inner-page">
-          <Header userId={this.props.user._id} notifs={this.props.notifs} title="Transactions" />
+          <Header 
+            userId={this.props.user._id} 
+            title="Transactions"
+            notifs={this.props.notifs} 
+            fetchNotifs={this.props.fetchNotifs}
+            gun={this.props.gun} />
 
           <PendingTransactions 
+            user={this.props.user}
             pendingTx={pendingTx} 
-            gun={this.gun}
+            gun={this.props.gun}
             transactions={this.props.transactions}
             blockchain={this.props.blockchain}
-            fetchNotifs={this.props.fetchNotifs} />
+            fetchNotifs={this.props.fetchNotifs}
+            fetchTx={this.props.fetchTx} />
 
           <Transactions transactions={this.props.transactions} />
         </div>

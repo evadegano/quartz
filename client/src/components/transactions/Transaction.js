@@ -23,7 +23,7 @@ class Transaction extends Component {
             <div className="trunc-txt"><b>Hash: </b> {this.props.hash}</div>
             
             <div className="trunc-txt">
-              <b>From: </b>
+              <span className="emph-txt">From: </span>
               { 
                 this.props.from === "null - bank transfer" 
                 || this.props.from === "null - QRTZ reward" 
@@ -33,15 +33,15 @@ class Transaction extends Component {
             </div>
 
             <div className="trunc-txt">
-              <b>To: </b>
+              <span className="emph-txt">To: </span>
               <Link to={`/wallets/${this.props.to}`}>{this.props.to}</Link>
             </div>
         </div>
 
         <div className="table-col">
-          <div><b>Date:</b> {this.state.date}</div>
-          <div><b>Amount:</b> {this.props.amount} QRTZ</div>
-          <div><b>Status:</b> {this.props.status}</div>
+          <div><span className="emph-txt">Date:</span> {this.state.date}</div>
+          <div><span className="emph-txt">Amount:</span> {this.props.amount} QRTZ</div>
+          <div><span className="emph-txt">Status:</span> {this.props.status}</div>
         </div>
       </div>
     );

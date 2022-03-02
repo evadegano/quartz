@@ -39,8 +39,9 @@ class Dashboard extends Component {
   }
 
   // get user's transactions
-  filterTransactions = (walletKey) => {
-    const userTransactions = this.props.transactions.filter(transac => transac.fromPublicKey === walletKey || transac.toPublicKey === walletKey);
+  filterTransactions = (walletAddress) => {
+    const userTransactions = this.props.transactions.filter(transac => transac.fromAddress === walletAddress || transac.toAddress === walletAddress);
+    
     return userTransactions;
   }
 

@@ -11,27 +11,31 @@ class Transactions extends Component {
   constructor({ gun }) {
     super()
     this.gun = gun;
-    this.blockchainRef = gun.get("blockchain");
+    this.blockchainRef = this.gun.get("blockchain");
     this.blocksRef = this.blockchainRef.get("ledger");
     this.transacsRef = this.gun.get("transactions");
     this.notifsRef = this.gun.get("notifications");
     
-    this.state = {
-      error: "",
-      success: "",
-      isMining: false
-    };
   }
+
+  state = {
+    error: "",
+    success: "",
+    isMining: false
+  };
 
   processTx = (event) => {
     // update state
     this.setState({ isMining: true });
 
     // delete once in prod
-    const walletAddress = wallets[Math.round(Math.random() * wallets.length)].address;
+    // const walletAddress = wallets[Math.round(Math.random() * wallets.length)].address;
+    const walletAddress = this.props.user.activeWallet;
 
     try {
       const [ confirmedTx, rejectedTx, rewardTx ] = processTx(this.gun, this.props.blockchain, this.blockchainRef, this.blocksRef, this.props.pendingTx, walletAddress, new Date().getTime());
+
+      console.log("confirmedTx, rejectedTx, rewardTx", confirmedTx, rejectedTx, rewardTx);
 
       for (let tx of confirmedTx) {
 
@@ -90,7 +94,7 @@ class Transactions extends Component {
           {
             this.state.isMining
             ? <h3>Mining in progress</h3>
-            : <h3>{this.props.pendingTx.length} transactions pending</h3>
+            : <h3>{this.props.pendingTx.length} pending { this.props.pendingTx.length > 1 ? "transactions" : "transaction"}</h3>
           }
           
           <div className="no-overflow-container">
@@ -120,7 +124,7 @@ class Transactions extends Component {
           }
           {
             this.state.isMining
-            && <button className="main-btn" disabled="true">VERIFY & MINE</button>
+            && <button className="main-btn" disabled={true}>VERIFY & MINE</button>
           }
           
         </div>

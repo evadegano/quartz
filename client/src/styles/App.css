@@ -137,6 +137,10 @@ section {
 }
 
 /* Text */
+.emph-txt {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+}
 .title {
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 500;
@@ -701,11 +705,19 @@ table td {
   color: #FF6D6D;
   padding: 10px;
   margin-bottom: 20px;
-  width: 100%;
   text-align: center;
   border: solid 2px #FF6D6D;
   border-radius: 4px;
   background: #FFC0C06B;
+}
+.success {
+  font-size: 14px;
+  color: #53be80;
+  padding: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  border: solid 2px #5fd791;
+  border-radius: 4px;
 }
 
 /* Loading animation */

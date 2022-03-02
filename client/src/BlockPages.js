@@ -19,7 +19,9 @@ class BlockPages extends Component {
               blockchain={this.props.blockchain} 
               blocks={this.props.blocks} 
               transactions={this.props.transactions}
-              notifs={this.props.notifs} />} />
+              notifs={this.props.notifs}
+              fetchNotifs={this.props.fetchNotifs}
+              gun={this.props.gun} />} />
           
           <Route path="/blocks/:blockId" render={(routerProps) => 
             <BlockDetails 
@@ -27,7 +29,9 @@ class BlockPages extends Component {
             userId={this.props.user._id} 
             blocks={this.props.blocks} 
             transactions={this.props.transactions}
-            notifs={this.props.notifs} />} />
+            notifs={this.props.notifs}
+            fetchNotifs={this.props.fetchNotifs}
+            gun={this.props.gun} />} />
         </Switch>
 
         <BottomNavbar user={this.props.user} />
