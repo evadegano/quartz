@@ -13,6 +13,7 @@ class SendCoins extends Component {
     super();
     this.gun = gun;
     this.transacsRef = this.gun.get("transactions");
+    this.notifsRef = this.gun.get("notifications");
   }
 
   state = {
@@ -45,6 +46,10 @@ class SendCoins extends Component {
     // create new transaction
     try {
       sendCoins(this.gun, amount, keypair, publicKey, walletAddress, toAddress);
+
+      // update notifs global state
+      this.props.fetchNotifs();
+
       this.setState({
         toAddress: "",
         amount: "",

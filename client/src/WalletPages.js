@@ -25,7 +25,8 @@ class WalletPages extends Component {
               blocks={this.props.blocks}
               gun={this.props.gun} 
               wallets={this.props.wallets} 
-              userId={this.props.user._id} />} />
+              userId={this.props.user._id}
+              notifs={this.props.notifs} />} />
 
           <Route path="/wallets/:walletId" render={() => 
             <WalletDetails 
@@ -33,7 +34,8 @@ class WalletPages extends Component {
               blocks={this.props.blocks} 
               gun={this.props.gun} 
               wallets={this.props.wallets} 
-              userId={this.props.user._id} />} />
+              userId={this.props.user._id}
+              notifs={this.props.notifs} />} />
         </Switch>
 
         <BottomNavbar user={this.props.user} />

@@ -72,7 +72,8 @@ async function createPurchaseTx(gun, amount, receiverAddress, keypair, publicKey
   Verify transactions and mine them into a block
 */
 async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTransactions, minerAddress, timestamps, allTransactions) {
-  let rejectedTx = {};
+  let rejectionErrors = {};
+  let rejectedTx = [];
   let confirmedTx = []
 
   // verify transactions
@@ -86,7 +87,8 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
       
       if (walletBalance < tx.amount) {
         // if error, add it to the rejection object
-        rejectedTx[tx.hash] ? rejectedTx[tx.hash].push("Insufficient funds.") : rejectedTx[tx.hash] = ["Insufficient funds."];
+        rejectionErrors[tx.hash] = ["Insufficient funds."];
+        rejectedTx.push(tx);
         tx.isValid = false;
       }
     }
@@ -94,14 +96,14 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
     // check signature validity
     if (!verifySignature(tx)) {
       // if error, add it to the rejection object
-      rejectedTx[tx.hash] ? rejectedTx[tx.hash].push("Invalid signature.") : rejectedTx[tx.hash] = ["Invalid signature."];
+      rejectionErrors[tx.hash] ? rejectionErrors[tx.hash].push("Invalid signature.") : rejectionErrors[tx.hash] = ["Invalid signature."] && rejectedTx.push(tx);
       tx.isValid = false;
     }
 
     // check header's validity
     if (!verifyHeader(tx)) {
       // if error, add it to the rejection object
-      rejectedTx[tx.hash] ? rejectedTx[tx.hash].push("Invalid header.") : rejectedTx[tx.hash] = ["Invalid header."];
+      rejectionErrors[tx.hash] ? rejectionErrors[tx.hash].push("Invalid header.") : rejectionErrors[tx.hash] = ["Invalid header."]  && rejectedTx.push(tx);
       tx.isValid = false;
     }
 
@@ -111,9 +113,9 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
     }
   }
 
-  // build merkle tree with confirmed transactions
-  const confirmedTxHashes = confirmedTx.map(tx => tx.hash);
-  const merkleRoot = getMerkleRoot(confirmedTxHashes); // where is the Merkle tree stored?
+  // build merkle tree with transactions
+  const txHashes = pendingTransactions.map(tx => tx.hash);
+  const merkleRoot = getMerkleRoot(txHashes); // where is the Merkle tree stored?
 
   // get blockchain data
   const difficulty = blockchain.difficulty;
@@ -121,12 +123,11 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
   const prevBlockHash = blockchain.lastBlock;
 
   if (typeof difficulty !== "number") {
-    console.log("difficulty", difficulty, typeof difficulty);
     throw new Error("There was an error while fetching blockchain's data.")
   }
 
   // create and mine a block
-  const newBlock = new Block(prevBlockHash, merkleRoot, confirmedTx, difficulty, miningReward, timestamps);
+  const newBlock = new Block(prevBlockHash, merkleRoot, difficulty, miningReward, pendingTransactions.length, timestamps);
   newBlock.mine(minerAddress);
 
   // throw an error if block has already been added to the blockchain
@@ -138,8 +139,14 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
   // else, update blockchain's last block hash
   blockchainRef.put({ lastBlock: newBlock.hash });
 
-  // update transactions' status and block hash
+  // add new block to the blockchain
+  blocksRef.set(gun.get(newBlock.hash).put(newBlock));
+
+  // update transactions' status and block hash and add to block
   for (let tx of pendingTransactions) {
+    // add tx pointer to block
+    gun.get(newBlock.hash).get("transactions").set(tx.hash);
+
     if (tx.isValid) {
       // if transaction is valid, set status to confirmed
       gun.get(`${tx.hash}`).put({ 
@@ -152,9 +159,6 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
      });
     }
   }
-
-  // add new block to the blockchain
-  blocksRef.set(gun.get(newBlock.hash).put(newBlock));
 
   // generate a one-time signing keypair
   const keypair = ec.genKeyPair();
@@ -174,7 +178,7 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
   // link transaction to the transactions ledger
   transacsRef.set(newTx);
 
-  return [ confirmedTx, rejectedTx, rewardTx, newBlock.hash ] ;
+  return [ confirmedTx, rejectionErrors, rewardTx, newBlock.hash ] ;
 }
 
 

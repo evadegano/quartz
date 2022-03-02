@@ -1,4 +1,3 @@
-
 import SHA256 from "crypto-js/sha256";
 import EC from "elliptic";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -20,7 +19,7 @@ var Status;
     Status["Rejected"] = "rejected";
 })(Status || (Status = {}));
 class Transaction {
-    constructor(amount, fromAddress, toAddress, timestamps = Date.now()) {
+    constructor(amount, fromAddress, toAddress, timestamps = new Date().getTime()) {
         this.isValid = false;
         this.amount = amount;
         this.fromAddress = fromAddress;
@@ -71,7 +70,7 @@ class Transaction {
     }
 }
 class RewardTransaction extends Transaction {
-    constructor(amount, toAddress, timestamps = Date.now(), blockHash) {
+    constructor(amount, toAddress, timestamps = new Date().getTime(), blockHash) {
         super(amount, "null - QRTZ reward", toAddress, timestamps);
         this.minedBlock = blockHash;
     }
@@ -119,7 +118,7 @@ class RewardTransaction extends Transaction {
     }
 }
 class PurchaseTransaction extends Transaction {
-    constructor(amount, toAddress, timestamps = Date.now()) {
+    constructor(amount, toAddress, timestamps = new Date().getTime()) {
         super(amount, "null - bank transfer", toAddress, timestamps);
         this.isValid = true;
     }

@@ -14,6 +14,7 @@ class BuyCoins extends Component {
     super();
     this.gun = Gun(["http://localhost:5005/gun"]); // add heroku url once in prod
     this.transacsRef = this.gun.get("transactions");
+    this.notifsRef = this.gun.get("notifications");
   }
 
   state = {
@@ -51,11 +52,14 @@ class BuyCoins extends Component {
         // add transaction to the blockchain
         createPurchaseTx(amount, walletAddress, keypair, publicKey);
 
+        // update notifs global state
+        this.props.fetchNotifs();
+
         // reset state
         this.setState({
           amount: "",
           error: "",
-          success: `${amount} QRTZ have been added to your wallet.`
+          success: `Your transaction was sent to the network for validation.`
         });
       })
       .catch(err => {

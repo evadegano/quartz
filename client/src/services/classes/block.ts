@@ -12,19 +12,17 @@ class Block {
   public height: number;
   public merkleRoot: string;
   public timestamps: number;
-  public transactions: Transaction[];
   public hash: string;
   
-  constructor(prevHash: string, merkleRoot: string, transactions: Transaction[], difficulty: number, miningReward: number, timestamps: number = Date.now()) {
+  constructor(prevHash: string, merkleRoot: string, difficulty: number, miningReward: number, height: number, timestamps: number = new Date().getTime()) {
     this.prevHash = prevHash;
     this.nonce = Math.round(Math.random() * 999999999);
     this.miner = null;
     this.miningReward = miningReward;
     this.difficulty = difficulty;
-    this.height = transactions.length;
+    this.height = height;
     this.merkleRoot = merkleRoot;
     this.timestamps = timestamps;
-    this.transactions = transactions;
   }
 
   // hash block's content

@@ -23,7 +23,7 @@ class Transaction {
   public status: Status;
   public hash: string;
 
-  constructor(amount: number, fromAddress: string, toAddress: string, timestamps: number = Date.now()) 
+  constructor(amount: number, fromAddress: string, toAddress: string, timestamps: number = new Date().getTime()) 
   {
     this.amount = amount;
     this.fromAddress = fromAddress;
@@ -86,7 +86,7 @@ class Transaction {
 class RewardTransaction extends Transaction {
   public minedBlock: string;
 
-  constructor(amount: number, toAddress: string, timestamps: number = Date.now(), blockHash: string) {
+  constructor(amount: number, toAddress: string, timestamps: number = new Date().getTime(), blockHash: string) {
     super(amount, "null - QRTZ reward", toAddress, timestamps);
     this.minedBlock = blockHash;
   }
@@ -145,7 +145,7 @@ class RewardTransaction extends Transaction {
 
 class PurchaseTransaction extends Transaction {
 
-  constructor(amount: number, toAddress: string, timestamps: number = Date.now()) {
+  constructor(amount: number, toAddress: string, timestamps: number = new Date().getTime()) {
     super(amount, "null - bank transfer", toAddress, timestamps);
     this.isValid = true;
   }

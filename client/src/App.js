@@ -84,9 +84,12 @@ class App extends Component {
 
   fetchNotifs() {
     let notifs = [];
+    const last2Days = Math.round(new Date().getTime() / 1000) - (72 * 3600);
 
     this.notifsRef.map().once(function(notif) {
-      notifs.push(notif);
+      if (notif.timestamps < last2Days || notif.read === true) {
+        notifs.push(notif);
+      }
     })
 
     this.setState({ notifs });
@@ -180,7 +183,8 @@ class App extends Component {
               transactions={this.state.transactions} 
               wallets={this.state.wallets} 
               blocks={this.state.blocks}
-              notifs={this.state.notifs} />} />
+              notifs={this.state.notifs}
+              fetchNotifs={this.fetchNotifs} />} />
 
           <Route path="/transactions" render={(routerProps) => 
             <TxPages {...routerProps}
@@ -188,7 +192,8 @@ class App extends Component {
               user={this.state.loggedInUser} 
               blockchain={this.state.blockchain} 
               transactions={this.state.transactions}
-              notifs={this.state.notifs} />} />
+              notifs={this.state.notifs}
+              fetchNotifs={this.fetchNotifs} />} />
 
           <Route path="/blocks" render={(routerProps) => 
             <BlockPages {...routerProps} 
@@ -197,7 +202,8 @@ class App extends Component {
               blockchain={this.state.blockchain} 
               blocks={this.state.blocks}
               transactions={this.state.transactions}
-              notifs={this.state.notifs} />} />
+              notifs={this.state.notifs}
+              fetchNotifs={this.fetchNotifs} />} />
 
           <Route path="/wallets" render={(routerProps) => 
             <WalletPages {...routerProps}
@@ -206,7 +212,8 @@ class App extends Component {
               blocks={this.state.blocks} 
               user={this.state.loggedInUser} 
               wallets={this.state.wallets}
-              notifs={this.state.notifs} />} />
+              notifs={this.state.notifs}
+              fetchNotifs={this.fetchNotifs} />} />
 
           
           <Route path="/recovery" render={() => <RecoveryPages /> } />

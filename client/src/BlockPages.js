@@ -18,14 +18,16 @@ class BlockPages extends Component {
               userId={this.props.user._id} 
               blockchain={this.props.blockchain} 
               blocks={this.props.blocks} 
-              transactions={this.props.transactions} />} />
+              transactions={this.props.transactions}
+              notifs={this.props.notifs} />} />
           
           <Route path="/blocks/:blockId" render={(routerProps) => 
             <BlockDetails 
             {...routerProps} 
             userId={this.props.user._id} 
             blocks={this.props.blocks} 
-            transactions={this.props.transactions} />} />
+            transactions={this.props.transactions}
+            notifs={this.props.notifs} />} />
         </Switch>
 
         <BottomNavbar user={this.props.user} />

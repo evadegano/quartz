@@ -12,6 +12,7 @@ class UserPages extends Component {
   getUserWallets = () => {
     const userWallets = this.props.wallets.filter(wallet => wallet.user_id === this.props.user._id);
     console.log("userID", this.props.user._id);
+
     return userWallets;
   }
 
@@ -29,10 +30,11 @@ class UserPages extends Component {
             updateUser={this.props.updateUser} 
             user={this.props.user} 
             userWallets={userWallets} 
-            transactions={this.props.transactions} />} />
+            transactions={this.props.transactions}
+            notifs={this.props.notifs} />} />
             
-          <Route exact path="/user/:walletId/send-coins" render={(routerProps) => <SendCoins {...routerProps} />} />
-          <Route exact path="/user/:walletId/get-coins" render={(routerProps) => <BuyCoins {...routerProps} />} />
+          <Route exact path="/user/:walletId/send-coins" render={(routerProps) => <SendCoins {...routerProps} fetchNotifs={this.props.fetchNotifs}/>} />
+          <Route exact path="/user/:walletId/get-coins" render={(routerProps) => <BuyCoins {...routerProps} fetchNotifs={this.props.fetchNotifs} />} />
           <Route exact path="/user/:userId" render={(routerProps) => <Profile {...routerProps} user={this.props.user} />} />
         </Switch>
 

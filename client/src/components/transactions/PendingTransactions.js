@@ -61,6 +61,9 @@ class Transactions extends Component {
           rewardTx
         }
       });
+
+      // update notifs global state
+      this.props.fetchNotifs();
     }
     catch(error) {
       this.setState({ error });

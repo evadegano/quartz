@@ -22,7 +22,7 @@ class TxPages extends Component {
     const pendingTx = this.props.transactions.filter(tx => tx.status === "pending");
 
     return pendingTx;
-  };
+  }
 
   render() {
     const pendingTx = this.getPendingTx();
@@ -32,13 +32,14 @@ class TxPages extends Component {
         <SideNavbar user={this.props.user} />
 
         <div className="inner-container inner-page">
-          <Header userId={this.props.user._id} title="Transactions" subtitle="" />
+          <Header userId={this.props.user._id} notifs={this.props.notifs} title="Transactions" />
 
           <PendingTransactions 
             pendingTx={pendingTx} 
             gun={this.gun}
             transactions={this.props.transactions}
-            blockchain={this.props.blockchain} />
+            blockchain={this.props.blockchain}
+            fetchNotifs={this.props.fetchNotifs} />
 
           <Transactions transactions={this.props.transactions} />
         </div>
