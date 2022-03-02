@@ -44,13 +44,14 @@ class Signup extends Component {
         // store user data
         userData = response.newUser;
 
-
+        console.log("userData", userData);
       })
       .then(() => {
         // add wallet to the database
         return postWallets(userData._id);
       })
       .then(response => {
+        console.log("postWallets response", response);
         // set new wallet as user's active wallet
         userData["activeWallet"] = response.walletAddress;
 

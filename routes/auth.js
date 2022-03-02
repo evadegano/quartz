@@ -72,7 +72,7 @@ router.post("/signup", (req, res, next) => {
           return;
         }
 
-        
+
 
         // return user
         res.status(200).json({ newUser: req.user });
@@ -146,7 +146,7 @@ router.get("/loggedin", (req, res, next) => {
 // POST log out user
 router.post("/logout", (req, res, next) => {
   req.logout();
-  res.status(204).send();
+  res.status(204).send({ message: "You were logged out successfully."});
 });
 
 

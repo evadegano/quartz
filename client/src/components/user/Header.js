@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import { logout } from "../../services/auth-service";
 import { UilSetting, UilBell, UilUser, UilSignout } from "@iconscout/react-unicons";
 
 
@@ -12,29 +13,9 @@ class Header extends Component {
     notifications: ""
   };
 
-  fetchNotifs = () => {
-    // fetch notifications
-    let notifs = localStorage.getItem("notifications");
-
-    // remove notifications that have been read and are over two days old
-    notifs = notifs.filter(notif => notif.read === true && notif.date > Date.now());
-
-    // update all notifs status to read
-    notifs = notifs.map(notif => notif.read === true);
-    localStorage.setItem("notifications", notifs);
-
-    // if no notif, display message
-    if (notifs.length === 0) {
-      this.setState({ 
-        notifications: "Nothing new to display...",
-        viewSettings: !this.state.viewSettings
-      });
-    } else {
-      this.setState({ 
-        notifications: notifs,
-        viewSettings: !this.state.viewSettings
-    });
-    }
+  logUserOut = () => {
+    logout()
+      .then(response => console.log("User logged out"))
   }
 
   render() {
@@ -49,14 +30,14 @@ class Header extends Component {
             className={
               `settings-btn 
               ${this.state.viewSettings ? "active" : "" }`} 
-            onClick={() => this.setState({ viewSettings: !this.state.viewSettings })}>
+            onClick={() => this.setState({ viewNotifs: false, viewSettings: !this.state.viewSettings })}>
 
             <UilSetting/>
           </button>
 
           <button 
             className={`settings-btn ${this.state.viewNotifs ? "active" : "" }`}
-            onClick={this.fetchNotifs}>
+            onClick={() => this.setState({ viewSettings: false, viewNotifs: !this.state.viewNotifs })}>
 
             <UilBell size="27"/>
 
@@ -64,11 +45,12 @@ class Header extends Component {
           </button>
         </div>
 
-        {this.state.viewSettings && 
+        {
+          this.state.viewSettings && 
           <div className="toggle-menu">
             <ul>
               <li><Link to={`/user/${this.props.userId}`}><UilUser size="30"/>Profile</Link></li>
-              <li><Link to="/logout"><UilSignout size="30"/>Log out</Link></li>
+              <li><Link to="/" onClick={this.logUserOut}><UilSignout size="30"/>Log out</Link></li>
             </ul>
           </div>
         }

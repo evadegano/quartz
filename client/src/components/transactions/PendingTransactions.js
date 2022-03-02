@@ -19,7 +19,7 @@ class Transactions extends Component {
     this.state = {
       error: "",
       success: "",
-      isMining: true
+      isMining: false
     };
   }
 

@@ -11,7 +11,6 @@ import BuyCoins from "./components/user/BuyCoins";
 class UserPages extends Component {
   getUserWallets = () => {
     const userWallets = this.props.wallets.filter(wallet => wallet.user_id === this.props.user._id);
-    console.log("userID", this.props.user._id);
 
     return userWallets;
   }
