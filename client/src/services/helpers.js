@@ -57,39 +57,22 @@ function hashInPair(hashArray, output = []) {
 /*
   Calculate a wallet's balance
 */
-// function getWalletBalance(transacsRef, walletAddress) {
-//   let balance = 0;
-
-//   transacsRef.map().once(tx => {
-//     if (tx.status === "confirmed") {
-//       if (tx.fromAddress === walletAddress) {
-//         balance -= tx.amount;
-//       }
-
-//       if (tx.toAddress === walletAddress) {
-//         balance += tx.amount;
-//       }
-//     }
-//   })
-
-//   return balance;
-// }
 function getBalance(transactions, walletAddress) {
   let balance = 0;
 
   for (let tx of transactions) {
     if (tx.status === "confirmed") {
       if (tx.fromAddress === walletAddress) {
-        balance -= tx.amount;
+        balance -= Number(tx.amount);
       }
 
       if (tx.toAddress === walletAddress) {
-        balance += tx.amount;
+        balance += Number(tx.amount);
       }
     }
   }
 
-  return balance;
+  return balance.toLocaleString('en-US');
 }
 
 
@@ -183,7 +166,7 @@ function verifyHeader(transaction) {
 function timestampsToDate(timestamps) {
   const date = new Date(timestamps);
   let day = date.getDate();
-  let month = date.getMonth();
+  let month = date.getMonth() + 1;
 
   if (day < 10) {
     day = "0" + day;

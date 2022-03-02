@@ -40,7 +40,7 @@ class Transaction extends Component {
 
         <div className="table-col">
           <div><span className="emph-txt">Date:</span> {this.state.date}</div>
-          <div><span className="emph-txt">Amount:</span> {this.props.amount} QRTZ</div>
+          <div><span className="emph-txt">Amount:</span> {Number(this.props.amount).toLocaleString('en-US')} QRTZ</div>
           <div><span className="emph-txt">Status:</span> {this.props.status}</div>
         </div>
       </div>

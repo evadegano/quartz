@@ -33,8 +33,8 @@ class Transactions extends Component {
     const walletAddress = this.props.user.activeWallet;
 
     try {
-      const [ confirmedTx, rejectedTx, rewardTx ] = processTx(this.gun, this.props.blockchain, this.blockchainRef, this.blocksRef, this.props.pendingTx, walletAddress, new Date().getTime());
-
+      const [ confirmedTx, rejectedTx, rewardTx ] = processTx(this.gun, this.props.blockchain, this.blockchainRef, this.blocksRef, this.props.pendingTx, walletAddress, new Date().getTime(), this.props.transactions);
+      // what happens here?
       console.log("confirmedTx, rejectedTx, rewardTx", confirmedTx, rejectedTx, rewardTx);
 
       for (let tx of confirmedTx) {
@@ -54,18 +54,25 @@ class Transactions extends Component {
             timestamps: new Date().getTime()
           };
 
+          console.log("newNotif1", newNotif1);
+
           this.notifsRef.set(newNotif1);
           this.notifsRef.set(newNotif2);
+
+        } else {
+          const newNotif = {
+            message: `${tx.amount} QRTZ were added to your account.`,
+            user: tx.toAddress,
+            isRead: false,
+            timestamps: new Date().getTime()
+          };
+
+          console.log("newNotif", newNotif);
+          
+          this.notifsRef.set(newNotif);
         }
 
-        const newNotif = {
-          message: `${tx.amount} QRTZ were added to your account.`,
-          user: tx.toAddress,
-          isRead: false,
-          timestamps: new Date().getTime()
-        };
         
-        this.notifsRef.set(newNotif);
       }
 
       this.setState({

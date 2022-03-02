@@ -80,7 +80,7 @@ class BuyCoins extends Component {
           <div className="field">
             <label className="label">Amount</label>
             <div className="control">
-              <input name="amount" value={this.state.amount} className="input" type="number" placeholder="300" onChange={this.handleChange} />
+              <input name="amount" value={this.state.amount} className="input" type="number" placeholder="15,000" onChange={this.handleChange} />
             </div>
           </div>
 
