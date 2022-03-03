@@ -1,6 +1,5 @@
 import { Component } from "react";
 import EC from "elliptic";
-import Gun from  "gun";
 import { sendCoins } from "../../services/transaction-service";
 
 // init variables
@@ -47,8 +46,8 @@ class SendCoins extends Component {
     try {
       sendCoins(this.gun, amount, keypair, publicKey, walletAddress, toAddress);
 
-      // update notifs global state
-      this.props.fetchNotifs();
+      // update global transaction state
+      this.props.fetchTx();
 
       this.setState({
         toAddress: "",
@@ -83,7 +82,7 @@ class SendCoins extends Component {
           <div className="field">
             <label className="label">Amount</label>
             <div className="control">
-              <input name="amount" value={this.state.amount} className="input" type="number" placeholder="300" onChange={this.handleChange} />
+              <input name="amount" value={this.state.amount} className="input" type="number" placeholder="4,000" onChange={this.handleChange} />
             </div>
           </div>
 

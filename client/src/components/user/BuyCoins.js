@@ -51,6 +51,9 @@ class BuyCoins extends Component {
         // add transaction to the blockchain
         createPurchaseTx(this.gun, amount, walletAddress, keypair, publicKey);
 
+        // update global transaction state
+        this.props.fetchTx();
+
         // reset state
         this.setState({
           amount: "",

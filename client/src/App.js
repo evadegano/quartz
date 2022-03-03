@@ -84,11 +84,11 @@ class App extends Component {
 
   fetchNotifs() {
     let notifs = [];
-    const last2Days = Math.round(new Date().getTime() / 1000) - (72 * 3600);
+    const lastThreeDays = Math.round(new Date().getTime() / 1000) - (72 * 3600);
 
-    // get user's notifs that haven't been seen yet or are less than two days old
+    // get user's notifs that haven't been seen yet or are less than three days old
     this.notifsRef.map().once(function(notif) {
-      if (notif.user === this.state.loggedInUser.activeWallet && (notif.timestamps < last2Days || notif.isRead === true)) {
+      if (notif.user === this.state.loggedInUser.activeWallet && (notif.timestamps < lastThreeDays || notif.isRead === true)) {
         notifs.push(notif);
       }
     })
@@ -139,7 +139,7 @@ class App extends Component {
     this.setState({ blocks: blocksCopy });
   }
 
-  async fetchTransactions() {
+  fetchTransactions() {
     let transactionsCopy = [];
 
     // loop through transactions and add them to the global state
@@ -180,7 +180,8 @@ class App extends Component {
               wallets={this.state.wallets} 
               blocks={this.state.blocks}
               notifs={this.state.notifs}
-              fetchNotifs={this.fetchNotifs} />} />
+              fetchNotifs={this.fetchNotifs}
+              fetchTx={this.fetchTransactions} />} />
 
           <Route path="/transactions" render={(routerProps) => 
             <TxPages {...routerProps}

@@ -17,7 +17,7 @@ const ec = new EC.ec('secp256k1');
 /*
   Create transactions between wallets
 */
-async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receiverAddress, timestamps, transactions) {
+async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receiverAddress, timestamps = new Date().getTime(), transactions) {
   // set pointer to transactions on gun
   const transacsRef = gun.get("transactions");
 
@@ -50,9 +50,6 @@ async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receive
   Create a transaction when a user tops up their wallet
 */
 async function createPurchaseTx(gun, amount, receiverAddress, keypair, publicKey, timestamps = new Date().getTime()) {
-  // set pointer to transactions on gun
-  const transacsRef = gun.get("transactions");
-
   // create transaction
   const transaction = new PurchaseTransaction(amount, receiverAddress, timestamps);
   // sign transaction
@@ -61,6 +58,8 @@ async function createPurchaseTx(gun, amount, receiverAddress, keypair, publicKey
   // store transaction's hash as its id
   const txId = transaction.hash;
   
+  // set pointer to transactions on gun
+  const transacsRef = gun.get("transactions");
   // add transaction to db
   const newTx = gun.get(`${txId}`).put(transaction);
   // link transaction to the transactions ledger
@@ -71,7 +70,7 @@ async function createPurchaseTx(gun, amount, receiverAddress, keypair, publicKey
 /*
   Verify transactions and mine them into a block
 */
-async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTransactions, minerAddress, timestamps, allTransactions) {
+async function processTx(gun, blockchain, pendingTransactions, minerAddress, allTransactions, timestamps = new Date().getTime()) {
   let rejectionErrors = {};
   let rejectedTx = [];
   let confirmedTx = []
@@ -87,7 +86,7 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
       
       if (walletBalance < tx.amount) {
         // if error, add it to the rejection object
-        rejectionErrors[tx.hash] = ["Insufficient funds."];
+        rejectionErrors[tx.hash] = ["insufficient funds."];
         rejectedTx.push(tx);
         tx.isValid = false;
       }
@@ -96,14 +95,14 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
     // check signature validity
     if (!verifySignature(tx)) {
       // if error, add it to the rejection object
-      rejectionErrors[tx.hash] ? rejectionErrors[tx.hash].push("Invalid signature.") : rejectionErrors[tx.hash] = ["Invalid signature."] && rejectedTx.push(tx);
+      rejectionErrors[tx.hash] ? rejectionErrors[tx.hash].push("invalid signature.") : rejectionErrors[tx.hash] = ["invalid signature."] && rejectedTx.push(tx);
       tx.isValid = false;
     }
 
     // check header's validity
     if (!verifyHeader(tx)) {
       // if error, add it to the rejection object
-      rejectionErrors[tx.hash] ? rejectionErrors[tx.hash].push("Invalid header.") : rejectionErrors[tx.hash] = ["Invalid header."]  && rejectedTx.push(tx);
+      rejectionErrors[tx.hash] ? rejectionErrors[tx.hash].push("invalid header.") : rejectionErrors[tx.hash] = ["invalid header."]  && rejectedTx.push(tx);
       tx.isValid = false;
     }
 
@@ -137,10 +136,12 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
   }
 
   // else, update blockchain's last block hash
+  const blockchainRef = gun.get("blockchain");
   blockchainRef.put({ lastBlock: newBlock.hash });
 
   // add new block to the blockchain
-  blocksRef.set(gun.get(newBlock.hash).put(newBlock));
+  const blocksRef = blockchainRef.get("ledger");
+  blocksRef.set( gun.get(newBlock.hash).put(newBlock) );
 
   // update transactions' status and block hash and add to block
   for (let tx of pendingTransactions) {
@@ -171,14 +172,12 @@ async function processTx(gun, blockchain, blockchainRef, blocksRef, pendingTrans
   // store transaction's hash as its id
   const txId = rewardTx.hash;
 
-  // add transaction to db
-  const newTx = gun.get(`${txId}`).put(rewardTx);
   // set pointer to transactions on gun
   const transacsRef = gun.get("transactions");
   // link transaction to the transactions ledger
-  transacsRef.set(newTx);
+  transacsRef.set( gun.get(`${txId}`).put(rewardTx) );
 
-  return [ confirmedTx, rejectionErrors, rewardTx, newBlock.hash ] ;
+  return [ confirmedTx, rejectedTx, rejectionErrors, rewardTx ] ;
 }
 
 

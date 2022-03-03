@@ -2,6 +2,7 @@
 import { Component } from "react";
 import gun from "gun"
 import Blockchain from "../services/classes/blockchain";
+import { RewardTransaction, PurchaseTransaction } from "../services/classes/transaction";
 
 // helpers
 import { genDebitTx, genCreditTx, verifTx } from "./helpers";
@@ -53,6 +54,12 @@ class Seed extends Component {
     genDebitTx(this.gun, wallets);
   }
 
+  test = (event) => {
+    const rewardTx = new RewardTransaction(100, "eva", new Date().getTime(), "newBlock.hash");
+
+    console.log(rewardTx);
+  }
+
   render() {
     return (
       <div>
@@ -62,6 +69,7 @@ class Seed extends Component {
           <br/> & mine block
         </button>
         <button onClick={this.genTx}>gen transactions</button>
+        <button onClick={this.test}>test</button>
       </div>
     );
   }

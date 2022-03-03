@@ -24,7 +24,7 @@ class Transactions extends Component {
     isMining: false
   };
 
-  processTx = (event) => {
+  processTx = async (event) => {
     // update state
     this.setState({ isMining: true });
 
@@ -33,15 +33,13 @@ class Transactions extends Component {
     const walletAddress = this.props.user.activeWallet;
 
     try {
-      const [ confirmedTx, rejectedTx, rewardTx ] = processTx(this.gun, this.props.blockchain, this.blockchainRef, this.blocksRef, this.props.pendingTx, walletAddress, new Date().getTime(), this.props.transactions);
-      // what happens here?
-      console.log("confirmedTx, rejectedTx, rewardTx", confirmedTx, rejectedTx, rewardTx);
+      const [ confirmedTx, rejectedTx, rejectionErrors, rewardTx ] = await processTx(this.gun, this.props.blockchain, this.props.pendingTx, walletAddress, this.props.transactions);
 
       for (let tx of confirmedTx) {
 
         if (!tx.fromAddress.includes("null")) {
           const newNotif1 = {
-            message: `Your transaction of ${tx.amount} QRTZ has been confirmed.`,
+            message: `Your outgoing transaction of ${tx.amount} QRTZ was confirmed.`,
             user: tx.fromAddress,
             isRead: false,
             timestamps: new Date().getTime()
@@ -66,14 +64,48 @@ class Transactions extends Component {
             isRead: false,
             timestamps: new Date().getTime()
           };
-
-          console.log("newNotif", newNotif);
           
           this.notifsRef.set(newNotif);
-        }
-
-        
+        }        
       }
+
+      for (let tx of rejectedTx) {
+
+        if (!tx.fromAddress.includes("null")) {
+          const newNotif1 = {
+            message: `Your outgoing transaction of ${tx.amount} QRTZ was rejected for ${rejectionErrors[tx.hash]}.`,
+            user: tx.fromAddress,
+            isRead: false,
+            timestamps: new Date().getTime()
+          };
+
+          const newNotif2 = {
+            message: `Your incoming transaction of ${tx.amount} QRTZ was rejected for ${rejectionErrors[tx.hash]}.`,
+            user: tx.toAddress,
+            isRead: false,
+            timestamps: new Date().getTime()
+          };
+
+          this.notifsRef.set(newNotif1);
+          this.notifsRef.set(newNotif2);
+
+        } else {
+          const newNotif = {
+            message: `Your purschase of ${tx.amount} QRTZ was rejected for ${rejectionErrors[tx.hash]}.`,
+            user: tx.toAddress,
+            isRead: false,
+            timestamps: new Date().getTime()
+          };
+          
+          this.notifsRef.set(newNotif);
+        }        
+      }
+
+      // update transactions global state 
+      this.props.fetchTx();
+
+      // update notifs global state
+      this.props.fetchNotifs();
 
       this.setState({
         error: rejectedTx,
@@ -83,9 +115,6 @@ class Transactions extends Component {
         },
         isMining: false
       });
-
-      // update notifs global state
-      this.props.fetchNotifs();
     }
     catch(error) {
       this.setState({ error });
