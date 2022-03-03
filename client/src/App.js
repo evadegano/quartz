@@ -28,6 +28,9 @@ import Seed from './bin/seed';
 class App extends Component {
   constructor() {
     super();
+      // clear console
+      console.clear();
+
       this.gun = Gun([`${process.env.REACT_APP_GUN_URL}`]);
       window.gun = this.gun; //To have access to gun object in browser console
       this.blockchainRef = this.gun.get("blockchain");
@@ -37,6 +40,7 @@ class App extends Component {
 
       this.state = {
         loggedInUser: "",
+        fetchingUser: false,
         blockchain: "",
         wallets: [],
         transactions: [],
@@ -57,6 +61,9 @@ class App extends Component {
   }
 
   fetchUser() {
+    if (this.state.loggedInUser._id || this.state.fetchingUser) return;
+
+    this.setState({ fetchingUser: true });
     if (this.state.loggedInUser === "") {
       loggedIn()
         .then(response => {
@@ -181,17 +188,21 @@ class App extends Component {
           <Route exact path="/" render={() => <Homepage />} />
           <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
           
-          <Route  path="/user" render={(routerProps) => 
-            <UserPages  {...routerProps} 
-              gun={this.gun}
-              updateUser={this.updateLoggedInUser} 
-              user={this.state.loggedInUser} 
-              transactions={this.state.transactions} 
-              wallets={this.state.wallets} 
-              blocks={this.state.blocks}
-              notifs={this.state.notifs}
-              fetchNotifs={this.fetchNotifs}
-              fetchTx={this.fetchTransactions} />} />
+          <Route  
+            path="/user" 
+            loggedin={this.state.loggedInUser.id}
+            pending={this.state.fetchingUser}
+            render={(routerProps) => 
+              <UserPages  {...routerProps} 
+                gun={this.gun}
+                updateUser={this.updateLoggedInUser} 
+                user={this.state.loggedInUser} 
+                transactions={this.state.transactions} 
+                wallets={this.state.wallets} 
+                blocks={this.state.blocks}
+                notifs={this.state.notifs}
+                fetchNotifs={this.fetchNotifs}
+                fetchTx={this.fetchTransactions} />} />
 
           <Route path="/transactions" render={(routerProps) => 
             <TxPages {...routerProps}
