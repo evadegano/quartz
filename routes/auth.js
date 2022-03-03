@@ -72,10 +72,16 @@ router.post("/signup", (req, res, next) => {
           return;
         }
 
+        // store data to pass to state
+        const userData = {
+          _id: newUser._id,
+          createdAt: newUser.createdAt,
+          email: newUser.email
+        };
 
 
         // return user
-        res.status(200).json({ newUser: req.user });
+        res.status(200).json({ newUser: userData });
       })
     })
     .catch(() => res.status(500).json({ message: "Something went wrong while signing you up." }))
@@ -112,7 +118,14 @@ router.post("/login", (req, res, next) => {
         { new: true }
         ).sort({ lastConnection: -1 })
         .then(walletFromDB => {
-          res.status(200).json({ user, walletAddress: walletFromDB.address });
+          // store data to pass to state
+          const userData = {
+            _id: user._id,
+            createdAt: user.createdAt,
+            email: user.email
+          };
+
+          res.status(200).json({ user: userData, walletAddress: walletFromDB.address });
         })
         .catch(() => res.status(500).json({ message: "Something went wrong while retrieving your wallet." }))
     })

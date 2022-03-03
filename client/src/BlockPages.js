@@ -15,7 +15,7 @@ class BlockPages extends Component {
         <Switch>
           <Route exact path="/blocks" render={() => 
             <Blockchain 
-              userId={this.props.user._id} 
+              user={this.props.user} 
               blockchain={this.props.blockchain} 
               blocks={this.props.blocks} 
               transactions={this.props.transactions}

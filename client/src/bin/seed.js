@@ -27,6 +27,7 @@ class Seed extends Component {
     this.blockchainRef = this.gun.get("blockchain");
     this.blocksRef = this.blockchainRef.get("ledger");
     this.transacsRef = this.gun.get("transactions");
+    this.notifsRef = this.gun.get("notifications");
     
     this.state = {
       tempWallets: []
@@ -54,22 +55,36 @@ class Seed extends Component {
     genDebitTx(this.gun, wallets);
   }
 
-  test = (event) => {
-    const rewardTx = new RewardTransaction(100, "eva", new Date().getTime(), "newBlock.hash");
+  sendNotif = () => {
+    const newNotif = {
+      message: "this is a test notif",
+      user: this.props.user.activeWallet,
+      isRead: false,
+      timestamps: new Date().getTime()
+    };
 
-    console.log(rewardTx);
+    console.log(newNotif);
+
+    this.notifsRef.set(newNotif);
+
+    // update notifs global state
+    this.props.fetchNotifs();
   }
 
   render() {
+    const messages = this.props.notifs.map(notif => notif.message);
+    console.log("messages", messages);
     return (
-      <div>
+      <div className="seed">
         <button onClick={this.initBlockchain}>init blockchain</button>
         <button onClick={this.topUpWallets}>top up wallets</button>
         <button onClick={this.mineBlock}>verif pending transac
           <br/> & mine block
         </button>
         <button onClick={this.genTx}>gen transactions</button>
-        <button onClick={this.test}>test</button>
+        <button onClick={this.sendNotif}>send notif</button>
+
+        {messages.map((msg, idx) => <p key={idx}>{msg}</p>)}
       </div>
     );
   }

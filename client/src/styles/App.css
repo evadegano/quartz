@@ -3,6 +3,10 @@
   text-align: center;
 background: #222222; }
 
+.seed{
+  color: white;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none; }
@@ -348,6 +352,10 @@ li * {
 }
 .auth-container {
   width: 40%;
+  margin-top: 40px;
+}
+.profile-container {
+  width: 100%;
   margin-top: 40px;
 }
 .settings-container {

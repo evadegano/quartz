@@ -22,7 +22,7 @@ class TxPages extends Component {
 
         <div className="inner-container inner-page">
           <Header 
-            userId={this.props.user._id} 
+            activeWallet={this.props.user.activeWallet}  
             title="Transactions"
             notifs={this.props.notifs} 
             fetchNotifs={this.props.fetchNotifs}

@@ -97,19 +97,10 @@ class Dashboard extends Component {
       <div id="dashboard" className="inner-container inner-page">
         <Header 
           title={this.state.greeting} 
-          userId={this.props.user._id} 
+          activeWallet={walletAddress} 
           notifs={this.props.notifs} 
           fetchNotifs={this.props.fetchNotifs}
           gun={this.props.gun} />
-
-        <div>
-          <label>Current wallet:</label>
-          <select name="wallets" onChange={this.updateWallet}>
-            {this.props.userWallets.map(wallet => <option key={wallet.address} value={wallet.address}>{wallet.address}</option>)}
-          </select>
-
-          <button onClick={this.createNewWallet}>ADD WALLET</button>
-        </div>
 
         <div className="row-container">
           <Balance balance={this.state.balance} />

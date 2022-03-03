@@ -37,7 +37,12 @@ class Wallets extends Component {
 
     return (
     <div className="inner-container inner-page">
-      <Header userId={this.props.userId} title="Wallets" subtitle="" />
+      <Header 
+        activeWallet={this.props.activeWallet}
+        title="Wallets"
+        notifs={this.props.notifs} 
+        fetchNotifs={this.props.fetchNotifs}
+        gun={this.props.gun} />
       
       <div className="inner-container hollow-table">
         <div className="search-container">

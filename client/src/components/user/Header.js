@@ -84,7 +84,7 @@ class Header extends Component {
           this.state.viewSettings && 
           <div className="toggle-menu">
             <ul>
-              <li><Link to={`/user/${this.props.userId}`}><UilUser size="30"/>Profile</Link></li>
+              <li><Link to={`/user/${this.props.activeWallet}/profile`}><UilUser size="30"/>Profile</Link></li>
               <li><Link to="/" onClick={this.logUserOut}><UilSignout size="30"/>Log out</Link></li>
             </ul>
           </div>
@@ -97,8 +97,8 @@ class Header extends Component {
               {
                 this.props.notifs.length === 0
                 ? <li><p>Nothing new going on here...</p></li>
-                : this.props.notifs.map(notif => 
-                  <li>
+                : this.props.notifs.map((notif, idx) => 
+                  <li key={idx}>
                     <p>{notif.message}</p>
                     <div className={`${!notif.isRead ? "unread-notif" : ""}`}></div>
                   </li>

@@ -13,6 +13,7 @@ import { loggedIn } from './services/auth-service';
 import { getWallets } from "./services/user-service";
 
 // components
+import ProtectedRoute from './components/auth/ProtectedRoutes';
 import Homepage from './components/homepage/Homepage';
 import Auth from './components/auth/Auth';
 import UserPages from './UserPages';
@@ -83,8 +84,8 @@ class App extends Component {
     this.setState({ blockchain: blockchainData });
   }
 
-  fetchNotifs() {
-    let notifs = [];
+  fetchNotifs = () => {
+    let notifsCopy = [];
     const lastThreeDays = Math.round(new Date().getTime() / 1000) - (72 * 3600);
 
     loggedIn()
@@ -96,13 +97,13 @@ class App extends Component {
           this.notifsRef.map().once(function(notif) {
 
             if (notif.user === userWallet && (notif.timestamps > lastThreeDays || notif.isRead === false)) {
-              notifs.push(notif);
+              notifsCopy.push(notif);
             }
           })
         })
         .catch((err) => this.setState({ loggedInUser: false }))
     
-    this.setState({ notifs });
+    this.setState({ notifs: notifsCopy });
   }
 
   updateBlockchain(block) {
@@ -148,7 +149,7 @@ class App extends Component {
     this.setState({ blocks: blocksCopy });
   }
 
-  fetchTransactions() {
+  fetchTransactions = () => {
     let transactionsCopy = [];
 
     // loop through transactions and add them to the global state
@@ -224,7 +225,12 @@ class App extends Component {
 
           
           <Route path="/recovery" render={() => <RecoveryPages /> } />
-          <Route path="/seed" render={() => <Seed gun={this.gun} /> } />
+          <Route path="/seed" render={(routerProps) => 
+            <Seed {...routerProps}
+            user={this.state.loggedInUser} 
+            gun={this.gun} 
+            notifs={this.state.notifs}
+            fetchNotifs={this.fetchNotifs} /> } />
         </Switch>
       </div>
   );}

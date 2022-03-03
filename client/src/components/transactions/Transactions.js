@@ -32,7 +32,7 @@ class Transactions extends Component {
   }
 
   render() {
-    const filteredTx = this.filterTx();
+    const filteredTx = this.filterTx().reverse();
 
     return (
       <div className="inner-container hollow-table">

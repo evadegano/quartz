@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import { signup } from "../../services/auth-service";
 import { postWallets } from "../../services/user-service";
-import { UilInfoCircle } from '@iconscout/react-unicons'
+import { UilInfoCircle } from '@iconscout/react-unicons';
 
 
 class Signup extends Component {
@@ -68,7 +68,8 @@ class Signup extends Component {
           this.setState({ error: err.response.data.message });
         } else {
           this.setState({ error: err.message });
-        }})
+        }
+      })
   }
 
   responseGoogle = (response) => {

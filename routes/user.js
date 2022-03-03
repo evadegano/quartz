@@ -20,6 +20,10 @@ router.put("/:userId", (req, res, next) => {
   const { email, password, passwordConfirm } = req.body;
   const userId = req.params.userId;
 
+  let updatedUser = {
+    email
+  };
+
   // verify email address format
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
   if (!emailRegex.test(email)) {
@@ -27,29 +31,30 @@ router.put("/:userId", (req, res, next) => {
     return;
   }
 
-  // make sure that passwords match
-  if (password !== passwordConfirm) {
-    res.status(400).json({ message: "Confirmation password doesn't match password." });
-    return;
+  // if user wants to change their password
+  if (password) {
+    // make sure that passwords match
+    if (password !== passwordConfirm) {
+      res.status(400).json({ message: "Confirmation password doesn't match password." });
+      return;
+    }
+
+    // verify password format
+    const pwdRgex = /^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$/;
+    if (!pwdRgex.test(password)) {
+      res.status(400).json({ message: "Password must contain at least 8 characters, one cap letter, one number and one special character." });
+      return;
+    }
+
+    // hash password
+    var salt = bcrypt.genSaltSync(saltRounds);
+    var hashedPwd = bcrypt.hashSync(password, salt);
+
+    updatedUser.password = hashedPwd;
   }
 
-  // verify password format
-  const pwdRgex = /^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$/;
-  if (!pwdRgex.test(password)) {
-    res.status(400).json({ message: "Password must contain at least 8 characters, one cap letter, one number and one special character." });
-    return;
-  }
-
-  // hash password
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const hashedPwd = bcrypt.hashSync(password, salt);
-
-  
   // get user by _id and update
-  User.findByIdAndUpdate(
-    userId, 
-    { email, password: hashedPwd },
-    { new: true })
+  User.findByIdAndUpdate( userId, updatedUser, { new: true } )
     .then((user) => res.status(200).json(user))
     .catch(() => res.status(500).json({ message: "Something went wrong." }))
 });
