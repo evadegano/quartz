@@ -44,6 +44,7 @@ class App extends Component {
         error: ""
       }
   }
+  
 
   updateLoggedInUser = (userObj) => {
     this.setState({ loggedInUser: userObj });
@@ -86,13 +87,21 @@ class App extends Component {
     let notifs = [];
     const lastThreeDays = Math.round(new Date().getTime() / 1000) - (72 * 3600);
 
-    // get user's notifs that haven't been seen yet or are less than three days old
-    this.notifsRef.map().once(function(notif) {
-      if (notif.user === this.state.loggedInUser.activeWallet && (notif.timestamps < lastThreeDays || notif.isRead === true)) {
-        notifs.push(notif);
-      }
-    })
+    loggedIn()
+        .then(response => {
+          // store user data
+          const userWallet = response.walletAddress;
 
+          // get user's notifs that haven't been seen yet or are less than three days old
+          this.notifsRef.map().once(function(notif) {
+
+            if (notif.user === userWallet && (notif.timestamps > lastThreeDays || notif.isRead === false)) {
+              notifs.push(notif);
+            }
+          })
+        })
+        .catch((err) => this.setState({ loggedInUser: false }))
+    
     this.setState({ notifs });
   }
 

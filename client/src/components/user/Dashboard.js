@@ -91,6 +91,8 @@ class Dashboard extends Component {
     const walletAddress = this.props.match.params.walletId;
     const userTransactions = this.filterTransactions(walletAddress);
 
+    if (!this.state.balance) return <div>Loading...</div>
+
     return (
       <div id="dashboard" className="inner-container inner-page">
         <Header 
