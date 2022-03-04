@@ -215,7 +215,8 @@ class App extends Component {
     this.fetchBlocks();
     this.fetchTransactions();
     this.fetchNotifs();
-    console.log("app js did mount");
+    
+    console.log("App.js did mount");
   }
 
   render() {

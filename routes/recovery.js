@@ -31,12 +31,12 @@ router.post("/request", (req, res, next) => {
           html: recoveryTemplate(user._id)
         })
         .then(() => { 
-          res.status(200).json({ message: `An email has been sent to ${email}. Please check out your inbox.` })
+          res.status(200).json({ message: `An email has been sent to ${email}. Please check out your inbox.` });
         })
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Something went wrong." })
+      res.status(500).json({ message: "Something went wrong." });
     })
 })
 

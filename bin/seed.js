@@ -10,6 +10,7 @@ const saltRounds = 10;
 // db models
 const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
+const { response } = require("express");
 
 // variables
 const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
@@ -18,15 +19,20 @@ const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
 
 function run() {
   // connect to database
-  mongoose.connect('mongodb://localhost/quartz')
+  mongoose.connect('mongodb+srv://evadgn:Pepsie01@cluster0.cq4jo.mongodb.net/Quartz?retryWrites=true&w=majority')
     .then(() => {
       console.log("connected!!");
+
       const users = createUsers();
+
       return addUsersToDB(users);
     })
-    .then(() => {
-      return deleteWallets();
+    .then(response => {
+      const wallets = createWallets(response);
+
+      return addWalletsToDB(wallets);
     })
+    .then(() => console.log("did it!"))
     .catch(err => console.log("global err:", err))
 }
 
@@ -55,7 +61,7 @@ function createUsers() {
 
   for (let i = 0; i < 271; i++) {
     const [ pwd, email ] = randomEmailAndPwd();
-    const timestamps = randomDate(new Date(2021, 9, 1), new Date()).getTime();
+    const timestamps = randomDate(new Date(2021, 10, 1), new Date(2021, 10, 30)).getTime();
 
     // hash pwd
     const salt = bcrypt.genSaltSync(saltRounds);
@@ -86,7 +92,10 @@ function deleteUsers() {
 function addUsersToDB(usersArray) {
   // delete users if any
   User.create(usersArray)
-    .then(() => console.log("users added to db"))
+    .then(usersFromDB => {
+      console.log("users added to db")
+      return usersFromDB;
+    })
     .catch(err => console.log("adding users err:", err))
 }
 
