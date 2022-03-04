@@ -15,23 +15,20 @@ const { response } = require("express");
 // variables
 const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
 
-
-
 function run() {
   // connect to database
   mongoose.connect('mongodb+srv://evadgn:Pepsie01@cluster0.cq4jo.mongodb.net/Quartz?retryWrites=true&w=majority')
     .then(() => {
       console.log("connected!!");
 
-      const users = createUsers();
+      User.find({ email: { $nin: ["eva.degano@gmail.com", "romain.dupont@gmail.com"] }})
 
-      return addUsersToDB(users);
-    })
-    .then(response => {
-      const wallets = createWallets(response);
+      //const wallets = createWallets(users);
+      //console.log(wallets);
 
-      return addWalletsToDB(wallets);
+      //return addWalletsToDB(wallets);
     })
+    .then(usersFromDB => console.log(usersFromDB))
     .then(() => console.log("did it!"))
     .catch(err => console.log("global err:", err))
 }
@@ -100,8 +97,8 @@ function addUsersToDB(usersArray) {
 }
 
 
-function getUserIds() {
-  User.find({ })
+function getUsers() {
+  User.find({ email: { $nin: ["eva.degano@gmail.com", "romain.dupont@gmail.com"] }})
     .then(usersFromDB => usersFromDB)
     .catch(err => console.log("searching for users err:", err))
 }

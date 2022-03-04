@@ -33,6 +33,9 @@ class Transactions extends Component {
     try {
       const [ confirmedTx, rejectedTx, rejectionErrors, rewardTx ] = await processTx(this.gun, this.props.blockchain, this.props.pendingTx, walletAddress, this.props.transactions);
 
+      // reset state
+      this.setState({ isMining: false });
+
       // loop through confirmed transactions and generate notifications
       for (let tx of confirmedTx) {
         
@@ -105,7 +108,7 @@ class Transactions extends Component {
 
       // send a notification to the user who receives the reward
       const newRwrdNotif = {
-        message: `${rewardTx.amount} QRTZ were added to your account as a reward for mining a block.`,
+        message: `${rewardTx.amount} QRTZ have been issued for you as a reward for mining a block.`,
           user: rewardTx.toAddress,
           isRead: false,
           timestamps: new Date().getTime()
@@ -119,11 +122,6 @@ class Transactions extends Component {
 
       // update the notifs global state
       this.props.fetchNotifs();
-
-      // reset state
-      this.setState({
-        isMining: false
-      });
     }
     catch(err) {
       console.log(err);
