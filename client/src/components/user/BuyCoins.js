@@ -11,17 +11,19 @@ const ec = new EC.ec('secp256k1');
 class BuyCoins extends Component {
   constructor({ gun }) {
     super();
+    // init gun pointers
     this.gun = gun;
-    this.transacsRef = this.gun.get("transactions");
-    this.notifsRef = this.gun.get("notifications");
+
+    this.state = {
+      amount: "",
+      error: "",
+      success: ""
+    }
   }
 
-  state = {
-    amount: "",
-    error: "",
-    success: ""
-  }
-
+  /*
+    Update state on form change
+  */
   handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -30,13 +32,17 @@ class BuyCoins extends Component {
     });
   }
 
+  /*
+    Prevent page from refreshing on form submit
+  */
   handleSubmit = async (event) => {
     event.preventDefault();
-
     return;
   }
 
-  // process user's purchase of Quartz coins
+  /*
+    Process user's purchase of QRTZ coins
+  */
   processTransfer = (token) => {
     const amount = this.state.amount;
 
@@ -44,6 +50,7 @@ class BuyCoins extends Component {
     const keypair = ec.genKeyPair();
     const publicKey = keypair.getPublic("hex");
 
+    // send data to server
     getCoins(amount, token, keypair, publicKey)
       .then(() => {
         const walletAddress = this.props.match.params.walletId;

@@ -26,13 +26,15 @@ class Transactions extends Component {
   }
 
   filterTx = () => {
-    const filteredTx = this.props.transactions.filter(tx => String(tx[`${this.state.filter}`]).includes(this.state.query));
+    const filteredTx = this.props.transactions.filter(
+      tx => String(tx[`${this.state.filter}`]).includes(this.state.query)
+      ).sort((a, b) => b.timestamps - a.timestamps);
 
     return filteredTx;
   }
 
   render() {
-    const filteredTx = this.filterTx().reverse();
+    const filteredTx = this.filterTx();
 
     return (
       <div className="inner-container hollow-table">
@@ -55,9 +57,9 @@ class Transactions extends Component {
           </div>
         </div>
         
-        {filteredTx.map(tx => {
+        {filteredTx.map((tx, idx) => {
           return <Transaction 
-                    key={tx.hash} 
+                    key={idx} 
                     hash={tx.hash} 
                     from={tx.fromAddress} 
                     to={tx.toAddress}

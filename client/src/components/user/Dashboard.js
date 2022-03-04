@@ -45,43 +45,6 @@ class Dashboard extends Component {
     return userTransactions;
   }
 
-  // create a new wallet for the user
-  createNewWallet = (event) => {
-    const userId = this.props.user._id;
-    let loggedInUserCopy = this.props.user;
-
-    postWallets(userId)
-      .then(response => {
-        // set new wallet as user's active wallet
-        loggedInUserCopy["activeWallet"] = response.walletAddress;
-
-        // update active wallet in logged in user global state
-        this.props.updateUser(loggedInUserCopy);
-
-        // redirect to wallet's dashboard
-        this.props.history.push(`/user/${response.walletAddress}`);
-      })
-      .catch((err) => this.setState({ error: err.response.data.message }))
-  }
-
-  // update the user's active wallet
-  updateWallet = (event) => {
-    const { value } = event.target;
-
-    putWallet(value)
-      .then(response => {
-        // update active wallet in logged in user global state
-        const loggedInUserCopy = this.props.user;
-        loggedInUserCopy["activeWallet"] = response;
-        this.props.updateUser(loggedInUserCopy);
-
-        // redirect to the selected wallet's dashboard
-        this.props.history.push(`/user/${response}`);
-      })
-      .catch(err => this.setState({error: err.response.data.message}))
-  }
-
-  // update component's state on mounting
   componentDidMount() {
     this.fetchWalletBalance();
     this.updateGreeting();

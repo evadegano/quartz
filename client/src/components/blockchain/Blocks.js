@@ -57,9 +57,9 @@ class Blocks extends Component {
         </div>
         
 
-        {filteredBlocks.map(block => {
+        {filteredBlocks.map((block, idx) => {
           return <Block 
-                    key={block.hash} 
+                    key={idx} 
                     hash={block.hash} 
                     prevBlock={block.prevHash} 
                     miner={block.miner}

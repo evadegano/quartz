@@ -432,7 +432,7 @@ li * {
   flex: 1;
 }
 
-.toggle-menu li:hover * {
+.toggle-menu a:hover * {
   color: #FE6601;
 }
 

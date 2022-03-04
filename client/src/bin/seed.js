@@ -62,8 +62,8 @@ class Seed extends Component {
 
   sendNotif = () => {
     const newNotif = {
-      message: "this is a test notif",
-      user: this.props.user.activeWallet,
+      message: "let's try this shit",
+      user: "test",
       isRead: false,
       timestamps: new Date().getTime(),
     };
@@ -76,40 +76,8 @@ class Seed extends Component {
     this.props.fetchNotifs();
   };
 
-  fetchNotifs() {
-    console.log("fetching notifs");
-    const lastThreeDays = Math.round(new Date().getTime() / 1000) - 72 * 3600;
-
-    // store user data
-    const userWallet = this.props.user.activeWallet;
-    console.log("userWallet", userWallet);
-
-    // notif => notif.user === userWallet && (notif.timestamps > lastThreeDays || notif.isRead === false) ? notif : undefined
-    // get user's notifs that haven't been seen yet or are younger than three days old
-    this.gun
-      .get("notifications")
-      .map()
-      .once(notif => {
-        console.log("yo");
-        const notifsCopy = [...this.state.notifs];
-
-        notifsCopy.push(notif);
-        console.log("notifsCopy", notifsCopy);
-
-        this.setState({ notifs: notifsCopy });
-      });
-
-    console.log("ya");
-    //this.setState({ notifs: notifsCopy });
-  }
-
-  componentDidMount() {
-    console.log("did mount");
-    this.fetchNotifs();
-  }
-
   render() {
-    if (this.state.notifs.length === 0) return "loading";
+    if (this.props.notifs.length === 0) return "loading";
 
     return (
       <div className="seed">
@@ -122,8 +90,7 @@ class Seed extends Component {
         <button onClick={this.genTx}>gen transactions</button>
         <button onClick={this.sendNotif}>send notif</button>
 
-        {this.state.notifs.map((notif, idx) => {
-          console.log("hey");
+        {this.props.notifs.map((notif, idx) => {
           return <p key={idx}>{notif.message}</p>;
         })}
       </div>

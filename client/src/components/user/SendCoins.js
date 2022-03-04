@@ -11,17 +11,18 @@ class SendCoins extends Component {
   constructor({ gun }) {
     super();
     this.gun = gun;
-    this.transacsRef = this.gun.get("transactions");
-    this.notifsRef = this.gun.get("notifications");
+    
+    this.state = {
+      toAddress: "",
+      amount: "",
+      error: "",
+      success: ""
+    }
   }
-
-  state = {
-    toAddress: "",
-    amount: "",
-    error: "",
-    success: ""
-  }
-
+  
+  /*
+    Update state on form change
+  */
   handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -30,6 +31,9 @@ class SendCoins extends Component {
     })
   }
 
+  /*
+    Process user's transaction
+  */
   handleSubmit = (event) => {
     // prevent page from reloading
     event.preventDefault();
@@ -49,6 +53,7 @@ class SendCoins extends Component {
       // update global transaction state
       this.props.fetchTx();
 
+      // reset state
       this.setState({
         toAddress: "",
         amount: "",
@@ -75,7 +80,7 @@ class SendCoins extends Component {
           <div className="field">
             <label className="label">To wallet</label>
             <div className="control">
-              <input name="toAddress" value={this.state.toAddress} className="input" type="text" placeholder="the wallet you are sending coins to" onChange={this.handleChange} />
+              <input name="toAddress" value={this.state.toAddress} className="input" type="text" placeholder="Some wallet address" onChange={this.handleChange} />
             </div>
           </div>
 
@@ -90,7 +95,6 @@ class SendCoins extends Component {
         </form>
 
         {this.state.error && <div className="error">{this.state.error}</div>}
-
         {this.state.success && <div className="success">{this.state.success}</div>}
       </div>
     );

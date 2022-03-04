@@ -10,20 +10,25 @@ class Header extends Component {
     super()
     this.gun = gun;
     this.notifsRef = this.gun.get("notifications");
+
+    this.state = {
+      viewSettings: false,
+      viewNotifs: false,
+      newNotifs: false,
+    }
   }
 
-
-  state = {
-    viewSettings: false,
-    viewNotifs: false,
-    newNotifs: false,
-  };
-
+  /*
+    Destroy user session on log out
+  */
   logUserOut = () => {
     logout()
       .then(response => console.log("User logged out"))
   }
 
+  /*
+    Update notifications once read
+  */
   updateNotifs = () => {
     if (this.state.viewNotifs) {
       // update local state
@@ -51,6 +56,14 @@ class Header extends Component {
         newNotifs: false
       });
     }
+  }
+
+  componentDidMount() {
+    const unreadNotifs = this.props.notifs.filter(notif => !notif.isRead);
+
+    if (unreadNotifs.length > 0) {
+      this.setState({ newNotifs: true  });
+    };
   }
 
   render() {
@@ -97,12 +110,14 @@ class Header extends Component {
               {
                 this.props.notifs.length === 0
                 ? <li><p>Nothing new going on here...</p></li>
-                : this.props.notifs.map((notif, idx) => 
-                  <li key={idx}>
-                    <p>{notif.message}</p>
-                    <div className={`${!notif.isRead ? "unread-notif" : ""}`}></div>
-                  </li>
-                )
+                : this.props.notifs
+                  .sort((a, b) => b.timestamps - a.timestamps)
+                  .map((notif, idx) => 
+                    <li key={idx}>
+                      <p>{notif.message}</p>
+                      <div className={`${!notif.isRead ? "unread-notif" : ""}`}></div>
+                    </li>
+                  )
               }
             </ul>
           </div>

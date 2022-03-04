@@ -2,10 +2,6 @@ import { Component } from "react";
 import { processTx } from "../../services/transaction-service";
 import Transaction from "./Transaction";
 
-// remove once in prod
-import wallets from "../../bin/wallets.json";
-
-
 
 class Transactions extends Component {
   constructor({ gun }) {
@@ -16,16 +12,18 @@ class Transactions extends Component {
     this.transacsRef = this.gun.get("transactions");
     this.notifsRef = this.gun.get("notifications");
     
+    this.state = {
+      error: "",
+      success: "",
+      isMining: false
+    }
   }
 
-  state = {
-    error: "",
-    success: "",
-    isMining: false
-  };
-
+  /*
+    Process pending transactions
+  */
   processTx = async (event) => {
-    // update state
+    // set state to mining
     this.setState({ isMining: true });
 
     // delete once in prod
@@ -35,8 +33,9 @@ class Transactions extends Component {
     try {
       const [ confirmedTx, rejectedTx, rejectionErrors, rewardTx ] = await processTx(this.gun, this.props.blockchain, this.props.pendingTx, walletAddress, this.props.transactions);
 
+      // loop through confirmed transactions and generate notifications
       for (let tx of confirmedTx) {
-
+        
         if (!tx.fromAddress.includes("null")) {
           const newNotif1 = {
             message: `Your outgoing transaction of ${tx.amount} QRTZ was confirmed.`,
@@ -52,10 +51,9 @@ class Transactions extends Component {
             timestamps: new Date().getTime()
           };
 
-          console.log("newNotif1", newNotif1);
-
-          this.notifsRef.set(newNotif1);
-          this.notifsRef.set(newNotif2);
+          // add notifications to Gun and user the user address and timestamps as a unique ID
+          this.notifsRef.set(this.gun.get(newNotif1.user + newNotif1.timestamps).put(newNotif1));
+          this.notifsRef.set(this.gun.get(newNotif2.user + newNotif2.timestamps).put(newNotif2));
 
         } else {
           const newNotif = {
@@ -64,11 +62,14 @@ class Transactions extends Component {
             isRead: false,
             timestamps: new Date().getTime()
           };
-          
-          this.notifsRef.set(newNotif);
-        }        
-      }
 
+          console.log("newNotif", newNotif);
+          
+          // add notification to Gun and user the user address and timestamps as a unique ID
+          this.notifsRef.set(this.gun.get(newNotif.user + newNotif.timestamps).put(newNotif));
+        }
+      }
+      
       for (let tx of rejectedTx) {
 
         if (!tx.fromAddress.includes("null")) {
@@ -86,8 +87,9 @@ class Transactions extends Component {
             timestamps: new Date().getTime()
           };
 
-          this.notifsRef.set(newNotif1);
-          this.notifsRef.set(newNotif2);
+          // add notifications to Gun and user the user address and timestamps as a unique ID
+          this.notifsRef.set(this.gun.get(newNotif1.user + newNotif1.timestamps).put(newNotif1));
+          this.notifsRef.set(this.gun.get(newNotif2.user + newNotif2.timestamps).put(newNotif2));
 
         } else {
           const newNotif = {
@@ -101,25 +103,38 @@ class Transactions extends Component {
         }        
       }
 
-      // update transactions global state 
+      // send a notification to the user who receives the reward
+      const newRwrdNotif = {
+        message: `${rewardTx.amount} QRTZ were added to your account as a reward for mining a block.`,
+          user: rewardTx.toAddress,
+          isRead: false,
+          timestamps: new Date().getTime()
+        };
+
+      // add notification to Gun and user the user address and timestamps as a unique ID
+      this.notifsRef.set(this.gun.get(newRwrdNotif.user + newRwrdNotif.timestamps).put(newRwrdNotif));
+
+      // update the transactions global state 
       this.props.fetchTx();
 
-      // update notifs global state
+      // update the notifs global state
       this.props.fetchNotifs();
 
+      // reset state
       this.setState({
-        error: rejectedTx,
-        success: {
-          confirmedTx,
-          rewardTx
-        },
         isMining: false
       });
     }
-    catch(error) {
-      this.setState({ error });
+    catch(err) {
+      console.log(err);
+
+      this.setState({ error: err });
     }
   };
+
+  componentDidMount() {
+    this.setState({ isMining: false });
+  }
 
   render() {
     return (

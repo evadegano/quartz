@@ -28,97 +28,72 @@ import Seed from './bin/seed';
 class App extends Component {
   constructor() {
     super();
-      // clear console
-      console.clear();
+    // clear console on every page update
+    console.clear();
 
-      this.gun = Gun([`${process.env.REACT_APP_GUN_URL}`]);
-      window.gun = this.gun; //To have access to gun object in browser console
-      this.blockchainRef = this.gun.get("blockchain");
-      this.blocksRef = this.blockchainRef.get("ledger");
-      this.transacsRef = this.gun.get("transactions");
-      this.notifsRef = this.gun.get("notifications");
+    // init gun pointers
+    this.gun = Gun([`${process.env.REACT_APP_GUN_URL}`]);
+    window.gun = this.gun; //To have access to gun object in browser console
+    this.blockchainRef = this.gun.get("blockchain");
+    this.blocksRef = this.blockchainRef.get("ledger");
+    this.transacsRef = this.gun.get("transactions");
+    this.notifsRef = this.gun.get("notifications");
 
-      this.state = {
-        loggedInUser: "",
-        fetchingUser: false,
-        blockchain: "",
-        wallets: [],
-        transactions: [],
-        blocks: [],
-        notifs: [],
-        error: ""
-      }
+    this.state = {
+      loggedInUser: "",
+      fetchingUser: false,
+      blockchain: "",
+      wallets: [],
+      transactions: [],
+      blocks: [],
+      notifs: [],
+      error: ""
+    }
   }
   
-
+  /*
+    Update user state on authentication
+  */
   updateLoggedInUser = (userObj) => {
     this.setState({ loggedInUser: userObj });
   }
 
+  /*
+    Delete this
+  */
   getUserWallets = () => {
     const userWallets = this.state.wallets.filter(wallet => wallet.user_id === this.state.loggedInUser._id);
     return userWallets;
   }
 
+  /*
+    Fetch user data from database
+  */
   fetchUser() {
+    // exit if user data has been or is being fetched
     if (this.state.loggedInUser._id || this.state.fetchingUser) return;
 
+    // update state
     this.setState({ fetchingUser: true });
-    if (this.state.loggedInUser === "") {
-      loggedIn()
-        .then(response => {
-          // store user data
-          const userData = response.user;
-          userData["activeWallet"] = response.walletAddress;
 
-          // update state
-          this.setState({ loggedInUser: userData })
-        })
-        .catch((err) => this.setState({ loggedInUser: false }))
-    }
-  }
-
-  fetchBlockchainData() {
-    let blockchainData = {};
-
-    this.blockchainRef.map().once(function(val, key) {
-
-      if (key !== "ledger") {
-        blockchainData[key] = val;
-      }
-    });
-
-    this.setState({ blockchain: blockchainData });
-  }
-
-  fetchNotifs = () => {
-    let notifsCopy = [];
-    const lastThreeDays = Math.round(new Date().getTime() / 1000) - (72 * 3600);
-
+    // fetch data from database
     loggedIn()
-        .then(response => {
-          // store user data
-          const userWallet = response.walletAddress;
+      .then(response => {
+        // store user data
+        const userData = response.user;
+        userData["activeWallet"] = response.walletAddress;
 
-          // get user's notifs that haven't been seen yet or are less than three days old
-          this.notifsRef.map().once(function(notif) {
-
-            if (notif.user === userWallet && (notif.timestamps > lastThreeDays || notif.isRead === false)) {
-              notifsCopy.push(notif);
-            }
-          })
-        })
-        .catch((err) => this.setState({ loggedInUser: false }))
-    
-    this.setState({ notifs: notifsCopy });
+        // update state
+        this.setState({ loggedInUser: userData })
+      })
+      .catch((err) => this.setState({ loggedInUser: false }))
   }
 
-  updateBlockchain(block) {
-    this.blockchainRef.get("ledger").set(block);
-  }
-
+  /*
+    Fetch wallets from database
+  */
   fetchWallets() {
-
+    // query database for wallets
     getWallets()
       .then(response => {
         let wallets = []
@@ -132,6 +107,7 @@ class App extends Component {
           })
         }
 
+        // update state
         this.setState({ wallets })
       })
       .catch(err => {
@@ -144,30 +120,92 @@ class App extends Component {
       }})
   }
 
-  fetchBlocks() {
-    let blocksCopy = [];
+  /*
+    Fetch blockchain data from Gun
+  */
+  fetchBlockchainData() {
+    const blockchainCopy = {};
 
-    this.blockchainRef.get("ledger").map().once(function(block) {
-      blocksCopy.push(block);
-    });
+    // loop through the blockchain object in Gun
+    this.blockchainRef
+      .map()
+      .once((val, key) => {
+        // skip the ledger key
+        if (key !== "ledger") {
+          // add key and values to the blockchain state
+          blockchainCopy[key] = val;
 
-    // this.blockchain.ledger.map(block => blocksCopy.push(block));
-
-    this.setState({ blocks: blocksCopy });
+          // update state
+          this.setState({ blockchain: blockchainCopy });
+        }
+      })
   }
 
-  fetchTransactions = () => {
-    let transactionsCopy = [];
+  /*
+    Fetch blocks from Gun
+  */
+  fetchBlocks() {
+    // loop through the blocks collection in Gun
+    this.blocksRef
+      .map()
+      .once(block => {
+        const blocksCopy = [...this.state.blocks];
+        blocksCopy.push(block);
 
-    // loop through transactions and add them to the global state
-    this.transacsRef.map().once(function(transac) {
-      // only add non-null transactions
-      if (transac) {
-        transactionsCopy.push(transac);
-      }
+        // update state
+        this.setState({ blocks: blocksCopy });
     });
+  }
 
-    this.setState({ transactions: transactionsCopy });
+  /* 
+    Fetch transactions from Gun
+  */
+  fetchTransactions = () => {
+    // loop through the transactions collection in Gun
+    this.transacsRef
+      .map()
+      .once(tx => {
+        const transactionsCopy = [...this.state.transactions];
+        transactionsCopy.push(tx);
+
+        // update state
+        this.setState({ transactions: transactionsCopy });
+      })
+  }
+
+  /* 
+    Fetch notifications from Gun
+  */
+  fetchNotifs() {
+    const lastThreeDays = Math.round(new Date().getTime() / 1000) - 72 * 3600;
+    let userWallet;
+
+    // get user's active wallet address
+    if (this.state.loggedInUser.activeWallet) {
+      userWallet = this.state.loggedInUser.activeWallet;
+
+    } else {
+      // fetch data from database
+      loggedIn()
+        .then(response => {
+          // store user data
+          userWallet = response.walletAddress;
+        })
+        .catch((err) => this.setState({ loggedInUser: false }))
+    }
+
+    // notif => notif.user === userWallet && (notif.timestamps > lastThreeDays || notif.isRead === false) ? notif : undefined
+    // loop through the notifications collection in Gun 
+    this.gun
+      .get("notifications")
+      // only keep user's notifs that haven't been seen yet or are younger than three days old
+      .map(notif => notif.user === userWallet && (notif.timestamps > lastThreeDays || notif.isRead === false) ? notif : undefined)
+      .once(notif => {
+        const notifsCopy = [...this.state.notifs];
+        notifsCopy.push(notif);
+
+        this.setState({ notifs: notifsCopy });
+      });
   }
 
   componentDidMount() {
@@ -177,6 +215,7 @@ class App extends Component {
     this.fetchBlocks();
     this.fetchTransactions();
     this.fetchNotifs();
+    console.log("app js did mount");
   }
 
   render() {
@@ -188,54 +227,64 @@ class App extends Component {
           <Route exact path="/" render={() => <Homepage />} />
           <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
           
-          <Route  
+          <ProtectedRoute  
             path="/user" 
-            loggedin={this.state.loggedInUser.id}
+            loggedin={this.state.loggedInUser._id}
             pending={this.state.fetchingUser}
-            render={(routerProps) => 
+            render={routerProps => 
               <UserPages  {...routerProps} 
                 gun={this.gun}
-                updateUser={this.updateLoggedInUser} 
-                user={this.state.loggedInUser} 
-                transactions={this.state.transactions} 
-                wallets={this.state.wallets} 
-                blocks={this.state.blocks}
+                user={this.state.loggedInUser}
+                transactions={this.state.transactions}
                 notifs={this.state.notifs}
-                fetchNotifs={this.fetchNotifs}
-                fetchTx={this.fetchTransactions} />} />
+                updateUser={this.updateLoggedInUser} 
+                fetchTx={this.fetchTransactions}
+                fetchNotifs={this.fetchNotifs} />} />
 
-          <Route path="/transactions" render={(routerProps) => 
-            <TxPages {...routerProps}
-              gun={this.gun}
-              user={this.state.loggedInUser} 
-              blockchain={this.state.blockchain} 
-              transactions={this.state.transactions}
-              notifs={this.state.notifs}
-              fetchNotifs={this.fetchNotifs}
-              fetchTx={this.fetchTransactions} />} />
+          <ProtectedRoute 
+            path="/transactions"
+            loggedin={this.state.loggedInUser._id}
+            pending={this.state.fetchingUser}
+            render={routerProps => 
+              <TxPages {...routerProps}
+                gun={this.gun}
+                user={this.state.loggedInUser} 
+                blockchain={this.state.blockchain} 
+                transactions={this.state.transactions}
+                notifs={this.state.notifs}
+                fetchTx={this.fetchTransactions}
+                fetchNotifs={this.fetchNotifs} />} />
 
-          <Route path="/blocks" render={(routerProps) => 
-            <BlockPages {...routerProps} 
-              gun={this.gun}
-              user={this.state.loggedInUser} 
-              blockchain={this.state.blockchain} 
-              blocks={this.state.blocks}
-              transactions={this.state.transactions}
-              notifs={this.state.notifs}
-              fetchNotifs={this.fetchNotifs} />} />
+          <ProtectedRoute 
+            path="/blocks"
+            loggedin={this.state.loggedInUser._id}
+            pending={this.state.fetchingUser}
+            render={routerProps => 
+              <BlockPages {...routerProps} 
+                gun={this.gun}
+                user={this.state.loggedInUser} 
+                blockchain={this.state.blockchain} 
+                blocks={this.state.blocks}
+                transactions={this.state.transactions}
+                notifs={this.state.notifs}
+                fetchNotifs={this.fetchNotifs} />} />
 
-          <Route path="/wallets" render={(routerProps) => 
-            <WalletPages {...routerProps}
-              gun={this.gun}
-              transactions={this.state.transactions}
-              blocks={this.state.blocks} 
-              user={this.state.loggedInUser} 
-              wallets={this.state.wallets}
-              notifs={this.state.notifs}
-              fetchNotifs={this.fetchNotifs} />} />
+          <ProtectedRoute 
+            path="/wallets"
+            loggedin={this.state.loggedInUser._id}
+            pending={this.state.fetchingUser}
+            render={routerProps => 
+              <WalletPages {...routerProps}
+                gun={this.gun}
+                user={this.state.loggedInUser}
+                blocks={this.state.blocks}
+                transactions={this.state.transactions}
+                notifs={this.state.notifs}
+                wallets={this.state.wallets}
+                fetchNotifs={this.fetchNotifs} />} />
 
-          
           <Route path="/recovery" render={() => <RecoveryPages /> } />
+          
           <Route path="/seed" render={(routerProps) => 
             <Seed {...routerProps}
             user={this.state.loggedInUser} 
