@@ -68,6 +68,7 @@ router.post("/signup", (req, res, next) => {
       // save user in session
       req.login(newUser, (err) => {
         if (err) {
+          console.log(err);
           res.status(500).json({ message: "Login error, please try again." });
           return;
         }
@@ -83,7 +84,10 @@ router.post("/signup", (req, res, next) => {
         res.status(200).json({ newUser: userData });
       })
     })
-    .catch((err) => res.status(500).json({ message: `${err}: "Something went wrong while signing you up."` }))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Something went wrong while signing you up." })
+    })
 });
 
 
@@ -106,6 +110,7 @@ router.post("/login", (req, res, next) => {
     // save user in session
     req.login(user, (err) => {
       if (err) {
+        console.log(err);
         res.status(500).json({ message: "Something went wrong while saving your session." });
         return;
       }
@@ -126,7 +131,10 @@ router.post("/login", (req, res, next) => {
 
           res.status(200).json({ user: userData, walletAddress: walletFromDB.address });
         })
-        .catch(() => res.status(500).json({ message: "Something went wrong while retrieving your wallet." }))
+        .catch(() => {
+          console.log(err);
+          res.status(500).json({ message: "Something went wrong while retrieving your wallet." })
+        })
     })
   })(req, res, next);
 });
@@ -145,7 +153,10 @@ router.get("/loggedin", (req, res, next) => {
       .then(walletFromDB => {
         res.status(200).json({ user: req.user, walletAddress: walletFromDB.address });
       })
-      .catch(() => res.status(500).json({ message: "Something went wrong while retrieving your wallet." }))
+      .catch(() => {
+        console.log(err);
+        res.status(500).json({ message: "Something went wrong while retrieving your wallet." })
+      })
   }
 
   else {

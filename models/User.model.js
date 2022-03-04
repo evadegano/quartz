@@ -14,10 +14,7 @@ const userSchema = new Schema(
       type: String,
       trim: true
     },
-    googleID: {
-      type: String,
-      unique: [true, "This Google account has already been registered."],
-    },
+    googleID: String,
   },
   {
     timestamps: true,

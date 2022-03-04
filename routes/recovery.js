@@ -34,7 +34,10 @@ router.post("/request", (req, res, next) => {
           res.status(200).json({ message: `An email has been sent to ${email}. Please check out your inbox.` })
         })
     })
-    .catch(() => res.status(500).json({ message: "Something went wrong." }))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Something went wrong." })
+    })
 })
 
 
@@ -69,7 +72,10 @@ router.post("/reset-password/:userId", (req, res, next) => {
   // update user profile
   User.findByIdAndUpdate(userId, { password: hashedPwd }, { new: true })
     .then(() => res.status(200).json({ message: "Your password has been updated successfully." }))
-    .catch(() => res.status(500).json({ message: "Something went wrong. Your account could not be updated." }))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Something went wrong. Your account could not be updated." })
+    })
 })
 
 

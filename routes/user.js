@@ -56,7 +56,10 @@ router.put("/:userId", (req, res, next) => {
   // get user by _id and update
   User.findByIdAndUpdate( userId, updatedUser, { new: true } )
     .then((user) => res.status(200).json(user))
-    .catch(() => res.status(500).json({ message: "Something went wrong." }))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Something went wrong." })
+    })
 });
 
 
@@ -82,7 +85,10 @@ router.delete("/:userId", (req, res, next) => {
 
   Promise.all([p1, p2])
     .then(() => res.status(200).json({ message: "Your account has been removed successfully." }))
-    .catch(() => res.status(500).json({ message: "Something went wrong, your account could not be deleted." }))    
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Something went wrong, your account could not be deleted." })
+    })    
 });
 
 
@@ -93,7 +99,8 @@ router.get("/wallets", (req, res, next) => {
     .then(walletsFromDB => {
       res.status(200).json({ walletsFromDB })
     })
-    .catch(() => {
+    .catch((err) => {
+      console.log(err);
       res.status(500).json({ message: "Something went wrong when retrieving wallets." })
     })
 });
@@ -121,7 +128,10 @@ router.post("/wallets", async (req, res, next) => {
     .then(() => {
       res.status(200).json({ walletAddress: newWallet.address });
     })
-    .catch(() => res.status(500).json({ message: "Something went wrong when creating your wallet." }))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Something went wrong when creating your wallet." })
+    })
 });
 
 
@@ -134,7 +144,10 @@ router.put("/:walletId", (req, res, next) => {
     { lastConnection: Date.now() },
     { new: true })
     .then(walletFromDb => res.status(200).json(walletFromDb.address))
-    .catch(() => res.status(500).json({ message: "Connection to database failed."}))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Connection to database failed."})
+    })
 });
 
 
@@ -162,7 +175,10 @@ router.post("/coins", (req, res, next) => {
       amount, 
       keypair
     }))
-    .catch(() => res.status(500).json({ message: "Your money transfer failed. Please try again."}))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Your money transfer failed. Please try again."})
+    })
 });
 
 
