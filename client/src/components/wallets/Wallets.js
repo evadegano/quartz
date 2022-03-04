@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { UilSearch } from "@iconscout/react-unicons";
 import Wallet from "./Wallet";
-import Header from "../user/Header"; 
+import Header from "../navbars/Header"; 
 
 
 class Wallets extends Component {

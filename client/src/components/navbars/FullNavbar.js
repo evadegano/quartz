@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-function FullNavbar() {
+function FullNavbar(props) {
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
         <NavLink to="/" className="navbar-brand">
@@ -12,15 +12,24 @@ function FullNavbar() {
       <div id="navbarBasicExample" className="navbar-menu">
         <div className="navbar-end">
           <div className="navbar-item">
-            <div className="buttons">
-              <NavLink to="/auth/login" className="login-btn">
-                Log in
-              </NavLink>
+          {
+            props.user 
+            ? <div className="buttons">
+                <NavLink to={`user/${props.user.activeWallet}`} className="signup-btn">
+                  My wallet
+                </NavLink>
+              </div>
 
-              <NavLink to="/auth/signup" className="signup-btn">
-                <strong>Sign up</strong>
-              </NavLink>
-            </div>
+            : <div className="buttons">
+                <NavLink to="/auth/login" className="login-btn">
+                  Log in
+                </NavLink>
+
+                <NavLink to="/auth/signup" className="signup-btn">
+                  Sign up
+                </NavLink>
+              </div>
+          }
           </div>
         </div>
       </div>

@@ -20,13 +20,13 @@ class Transaction extends Component {
     return (
       <div className="table-row">
         <div className="table-col">
-            <div className="trunc-txt"><b>Hash: </b> {this.props.hash}</div>
+            <div className="trunc-txt">
+              <span className="emph-txt"><b>Hash: </b></span> {this.props.hash}</div>
             
             <div className="trunc-txt">
               <span className="emph-txt">From: </span>
               { 
-                this.props.from === "null - bank transfer" 
-                || this.props.from === "null - QRTZ reward" 
+                this.props.from.includes("null")
                 ? <span>{this.props.from}</span>
                 : <Link to={`/wallets/${this.props.from}`}>{this.props.from}</Link>
               }

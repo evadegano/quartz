@@ -1,7 +1,7 @@
 import { Component } from "react";
 import SideNavbar from "./components/navbars/SideNavbar";
 import BottomNavbar from "./components/navbars/BottomNavbar";
-import Header from "./components/user/Header";
+import Header from "./components/navbars/Header";
 import PendingTransactions from "./components/transactions/PendingTransactions";
 import Transactions from "./components/transactions/Transactions";
 

@@ -8,6 +8,7 @@ function TransferBtns(props) {
       <div className="stats-header">
         <h2>New transaction</h2>
       </div>
+      
       <div className="center-row-container">
         <Link className="transfer-btn" to={`/user/${props.walletAddress}/get-coins`} >
           <UilArrowToBottom size="60" color="#000" />
@@ -19,7 +20,6 @@ function TransferBtns(props) {
           Send
         </Link>
       </div>
-      
     </div>
   );
 }

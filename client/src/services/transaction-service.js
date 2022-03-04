@@ -1,5 +1,4 @@
 // packages
-import Gun from  "gun";
 import EC from "elliptic";
 
 // helper functions
@@ -17,7 +16,7 @@ const ec = new EC.ec('secp256k1');
 /*
   Create transactions between wallets
 */
-async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receiverAddress, timestamps = new Date().getTime(), transactions) {
+async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receiverAddress, transactions, timestamps = new Date().getTime()) {
   // set pointer to transactions on gun
   const transacsRef = gun.get("transactions");
 

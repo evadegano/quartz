@@ -2,7 +2,7 @@ import { Component } from "react";
 import { getBalance } from "../../services/helpers";
 import QRCode from "qrcode";
 import { postWallets, putWallet } from "../../services/user-service";
-import Header from "./Header";
+import Header from "../navbars/Header";
 import TransferBtns from "./TransferBtns";
 import Transactions from "../transactions/Transactions";
 import Balance from "./Balance";
@@ -16,7 +16,9 @@ class Dashboard extends Component {
     greeting: ""
   }
 
-  // adapt greeting message depending on the time of day
+  /*
+    Adapt greeting message based on the time of day
+  */
   updateGreeting = () => {
     const date = new Date();
     const hours = date.getHours();
@@ -30,7 +32,9 @@ class Dashboard extends Component {
     }
   }
 
-  // calculate wallet's balance
+  /*
+    Calculate wallet's balance
+  */
   fetchWalletBalance = () => {
     const walletAddress = this.props.match.params.walletId;
     const balance = getBalance(this.props.transactions, walletAddress);
@@ -38,7 +42,9 @@ class Dashboard extends Component {
     this.setState({ balance });
   }
 
-  // get user's transactions
+  /* 
+   Get user's transactions
+  */
   filterTransactions = (walletAddress) => {
     const userTransactions = this.props.transactions.filter(transac => transac.fromAddress === walletAddress || transac.toAddress === walletAddress);
     

@@ -137,6 +137,8 @@ class Transactions extends Component {
   }
 
   render() {
+    const pendingTx = this.props.pendingTx.sort((a, b) => b.timestamps - a.timestamps);
+
     return (
       <div className="pending-tx">
         <h2>Pending transactions</h2>
@@ -150,7 +152,7 @@ class Transactions extends Component {
           
           <div className="no-overflow-container">
 
-            {!this.state.isMining && this.props.pendingTx.map((tx, idx) => {
+            {!this.state.isMining && pendingTx.map((tx, idx) => {
               return <Transaction 
                         key={idx} 
                         hash={tx.hash} 

@@ -1,5 +1,5 @@
 import { Component } from "react";
-import Header from "../user/Header";
+import Header from "../navbars/Header";
 import Transactions from "../transactions/Transaction";
 
 

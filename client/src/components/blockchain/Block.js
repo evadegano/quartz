@@ -4,19 +4,10 @@ import { timestampsToDate } from "../../services/helpers";
 
 
 class Block extends Component {
-  state = {
-    date: ""
-  }
-
-  componentDidMount() {
+  render() {
+    // convert timestamps to date
     const date = timestampsToDate(this.props.date);
 
-    this.setState({
-      date
-    })
-  }
-
-  render() {
     return (
       <div className="table-row">
         <div className="table-col">
@@ -29,17 +20,24 @@ class Block extends Component {
             <div className="trunc-txt">
               <b>Prev block: </b>
               { 
-                this.props.prevBlock === "null - genesis block" 
+                this.props.prevBlock === "null - genesis block"
                 ? <span>{this.props.prevBlock}</span>
                 : <Link to={`/blocks/${this.props.prevBlock}`}>{this.props.prevBlock}</Link>
               }
             </div>
 
-            <div><b>Date:</b> {this.state.date}</div>
+            <div><b>Date:</b> {date}</div>
         </div>
 
         <div className="table-col">
-          <div><b>Miner:</b> {this.props.miner}</div>
+          <div className="trunc-txt">
+            <b>Miner: </b>
+              { 
+                !this.props.miner
+                ? <span>null</span>
+                : <Link to={`/wallets/${this.props.miner}`}>{this.props.miner}</Link>
+              }
+          </div>
           <div><b>Reward:</b> {this.props.reward} QRTZ</div>
           <div><b>Height:</b> {this.props.height}</div>
         </div>

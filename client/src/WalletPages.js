@@ -29,8 +29,8 @@ class WalletPages extends Component {
               notifs={this.props.notifs}
               fetchNotifs={this.props.fetchNotifs} />} />
 
-          <Route path="/wallets/:walletId" render={() => 
-            <WalletDetails 
+          <Route path="/wallets/:walletId" render={routerProps => 
+            <WalletDetails {...routerProps}
               transactions={this.props.transactions}
               blocks={this.props.blocks} 
               gun={this.props.gun} 

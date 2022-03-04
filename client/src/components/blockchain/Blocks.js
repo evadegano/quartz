@@ -32,7 +32,7 @@ class Blocks extends Component {
   }
 
   render() {
-    const filteredBlocks = this.filterBlocks();
+    const filteredBlocks = this.filterBlocks().sort((a, b) => b.timestamps - a.timestamps);
 
     return (
       <div className="inner-container hollow-table">

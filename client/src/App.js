@@ -224,7 +224,7 @@ class App extends Component {
     return (
       <div className="App">
         <Switch>
-          <Route exact path="/" render={() => <Homepage />} />
+          <Route exact path="/" render={() => <Homepage user={this.state.loggedInUser} />} />
           <Route path="/auth" render={(routerProps) => <Auth {...routerProps} updateUser={this.updateLoggedInUser} />} />
           
           <ProtectedRoute  
@@ -267,6 +267,7 @@ class App extends Component {
                 blocks={this.state.blocks}
                 transactions={this.state.transactions}
                 notifs={this.state.notifs}
+                wallets={this.state.wallets}
                 fetchNotifs={this.fetchNotifs} />} />
 
           <ProtectedRoute 

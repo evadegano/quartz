@@ -7,7 +7,7 @@ gsap.registerPlugin(MotionPathPlugin);
 
 
 
-function Homepage() {
+function Homepage(props) {
   // svg illustrations
   const ill1Path1 = React.useRef();
   const ill1Path2 = React.useRef();
@@ -96,7 +96,7 @@ function Homepage() {
 
   return (
     <div className="homepage">
-      <FullNavbar />
+      <FullNavbar user={props.user} />
 
       <main>
         <section className="header-container">

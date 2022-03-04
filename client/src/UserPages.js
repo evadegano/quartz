@@ -16,7 +16,7 @@ class UserPages extends Component {
         <SideNavbar user={this.props.user} />
 
         <Switch>
-          <Route exact path="/user/:walletId" render={(routerProps) => 
+          <Route exact path="/user/:walletId" render={routerProps => 
             <Dashboard 
               {...routerProps} 
               gun={this.props.gun}
@@ -25,17 +25,18 @@ class UserPages extends Component {
               notifs={this.props.notifs}
               fetchNotifs={this.props.fetchNotifs} />} />
             
-          <Route exact path="/user/:walletId/send-coins" render={(routerProps) => 
+          <Route exact path="/user/:walletId/send-coins" render={routerProps => 
             <SendCoins {...routerProps} 
               gun={this.props.gun} 
+              transactions={this.props.transactions}
               fetchTx={this.props.fetchTx} />} />
 
-          <Route exact path="/user/:walletId/get-coins" render={(routerProps) => 
+          <Route exact path="/user/:walletId/get-coins" render={routerProps => 
             <BuyCoins {...routerProps} 
               gun={this.props.gun} 
               fetchTx={this.props.fetchTx} />} />
 
-          <Route exact path="/user/:walletId/profile" render={(routerProps) => 
+          <Route exact path="/user/:walletId/profile" render={routerProps => 
             <Profile {...routerProps} 
               user={this.props.user} 
               updateUser={this.props.updateUser} />} />

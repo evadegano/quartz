@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { useLocation } from "react-router-dom";
 import EC from "elliptic";
 import { sendCoins } from "../../services/transaction-service";
 
@@ -18,6 +19,15 @@ class SendCoins extends Component {
       error: "",
       success: ""
     }
+  }
+
+  /* 
+   Get user's transactions
+  */
+   filterTransactions = (walletAddress) => {
+    const userTransactions = this.props.transactions.filter(transac => transac.fromAddress === walletAddress || transac.toAddress === walletAddress);
+    
+    return userTransactions;
   }
   
   /*
@@ -41,6 +51,7 @@ class SendCoins extends Component {
     // get data
     const { toAddress, amount } = this.state;
     const walletAddress = this.props.match.params.walletId;
+    const userTransactions = this.filterTransactions(walletAddress);
 
     // generate a one-time signing keypair
     const keypair = ec.genKeyPair();
@@ -48,7 +59,7 @@ class SendCoins extends Component {
 
     // create new transaction
     try {
-      sendCoins(this.gun, amount, keypair, publicKey, walletAddress, toAddress);
+      sendCoins(this.gun, amount, keypair, publicKey, walletAddress, toAddress, userTransactions);
 
       // update global transaction state
       this.props.fetchTx();
@@ -68,6 +79,16 @@ class SendCoins extends Component {
         error: err,
         success: ""
       });
+    }
+  }
+
+  componentDidMount() {
+    const search = this.props.location.search;
+    const toAddress = new URLSearchParams(search).get("toAddress");
+
+    // update state with query params if any
+    if (toAddress) {
+      this.setState({ toAddress });
     }
   }
 
