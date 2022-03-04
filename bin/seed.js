@@ -10,10 +10,10 @@ const saltRounds = 10;
 // db models
 const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
-const { response } = require("express");
 
 // variables
 const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
+const users = require("./users.json");
 
 function run() {
   // connect to database
@@ -21,14 +21,11 @@ function run() {
     .then(() => {
       console.log("connected!!");
 
-      User.find({ email: { $nin: ["eva.degano@gmail.com", "romain.dupont@gmail.com"] }})
-
-      //const wallets = createWallets(users);
-      //console.log(wallets);
+      const wallets = createWallets(users);
+      console.log(wallets);
 
       //return addWalletsToDB(wallets);
     })
-    .then(usersFromDB => console.log(usersFromDB))
     .then(() => console.log("did it!"))
     .catch(err => console.log("global err:", err))
 }
@@ -118,11 +115,15 @@ async function createWallets(usersFromDB) {
       user_id: user._id,
       address: walletAddress,
       name: randWalletName,
-      lastConnection: user.timestamps,
+      lastConnection: user.createdAt,
     })
   }
 
-  return wallets;
+  console.log(wallets);
+
+  Wallet.create(wallets)
+    .then(() => console.log("wallets added to db"))
+    .catch(err => console.log("adding wallets err:", err))
 }
 
 

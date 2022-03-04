@@ -6,7 +6,6 @@ import {
   RewardTransaction,
   PurchaseTransaction,
 } from "../services/classes/transaction";
-import _ from "lodash";
 
 
 // helpers
