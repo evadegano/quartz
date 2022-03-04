@@ -46,6 +46,7 @@ router.post("/signup", (req, res, next) => {
 
   // search for email address in database
   User.findOne({ email }, (err, user) => {
+    console.log("connecting to db");
     // if found, return error
     if (user) {
       res.status(400).json({ message: "This email address is already linked to an account." });
