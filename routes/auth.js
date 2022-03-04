@@ -46,7 +46,6 @@ router.post("/signup", (req, res, next) => {
 
   // search for email address in database
   User.findOne({ email }, (err, user) => {
-    console.log("connecting to db");
     // if found, return error
     if (user) {
       res.status(400).json({ message: "This email address is already linked to an account." });
@@ -136,7 +135,9 @@ router.post("/login", (req, res, next) => {
 
 // GET user is logged in
 router.get("/loggedin", (req, res, next) => {
-  // return user if loggin
+  try 
+  {
+    // return user if loggin
   if (req.user) {
     // find user's active wallet
     Wallet.findOneAndUpdate(
@@ -153,6 +154,10 @@ router.get("/loggedin", (req, res, next) => {
   else {
     // else return error
     res.status(403).json({ message: "Unauthorized" });
+  }
+  }
+  catch(err) {
+    console.log("error", err);
   }
 });
 
