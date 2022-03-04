@@ -79,7 +79,7 @@ router.post("/signup", (req, res, next) => {
           email: newUser.email
         };
 
-
+        console.log("userData", userData);
         // return user
         res.status(200).json({ newUser: userData });
       })
@@ -135,9 +135,7 @@ router.post("/login", (req, res, next) => {
 
 // GET user is logged in
 router.get("/loggedin", (req, res, next) => {
-  try 
-  {
-    // return user if loggin
+  // return user if loggin
   if (req.user) {
     // find user's active wallet
     Wallet.findOneAndUpdate(
@@ -154,10 +152,6 @@ router.get("/loggedin", (req, res, next) => {
   else {
     // else return error
     res.status(403).json({ message: "Unauthorized" });
-  }
-  }
-  catch(err) {
-    console.log("error", err);
   }
 });
 
