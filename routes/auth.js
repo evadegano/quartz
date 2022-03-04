@@ -79,12 +79,11 @@ router.post("/signup", (req, res, next) => {
           email: newUser.email
         };
 
-        console.log("userData", userData);
         // return user
         res.status(200).json({ newUser: userData });
       })
     })
-    .catch(() => res.status(500).json({ message: "Something went wrong while signing you up." }))
+    .catch((err) => res.status(500).json({ message: `${err}: "Something went wrong while signing you up."` }))
 });
 
 
