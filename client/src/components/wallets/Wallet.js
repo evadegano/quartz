@@ -39,7 +39,7 @@ class Wallet extends Component {
         <div className="table-col">
           <div className="small-row-container tooltip">
             <div className="trunc-txt">
-              <b>Address: </b>
+              <span className="emph-txt">Address: </span>
               <Link to={`/wallets/${this.props.address}`}>{this.props.address}</Link>
             </div>
 
@@ -58,19 +58,19 @@ class Wallet extends Component {
           </div>
 
           <div className="trunc-txt">
-            <b>Name: </b>
+            <span className="emph-txt">Name: </span>
             <Link to={`/wallets/${this.props.address}`}>{this.props.name}</Link>
           </div>
         </div>
 
         <div className="table-col">
-          <div><b>Balance: </b>{this.state.balance} QRTZ</div>
-          <div><b>Blocks mined: </b>{this.state.minedBlocks}</div>
+          <div><span className="emph-txt">Balance: </span>{this.state.balance} QRTZ</div>
+          <div><span className="emph-txt">Blocks mined: </span>{this.state.minedBlocks}</div>
         </div>
 
         <div className="table-col desktop-only">
-          <div><b>Active: </b>{this.props.active ? "true" : "false"}</div>
-          <div><b>Last seen: </b>{this.state.date}</div>
+          <div><span className="emph-txt">Active: </span>{this.props.active ? "true" : "false"}</div>
+          <div><span className="emph-txt">Last seen: </span>{this.state.date}</div>
         </div>
 
       </div>

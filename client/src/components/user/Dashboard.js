@@ -72,7 +72,7 @@ class Dashboard extends Component {
           gun={this.props.gun} />
 
         <div className="row-container">
-          <Balance balance={this.state.balance} />
+          <Balance balance={this.state.balance} transactions={userTransactions} />
           
           <TransferBtns walletAddress={walletAddress} />
           

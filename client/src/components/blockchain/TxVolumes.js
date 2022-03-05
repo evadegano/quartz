@@ -3,36 +3,7 @@ import LineChart from "./LineChart";
 
 class TxVolumes extends Component {
   state = {
-    timePeriod: "year"
-  }
-
-  updateChart = () => {
-    let labels, data;
-
-    if (this.state.timePeriod === "year") {
-      labels = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
-    }
-
-    if (this.state.timePeriod === "month") {
-      return;
-    }
-
-    if (this.state.timePeriod === "week") {
-      let monday = 0;
-
-      labels = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
-
-      for (let tx of this.props.transactions) {
-        return;
-        
-      }
-    }
-
-    return [ labels, data ];
-  }
-
-  componentDidMount() {
-    this.updateChart();
+    timePeriod: "month"
   }
 
   render() {
@@ -42,13 +13,13 @@ class TxVolumes extends Component {
           <h2>Transactions</h2>
 
           <div>
-            <button className={`time-btn ${this.state.timePeriod === "week" ? "active" : ""}`} onClick={() => this.setState({ timePeriod: "week"})}>Week</button>
-            <button className={`time-btn ${this.state.timePeriod === "month" ? "active" : ""}`} onClick={() => this.setState({ timePeriod: "month"})}>Month</button>
-            <button className={`time-btn ${this.state.timePeriod === "year" ? "active" : ""}`} onClick={() => this.setState({ timePeriod: "year"})}>Year</button>
+            <button className={`time-btn ${this.state.timePeriod === "day" ? "active" : ""}`} onClick={() => this.setState({ timePeriod: "week"})}>Week</button>
+            <button className={`time-btn ${this.state.timePeriod === "week" ? "active" : ""}`} onClick={() => this.setState({ timePeriod: "month"})}>Month</button>
+            <button className={`time-btn ${this.state.timePeriod === "month" ? "active" : ""}`} onClick={() => this.setState({ timePeriod: "year"})}>Year</button>
           </div>
         </div>
         
-        <LineChart timePeriod={this.state.timePeriod} />
+        <LineChart transactions={this.props.transactions} timePeriod={this.state.timePeriod} />
       </div>
     );
   }

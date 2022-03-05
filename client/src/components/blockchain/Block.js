@@ -13,12 +13,12 @@ class Block extends Component {
         <div className="table-col">
 
             <div className="trunc-txt">
-              <b>Hash: </b>
+              <span className="emph-txt">Hash: </span>
               <Link to={`/blocks/${this.props.hash}`}>{this.props.hash}</Link>
             </div>
 
             <div className="trunc-txt">
-              <b>Prev block: </b>
+              <span className="emph-txt">Prev block: </span>
               { 
                 this.props.prevBlock === "null - genesis block"
                 ? <span>{this.props.prevBlock}</span>
@@ -26,20 +26,20 @@ class Block extends Component {
               }
             </div>
 
-            <div><b>Date:</b> {date}</div>
+            <div><span className="emph-txt">Date:</span> {date}</div>
         </div>
 
         <div className="table-col">
           <div className="trunc-txt">
-            <b>Miner: </b>
+            <span className="emph-txt">Miner: </span>
               { 
                 !this.props.miner
                 ? <span>null</span>
                 : <Link to={`/wallets/${this.props.miner}`}>{this.props.miner}</Link>
               }
           </div>
-          <div><b>Reward:</b> {this.props.reward} QRTZ</div>
-          <div><b>Height:</b> {this.props.height}</div>
+          <div><span className="emph-txt">Reward:</span> {this.props.reward} QRTZ</div>
+          <div><span className="emph-txt">Height:</span> {this.props.height}</div>
         </div>
       </div>
     );
