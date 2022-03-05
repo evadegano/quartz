@@ -14,7 +14,7 @@ class Block extends Component {
 
             <div className="trunc-txt">
               <span className="emph-txt">Hash: </span>
-              <Link to={`/blocks/${this.props.hash}`}>{this.props.hash}</Link>
+              <Link to="">{this.props.hash}</Link>
             </div>
 
             <div className="trunc-txt">
@@ -22,7 +22,7 @@ class Block extends Component {
               { 
                 this.props.prevBlock === "null - genesis block"
                 ? <span>{this.props.prevBlock}</span>
-                : <Link to={`/blocks/${this.props.prevBlock}`}>{this.props.prevBlock}</Link>
+                : <Link to="">{this.props.prevBlock}</Link>
               }
             </div>
 
