@@ -160,6 +160,8 @@ class LineChart extends Component {
         month++;
       }
     }
+
+    console.log('values', values);
   
     const data = {
       datasets: [
