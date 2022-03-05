@@ -1,7 +1,6 @@
 
 import { Component } from "react";
 import { Line } from "react-chartjs-2";
-import 'chartjs-adapter-date-fns';
 
 
 import {
@@ -41,10 +40,6 @@ class LineChart extends Component {
       },
       scales: {
         x: {
-          type: "time",
-          time: {
-            unit: `${this.props.timePeriod}`
-          },
           ticks: {
             color: "white",
             font: {
@@ -77,7 +72,8 @@ class LineChart extends Component {
 
   setData = () => {
     // labels defined by props
-    const values = [];
+    const labels = [];
+    const values = []
 
     // agreggate transaction amounts per day for the last 7 days
     if (this.props.timePeriod === "day") {
@@ -95,12 +91,8 @@ class LineChart extends Component {
                       .filter(tx => tx.timestamps > day && tx.timestamps < nextDay)
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
-        values.push(
-          {
-            x: day,
-            y: value
-          }
-        )
+        labels.push(day);
+        values.push(value);
       }
     }
 
@@ -118,16 +110,12 @@ class LineChart extends Component {
         nextMonday.setDate( today.getDate() - ((today.getDay() + 6) % 7) - 7 * ( i - 1 ) );
         nextMonday.setHours(0, 0, 0, 0);
 
-        let value = this.props.transactions
+        const value = this.props.transactions
                       .filter(tx => tx.timestamps > prevMonday && tx.timestamps < nextMonday)
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
-        values.push(
-          {
-            x: prevMonday,
-            y: value
-          }
-        )
+        labels.push(prevMonday);
+        values.push(value);
       }
     }
 
@@ -146,24 +134,21 @@ class LineChart extends Component {
         const firstDayOfMonth = new Date(year, month, 1);
         const lastDayOfMonth  = new Date(year, month + 1, -1);
 
-        let value = this.props.transactions
+        const value = this.props.transactions
                       .filter(tx => tx.timestamps > firstDayOfMonth && tx.timestamps < lastDayOfMonth)
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
-        values.push(
-          {
-            x: firstDayOfMonth,
-            y: value
-          }
-        )
+        labels.push(firstDayOfMonth);
+        values.push(value);
 
         month++;
       }
     }
 
-    console.log('values', values);
+    console.log('labels, values', labels, values);
   
     const data = {
+      labels,
       datasets: [
         {
           label: "Transactions",
