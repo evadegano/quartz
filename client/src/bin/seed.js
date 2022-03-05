@@ -52,7 +52,12 @@ class Seed extends Component {
   };
 
   mineBlock = (event) => {
-    verifTx(this.gun, this.blockchainRef, this.blocksRef);
+    const pendingTx = this.props.transactions.filter(tx => tx.status === "pending");
+    const randWallet = Math.round(Math.random() * wallets.length);
+    const miner = wallets[ randWallet ].name;
+    const timestamps = new Date(2021, 11, 31).getTime();
+
+    verifTx(this.gun, this.props.blockchain, pendingTx, miner, this.props.transactions, timestamps);
   };
 
   genTx = (event) => {
@@ -76,8 +81,6 @@ class Seed extends Component {
   };
 
   render() {
-    if (this.props.notifs.length === 0) return "loading";
-
     return (
       <div className="seed">
         <button onClick={this.initBlockchain}>init blockchain</button>

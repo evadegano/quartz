@@ -291,6 +291,8 @@ class App extends Component {
             <Seed {...routerProps}
             user={this.state.loggedInUser} 
             gun={this.gun} 
+            blockchain={this.state.blockchain}
+            transactions={this.state.transactions}
             notifs={this.state.notifs}
             fetchNotifs={this.fetchNotifs} /> } />
         </Switch>
