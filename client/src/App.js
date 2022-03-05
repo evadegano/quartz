@@ -220,7 +220,7 @@ class App extends Component {
   }
 
   render() {
-    if (!this.state.blockchain || !this.state.wallets || !this.state.transactions || !this.state.blocks) return <div>Loading...</div>
+    if (!this.state.wallets) return <div>Loading...</div>
 
     return (
       <div className="App">
