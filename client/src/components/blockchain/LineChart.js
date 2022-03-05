@@ -76,74 +76,77 @@ class LineChart extends Component {
     const values = []
 
     // agreggate transaction amounts per day for the last 7 days
-    if (this.props.timePeriod === "day") {
+    // if (this.props.timePeriod === "day") {
 
-      for (let i = 7; i > 0; i--) {
-        const day = new Date( Date.now() );
-        day.setDate( day.getDate() - i );
-        day.setHours(0, 0, 0, 0);
+    //   for (let i = 7; i > 0; i--) {
+    //     const day = new Date( Date.now() );
+    //     day.setDate( day.getDate() - i );
+    //     day.setHours(0, 0, 0, 0);
 
-        const nextDay = new Date();
-        nextDay.setDate( day.getDate() + 1 );
-        nextDay.setHours(0, 0, 0, 0);
+    //     const nextDay = new Date();
+    //     nextDay.setDate( day.getDate() + 1 );
+    //     nextDay.setHours(0, 0, 0, 0);
 
-        const value = this.props.transactions
-                      .filter(tx => tx.timestamps > day && tx.timestamps < nextDay)
-                      .reduce((acc, tx) => acc + tx.amount, 0)
+    //     const value = this.props.transactions
+    //                   .filter(tx => tx.timestamps > day && tx.timestamps < nextDay)
+    //                   .reduce((acc, tx) => acc + tx.amount, 0)
 
-        labels.push(day);
-        values.push(value);
-      }
-    }
+    //     labels.push(day);
+    //     values.push(value);
+    //   }
+    // }
 
-    // agreggate transaction amounts per week for the last 4 weeks
-    if (this.props.timePeriod === "week") {
-      const today = new Date();
+    // // agreggate transaction amounts per week for the last 4 weeks
+    // if (this.props.timePeriod === "week") {
+    //   const today = new Date();
 
-      for (let i = 4; i > 0; i--) {
-        const prevMonday = new Date();
+    //   for (let i = 4; i > 0; i--) {
+    //     const prevMonday = new Date();
 
-        prevMonday.setDate( today.getDate() - ((today.getDay() + 6) % 7) - 7 * i );
-        prevMonday.setHours(0, 0, 0, 0);
+    //     prevMonday.setDate( today.getDate() - ((today.getDay() + 6) % 7) - 7 * i );
+    //     prevMonday.setHours(0, 0, 0, 0);
 
-        const nextMonday = new Date();
-        nextMonday.setDate( today.getDate() - ((today.getDay() + 6) % 7) - 7 * ( i - 1 ) );
-        nextMonday.setHours(0, 0, 0, 0);
+    //     const nextMonday = new Date();
+    //     nextMonday.setDate( today.getDate() - ((today.getDay() + 6) % 7) - 7 * ( i - 1 ) );
+    //     nextMonday.setHours(0, 0, 0, 0);
 
-        const value = this.props.transactions
-                      .filter(tx => tx.timestamps > prevMonday && tx.timestamps < nextMonday)
-                      .reduce((acc, tx) => acc + tx.amount, 0)
+    //     const value = this.props.transactions
+    //                   .filter(tx => tx.timestamps > prevMonday && tx.timestamps < nextMonday)
+    //                   .reduce((acc, tx) => acc + tx.amount, 0)
 
-        labels.push(prevMonday);
-        values.push(value);
-      }
-    }
+    //     labels.push(prevMonday);
+    //     values.push(value);
+    //   }
+    // }
 
-    // agreggate transaction amounts per month for the last 12 months
-    if (this.props.timePeriod === "month") {
-      let month = new Date().getMonth();
-      let year = new Date().getFullYear() - 1;
+    // // agreggate transaction amounts per month for the last 12 months
+    // if (this.props.timePeriod === "month") {
+    //   let month = new Date().getMonth();
+    //   let year = new Date().getFullYear() - 1;
 
-      for (let i = 0; i < 12; i--) {
+    //   for (let i = 0; i < 12; i--) {
 
-        if (month === 12) {
-          month = 0;
-          year++;
-        }
+    //     if (month === 12) {
+    //       month = 0;
+    //       year++;
+    //     }
 
-        const firstDayOfMonth = new Date(year, month, 1);
-        const lastDayOfMonth  = new Date(year, month + 1, -1);
+    //     const firstDayOfMonth = new Date(year, month, 1);
+    //     const lastDayOfMonth  = new Date(year, month + 1, -1);
 
-        const value = this.props.transactions
-                      .filter(tx => tx.timestamps > firstDayOfMonth && tx.timestamps < lastDayOfMonth)
-                      .reduce((acc, tx) => acc + tx.amount, 0)
+    //     const value = this.props.transactions
+    //                   .filter(tx => tx.timestamps > firstDayOfMonth && tx.timestamps < lastDayOfMonth)
+    //                   .reduce((acc, tx) => acc + tx.amount, 0)
 
-        labels.push(firstDayOfMonth);
-        values.push(value);
+    //     labels.push(firstDayOfMonth);
+    //     values.push(value);
 
-        month++;
-      }
-    }
+    //     month++;
+    //   }
+    // }
+
+    labels.push(["Jan", "Feb", "Dec"]);
+    values.push([2300, 13333, 336767])
 
     console.log('labels, values', labels, values);
   
