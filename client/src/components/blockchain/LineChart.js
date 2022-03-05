@@ -72,8 +72,7 @@ class LineChart extends Component {
 
   setData = () => {
     // labels defined by props
-    const labels = [];
-    const values = []
+    let labels, values;
 
     // agreggate transaction amounts per day for the last 7 days
     // if (this.props.timePeriod === "day") {
@@ -145,10 +144,20 @@ class LineChart extends Component {
     //   }
     // }
 
-    labels.push(["Jan", "Feb", "Dec"]);
-    values.push([2300, 13333, 336767])
+    if (this.props.timePeriod === "day") {
+      labels = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
+      values = [36000, 28000, 42000, 45000, 38500, 51000, 52100];
+    }
 
-    console.log('labels, values', labels, values);
+    if (this.props.timePeriod === "week") {
+      labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+      values = [36000*2, 28000*3, 42000*1.8, 45000*2.3];
+    }
+
+    if (this.props.timePeriod === "month") {
+      labels = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+      values = [360000, 280000, 420000, 450000, 385000, 510000, 52100, 463000, 413000, 604050, 63090, 614000];
+    }
   
     const data = {
       labels,
