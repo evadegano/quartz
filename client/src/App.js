@@ -145,11 +145,12 @@ class App extends Component {
     Fetch blocks from Gun
   */
   fetchBlocks() {
+    const blocksCopy = [];
+
     // loop through the blocks collection in Gun
     this.blocksRef
       .map()
       .once(block => {
-        const blocksCopy = [...this.state.blocks];
         blocksCopy.push(block);
 
         // update state
@@ -161,11 +162,12 @@ class App extends Component {
     Fetch transactions from Gun
   */
   fetchTransactions = () => {
+    const transactionsCopy = [];
+
     // loop through the transactions collection in Gun
     this.transacsRef
       .map()
       .once(tx => {
-        const transactionsCopy = [...this.state.transactions];
         transactionsCopy.push(tx);
 
         // update state
@@ -194,14 +196,16 @@ class App extends Component {
         .catch((err) => this.setState({ loggedInUser: false }))
     }
 
-    // notif => notif.user === userWallet && (notif.timestamps > lastThreeDays || notif.isRead === false) ? notif : undefined
+
+    // init empty notifs array
+    const notifsCopy = [];
+
     // loop through the notifications collection in Gun 
     this.gun
       .get("notifications")
       // only keep user's notifs that haven't been seen yet or are younger than three days old
       .map(notif => notif.user === userWallet && (notif.timestamps > lastThreeDays || notif.isRead === false) ? notif : undefined)
       .once(notif => {
-        const notifsCopy = [...this.state.notifs];
         notifsCopy.push(notif);
 
         this.setState({ notifs: notifsCopy });
@@ -253,6 +257,7 @@ class App extends Component {
                 blockchain={this.state.blockchain} 
                 transactions={this.state.transactions}
                 notifs={this.state.notifs}
+                updateUser={this.updateLoggedInUser}
                 fetchTx={this.fetchTransactions}
                 fetchNotifs={this.fetchNotifs} />} />
 
@@ -268,6 +273,7 @@ class App extends Component {
                 blocks={this.state.blocks}
                 transactions={this.state.transactions}
                 notifs={this.state.notifs}
+                updateUser={this.updateLoggedInUser}
                 wallets={this.state.wallets}
                 fetchNotifs={this.fetchNotifs} />} />
 
@@ -282,6 +288,7 @@ class App extends Component {
                 blocks={this.state.blocks}
                 transactions={this.state.transactions}
                 notifs={this.state.notifs}
+                updateUser={this.updateLoggedInUser}
                 wallets={this.state.wallets}
                 fetchNotifs={this.fetchNotifs} />} />
 

@@ -20,6 +20,7 @@ class BlockPages extends Component {
               blocks={this.props.blocks} 
               transactions={this.props.transactions}
               notifs={this.props.notifs}
+              updateUser={this.props.updateUser}
               fetchNotifs={this.props.fetchNotifs}
               gun={this.props.gun} />} />
           
@@ -30,6 +31,7 @@ class BlockPages extends Component {
             blocks={this.props.blocks} 
             transactions={this.props.transactions}
             notifs={this.props.notifs}
+            updateUser={this.props.updateUser}
             fetchNotifs={this.props.fetchNotifs}
             gun={this.props.gun} />} />
         </Switch>

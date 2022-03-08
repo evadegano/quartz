@@ -33,9 +33,6 @@ class Transactions extends Component {
     try {
       const [ confirmedTx, rejectedTx, rejectionErrors, rewardTx ] = await processTx(this.gun, this.props.blockchain, this.props.pendingTx, walletAddress, this.props.transactions);
 
-      // reset state
-      this.setState({ isMining: false });
-
       // loop through confirmed transactions and generate notifications
       for (let tx of confirmedTx) {
         
@@ -105,6 +102,9 @@ class Transactions extends Component {
           this.notifsRef.set(newNotif);
         }        
       }
+
+      // reset state
+      this.setState({ isMining: false });
 
       // send a notification to the user who receives the reward
       const newRwrdNotif = {

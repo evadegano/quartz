@@ -68,6 +68,7 @@ class Dashboard extends Component {
           title={this.state.greeting} 
           activeWallet={walletAddress} 
           notifs={this.props.notifs} 
+          updateUser={this.props.updateUser}
           fetchNotifs={this.props.fetchNotifs}
           gun={this.props.gun} />
 

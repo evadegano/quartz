@@ -27,6 +27,7 @@ class WalletPages extends Component {
               wallets={this.props.wallets} 
               activeWallet={this.props.user.activeWallet}
               notifs={this.props.notifs}
+              updateUser={this.props.updateUser}
               fetchNotifs={this.props.fetchNotifs} />} />
 
           <Route path="/wallets/:walletId" render={routerProps => 
@@ -37,6 +38,7 @@ class WalletPages extends Component {
               wallets={this.props.wallets} 
               activeWallet={this.props.user.activeWallet}
               notifs={this.props.notifs}
+              updateUser={this.props.updateUser}
               fetchNotifs={this.props.fetchNotifs} />} />
         </Switch>
 

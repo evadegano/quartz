@@ -23,7 +23,10 @@ class Header extends Component {
   */
   logUserOut = () => {
     logout()
-      .then(response => console.log("User logged out"))
+      .then(response => {
+        console.log("User logged out")
+        this.props.updateUser( false );
+      })
   }
 
   /*
@@ -59,7 +62,7 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    const unreadNotifs = this.props.notifs.filter(notif => !notif.isRead);
+    const unreadNotifs = this.props.notifs.filter(notif => notif.isRead === false);
 
     if (unreadNotifs.length > 0) {
       this.setState({ newNotifs: true  });

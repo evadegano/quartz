@@ -14,6 +14,7 @@ class Blockchain extends Component {
           title="Quartz blockchain" 
           notifs={this.props.notifs} 
           fetchNotifs={this.props.fetchNotifs}
+          updateUser={this.props.updateUser}
           gun={this.props.gun} />
 
         <div className="row-container">
