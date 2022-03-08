@@ -14,7 +14,6 @@ class Header extends Component {
     this.state = {
       viewSettings: false,
       viewNotifs: false,
-      newNotifs: false,
     }
   }
 
@@ -38,7 +37,6 @@ class Header extends Component {
       this.setState({
         viewSettings: false, 
         viewNotifs: false,
-        newNotifs: false
       });
 
       // update notifs from unread to read
@@ -56,18 +54,10 @@ class Header extends Component {
       this.setState({
         viewSettings: false, 
         viewNotifs: true, 
-        newNotifs: false
       });
     }
   }
 
-  componentDidMount() {
-    const unreadNotifs = this.props.notifs.filter(notif => notif.isRead === false);
-
-    if (unreadNotifs.length > 0) {
-      this.setState({ newNotifs: true  });
-    };
-  }
 
   render() {
     return (
@@ -92,7 +82,7 @@ class Header extends Component {
 
             <UilBell size="27"/>
 
-            {this.state.newNotifs && <div className="notif-alert">!</div>}
+            {this.props.newNotifs && <div className="notif-alert">!</div>}
           </button>
         </div>
 

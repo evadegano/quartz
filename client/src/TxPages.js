@@ -25,6 +25,7 @@ class TxPages extends Component {
             activeWallet={this.props.user.activeWallet}  
             title="Transactions"
             notifs={this.props.notifs}
+            newNotifs={this.props.newNotifs}
             updateUser={this.props.updateUser}
             fetchNotifs={this.props.fetchNotifs}
             gun={this.props.gun} />

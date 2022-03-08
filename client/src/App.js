@@ -47,6 +47,7 @@ class App extends Component {
       transactions: [],
       blocks: [],
       notifs: [],
+      newNotifs: false,
       error: ""
     }
   }
@@ -209,6 +210,10 @@ class App extends Component {
         notifsCopy.push(notif);
 
         this.setState({ notifs: notifsCopy });
+
+        if (!notif.isRead) {
+          this.setState({ newNotifs: true  });
+        }
       });
   }
 
@@ -242,6 +247,7 @@ class App extends Component {
                 user={this.state.loggedInUser}
                 transactions={this.state.transactions}
                 notifs={this.state.notifs}
+                newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser} 
                 fetchTx={this.fetchTransactions}
                 fetchNotifs={this.fetchNotifs} />} />
@@ -257,6 +263,7 @@ class App extends Component {
                 blockchain={this.state.blockchain} 
                 transactions={this.state.transactions}
                 notifs={this.state.notifs}
+                newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser}
                 fetchTx={this.fetchTransactions}
                 fetchNotifs={this.fetchNotifs} />} />
@@ -273,6 +280,7 @@ class App extends Component {
                 blocks={this.state.blocks}
                 transactions={this.state.transactions}
                 notifs={this.state.notifs}
+                newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser}
                 wallets={this.state.wallets}
                 fetchNotifs={this.fetchNotifs} />} />
@@ -288,6 +296,7 @@ class App extends Component {
                 blocks={this.state.blocks}
                 transactions={this.state.transactions}
                 notifs={this.state.notifs}
+                newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser}
                 wallets={this.state.wallets}
                 fetchNotifs={this.fetchNotifs} />} />

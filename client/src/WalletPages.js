@@ -27,6 +27,7 @@ class WalletPages extends Component {
               wallets={this.props.wallets} 
               activeWallet={this.props.user.activeWallet}
               notifs={this.props.notifs}
+              newNotifs={this.props.newNotifs}
               updateUser={this.props.updateUser}
               fetchNotifs={this.props.fetchNotifs} />} />
 
@@ -38,6 +39,7 @@ class WalletPages extends Component {
               wallets={this.props.wallets} 
               activeWallet={this.props.user.activeWallet}
               notifs={this.props.notifs}
+              newNotifs={this.props.newNotifs}
               updateUser={this.props.updateUser}
               fetchNotifs={this.props.fetchNotifs} />} />
         </Switch>

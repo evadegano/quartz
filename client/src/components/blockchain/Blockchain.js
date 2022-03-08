@@ -13,6 +13,7 @@ class Blockchain extends Component {
           activeWallet={this.props.user.activeWallet} 
           title="Quartz blockchain" 
           notifs={this.props.notifs} 
+          newNotifs={this.props.newNotifs}
           fetchNotifs={this.props.fetchNotifs}
           updateUser={this.props.updateUser}
           gun={this.props.gun} />
