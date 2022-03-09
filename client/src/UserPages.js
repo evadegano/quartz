@@ -25,7 +25,8 @@ class UserPages extends Component {
               notifs={this.props.notifs}
               newNotifs={this.props.newNotifs}
               updateUser={this.props.updateUser}
-              fetchNotifs={this.props.fetchNotifs} />} />
+              fetchNotifs={this.props.fetchNotifs}
+              resetNotifsAlert={this.props.resetNotifsAlert} />} />
             
           <Route exact path="/user/:walletId/send-coins" render={routerProps => 
             <SendCoins {...routerProps} 

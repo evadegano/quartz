@@ -22,6 +22,7 @@ class BlockPages extends Component {
               notifs={this.props.notifs}
               updateUser={this.props.updateUser}
               fetchNotifs={this.props.fetchNotifs}
+              resetNotifsAlert={this.props.resetNotifsAlert}
               gun={this.props.gun} />} />
           
           <Route path="/blocks/:blockId" render={(routerProps) => 
@@ -33,6 +34,7 @@ class BlockPages extends Component {
             notifs={this.props.notifs}
             updateUser={this.props.updateUser}
             fetchNotifs={this.props.fetchNotifs}
+            resetNotifsAlert={this.props.resetNotifsAlert}
             gun={this.props.gun} />} />
         </Switch>
 

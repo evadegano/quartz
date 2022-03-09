@@ -217,6 +217,10 @@ class App extends Component {
       });
   }
 
+  resetNotifsAlert = () => {
+    this.setState({ newNotifs: false });
+  }
+
   componentDidMount() {
     this.fetchUser();
     this.fetchWallets();
@@ -250,7 +254,8 @@ class App extends Component {
                 newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser} 
                 fetchTx={this.fetchTransactions}
-                fetchNotifs={this.fetchNotifs} />} />
+                fetchNotifs={this.fetchNotifs}
+                resetNotifsAlert={this.resetNotifsAlert} />} />
 
           <ProtectedRoute 
             path="/transactions"
@@ -266,7 +271,8 @@ class App extends Component {
                 newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser}
                 fetchTx={this.fetchTransactions}
-                fetchNotifs={this.fetchNotifs} />} />
+                fetchNotifs={this.fetchNotifs}
+                resetNotifsAlert={this.resetNotifsAlert} />} />
 
           <ProtectedRoute 
             path="/blocks"
@@ -283,7 +289,8 @@ class App extends Component {
                 newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser}
                 wallets={this.state.wallets}
-                fetchNotifs={this.fetchNotifs} />} />
+                fetchNotifs={this.fetchNotifs}
+                resetNotifsAlert={this.resetNotifsAlert} />} />
 
           <ProtectedRoute 
             path="/wallets"
@@ -299,7 +306,8 @@ class App extends Component {
                 newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser}
                 wallets={this.state.wallets}
-                fetchNotifs={this.fetchNotifs} />} />
+                fetchNotifs={this.fetchNotifs}
+                resetNotifsAlert={this.resetNotifsAlert} />} />
 
           <Route path="/recovery" render={() => <RecoveryPages /> } />
           

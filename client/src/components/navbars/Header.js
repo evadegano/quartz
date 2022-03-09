@@ -55,6 +55,9 @@ class Header extends Component {
         viewSettings: false, 
         viewNotifs: true, 
       });
+
+      // update global state
+      this.props.resetNotifsAlert();
     }
   }
 

@@ -29,7 +29,8 @@ class WalletPages extends Component {
               notifs={this.props.notifs}
               newNotifs={this.props.newNotifs}
               updateUser={this.props.updateUser}
-              fetchNotifs={this.props.fetchNotifs} />} />
+              fetchNotifs={this.props.fetchNotifs}
+              resetNotifsAlert={this.props.resetNotifsAlert} />} />
 
           <Route path="/wallets/:walletId" render={routerProps => 
             <WalletDetails {...routerProps}
@@ -41,7 +42,8 @@ class WalletPages extends Component {
               notifs={this.props.notifs}
               newNotifs={this.props.newNotifs}
               updateUser={this.props.updateUser}
-              fetchNotifs={this.props.fetchNotifs} />} />
+              fetchNotifs={this.props.fetchNotifs}
+              resetNotifsAlert={this.props.resetNotifsAlert} />} />
         </Switch>
 
         <BottomNavbar user={this.props.user} />

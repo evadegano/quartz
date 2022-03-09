@@ -71,6 +71,7 @@ class Dashboard extends Component {
           newNotifs={this.props.newNotifs}
           updateUser={this.props.updateUser}
           fetchNotifs={this.props.fetchNotifs}
+          resetNotifsAlert={this.props.resetNotifsAlert}
           gun={this.props.gun} />
 
         <div className="row-container">

@@ -15,6 +15,7 @@ class Blockchain extends Component {
           notifs={this.props.notifs} 
           newNotifs={this.props.newNotifs}
           fetchNotifs={this.props.fetchNotifs}
+          resetNotifsAlert={this.props.resetNotifsAlert}
           updateUser={this.props.updateUser}
           gun={this.props.gun} />
 
