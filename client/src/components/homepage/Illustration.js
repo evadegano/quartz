@@ -75,12 +75,12 @@ function Illustration(props) {
     var tl = gsap.timeline({ repeat: 0 });
 
     tl.to(circ1.current, { "opacity": 1, duration: 2}, 0);
-    tl.to(circ1.current, { "opacity": 1, duration: 2}, 0);
-    tl.to(circ1.current, { "opacity": 1, duration: 2}, 0);
-    tl.to(circ1.current, { "opacity": 1, duration: 2}, 0);
-    tl.to(circ1.current, { "opacity": 1, duration: 2}, 0);
-    tl.to(circ1.current, { "opacity": 1, duration: 2}, 0);
-    tl.to(circ1.current, { "opacity": 1, duration: 2}, 0);
+    tl.to(circ2.current, { "opacity": 1, duration: 2}, 0);
+    tl.to(circ3.current, { "opacity": 1, duration: 2}, 0);
+    tl.to(circ4.current, { "opacity": 1, duration: 2}, 0);
+    tl.to(circ5.current, { "opacity": 1, duration: 2}, 0);
+    tl.to(circ6.current, { "opacity": 1, duration: 2}, 0);
+    tl.to(circ7.current, { "opacity": 1, duration: 2}, 0);
 
     return tl;
   }
@@ -127,8 +127,8 @@ function Illustration(props) {
     var master = gsap.timeline();
 
     master.add(timeLine1())
-          .add(timeLine2(), ">")
-          .add(timeLine3(), ">")
+          .add(timeLine2(), 5)
+          .add(timeLine3(), 5)
   });
   
 

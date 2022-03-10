@@ -89,7 +89,7 @@ class LineChart extends Component {
         nextDay.setHours(0, 0, 0, 0);
 
         const value = this.props.transactions
-                      .filter(tx => tx.timestamps > day && tx.timestamps < nextDay)
+                      .filter(tx => tx.timestamps >= day.getTime() && tx.timestamps < nextDay.getTime())
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
         let dateLabel = day.toDateString().split(" ").slice(0, 3).join(" ");
@@ -114,7 +114,7 @@ class LineChart extends Component {
         nextMonday.setHours(0, 0, 0, 0);
 
         const value = this.props.transactions
-                      .filter(tx => tx.timestamps > prevMonday && tx.timestamps < nextMonday)
+                      .filter(tx => tx.timestamps >= prevMonday.getTime() && tx.timestamps < nextMonday.getTime())
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
         let dateLabel = DateTime.fromJSDate(prevMonday).weekNumber;
@@ -140,7 +140,7 @@ class LineChart extends Component {
         const lastDayOfMonth  = new Date(year, month + 1, -1);
 
         const value = this.props.transactions
-                      .filter(tx => tx.timestamps > firstDayOfMonth && tx.timestamps < lastDayOfMonth)
+                      .filter(tx => tx.timestamps >= firstDayOfMonth.getTime() && tx.timestamps < lastDayOfMonth.getTime())
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
         let dateLabel = firstDayOfMonth.toDateString().split(" ")[1];
@@ -152,6 +152,7 @@ class LineChart extends Component {
       }
     }
 
+    console.log("all transacs", this.props.transactions);
     console.log("values", values);
   
     const data = {
