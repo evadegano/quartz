@@ -48,13 +48,13 @@ function Illustration(props) {
   const timeLine1 = () => {
     var tl = gsap.timeline({ repeat: 0 });
 
-    tl.to(ill1Circ1.current, { "stroke-dashoffset": 0, duration: 2 }, 3);
-    tl.to(ill1Path1.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
-    tl.to(ill1Path2.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
-    tl.to(ill1Path3.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
-    tl.to(ill1Path4.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
-    tl.to(ill1Path5.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
-    tl.to(ill1Line1.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
+    tl.to(ill1Circ1.current, { "stroke-dashoffset": 0, duration: 5 }, 2);
+    tl.to(ill1Path1.current, { "stroke-dashoffset": 0, duration: 7 }, 2);
+    tl.to(ill1Path2.current, { "stroke-dashoffset": 0, duration: 7 }, 2);
+    tl.to(ill1Path3.current, { "stroke-dashoffset": 0, duration: 7 }, 2);
+    tl.to(ill1Path4.current, { "stroke-dashoffset": 0, duration: 7 }, 2);
+    tl.to(ill1Path5.current, { "stroke-dashoffset": 0, duration: 7 }, 2);
+    tl.to(ill1Line1.current, { "stroke-dashoffset": 0, duration: 7 }, 2);
 
     return tl;
   };
@@ -101,7 +101,7 @@ function Illustration(props) {
     var master = gsap.timeline();
 
     master.add(timeLine1())
-          .add(timeLine2(), ">2")
+          .add(timeLine2(), ">0")
   });
   
 

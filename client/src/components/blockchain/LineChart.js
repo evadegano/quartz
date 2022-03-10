@@ -92,8 +92,7 @@ class LineChart extends Component {
                       .filter(tx => tx.timestamps > day && tx.timestamps < nextDay)
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
-        let dateLabel = day.toDateString().split(" ").slice(0, 3);
-        dateLabel.join(" ");
+        let dateLabel = day.toDateString().split(" ").slice(0, 3).join(" ");
         
         labels.push(dateLabel);
         values.push(value);
@@ -120,7 +119,7 @@ class LineChart extends Component {
 
         let dateLabel = DateTime.fromJSDate(prevMonday).weekNumber;
 
-        labels.push(dateLabel);
+        labels.push(`Week ${dateLabel}`);
         values.push(value);
       }
     }
