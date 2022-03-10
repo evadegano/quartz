@@ -42,17 +42,29 @@ function Illustration(props) {
   const ill2Path18 = React.useRef();
 
 
-  React.useEffect(() => {
-    // init timeline
+  /* 
+    Greensock timeline for drawing lines
+  */
+  const timeLine1 = () => {
     var tl = gsap.timeline({ repeat: 0 });
 
-    tl.to(ill1Circ1.current, { "stroke-dashoffset": 0, duration: 2 }, 0);
-    tl.to(ill1Path1.current, { "stroke-dashoffset": 0, duration: 5 }, 0);
-    tl.to(ill1Path2.current, { "stroke-dashoffset": 0, duration: 5 }, 0);
-    tl.to(ill1Path3.current, { "stroke-dashoffset": 0, duration: 5 }, 0);
-    tl.to(ill1Path4.current, { "stroke-dashoffset": 0, duration: 5 }, 0);
-    tl.to(ill1Path5.current, { "stroke-dashoffset": 0, duration: 5 }, 0);
-    tl.to(ill1Line1.current, { "stroke-dashoffset": 0, duration: 5 }, 0);
+    tl.to(ill1Circ1.current, { "stroke-dashoffset": 0, duration: 2 }, 3);
+    tl.to(ill1Path1.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
+    tl.to(ill1Path2.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
+    tl.to(ill1Path3.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
+    tl.to(ill1Path4.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
+    tl.to(ill1Path5.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
+    tl.to(ill1Line1.current, { "stroke-dashoffset": 0, duration: 5 }, 3);
+
+    return tl;
+  };
+
+
+  /*
+    Greensock timeline for making little illustrations appear
+  */
+  const timeLine2 = () => {
+    var tl = gsap.timeline({ repeat: 0 });
 
     tl.to(ill2Path1.current, { "opacity": 1 }, Math.random() * 2);
     tl.to(ill2Path2.current, { "opacity": 1 }, Math.random() * 2);
@@ -79,9 +91,20 @@ function Illustration(props) {
     tl.to(ill2Circ4.current, { "opacity": 1 }, Math.random() * 2);
     tl.to(ill2Path17.current, { "opacity": 1 }, Math.random() * 2);
     tl.to(ill2Path18.current, { "opacity": 1 }, Math.random() * 2);
+
+    return tl;
+  }
+
+
+  React.useEffect(() => {
+    // init timeline
+    var master = gsap.timeline();
+
+    master.add(timeLine1())
+          .add(timeLine2(), ">2")
   });
   
-  
+
   return (
     <svg viewBox="0 0 560 433" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle className="animated-path" ref={ill1Circ1} cx="279.478" cy="217" r="141.5" stroke="#222222" strokeWidth="3"/>

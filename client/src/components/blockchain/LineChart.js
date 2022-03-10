@@ -1,6 +1,7 @@
 
 import { Component } from "react";
 import { Line } from "react-chartjs-2";
+import DateTime from 'luxon/src/datetime.js'
 
 
 import {
@@ -91,7 +92,8 @@ class LineChart extends Component {
                       .filter(tx => tx.timestamps > day && tx.timestamps < nextDay)
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
-        let dateLabel = day.toDateString();
+        let dateLabel = day.toDateString().split(" ").slice(0, 3);
+        dateLabel.join(" ");
         
         labels.push(dateLabel);
         values.push(value);
@@ -116,7 +118,7 @@ class LineChart extends Component {
                       .filter(tx => tx.timestamps > prevMonday && tx.timestamps < nextMonday)
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
-        let dateLabel = prevMonday.toDateString();
+        let dateLabel = DateTime.fromJSDate(prevMonday).weekNumber;
 
         labels.push(dateLabel);
         values.push(value);
@@ -150,21 +152,6 @@ class LineChart extends Component {
         month++;
       }
     }
-
-    // if (this.props.timePeriod === "day") {
-    //   labels = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
-    //   values = [36000, 28000, 42000, 45000, 38500, 51000, 52100];
-    // }
-
-    // if (this.props.timePeriod === "week") {
-    //   labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
-    //   values = [36000*2, 28000*3, 42000*1.8, 45000*2.3];
-    // }
-
-    // if (this.props.timePeriod === "month") {
-    //   labels = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
-    //   values = [360000, 280000, 420000, 450000, 385000, 510000, 52100, 463000, 413000, 604050, 63090, 614000];
-    // }
   
     const data = {
       labels,
