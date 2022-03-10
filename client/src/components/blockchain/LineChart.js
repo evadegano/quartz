@@ -72,7 +72,8 @@ class LineChart extends Component {
 
   setData = () => {
     // labels defined by props
-    let labels, values;
+    let labels = [];
+    let values = [];
 
     // agreggate transaction amounts per day for the last 7 days
     if (this.props.timePeriod === "day") {
