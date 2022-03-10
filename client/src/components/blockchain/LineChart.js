@@ -90,7 +90,9 @@ class LineChart extends Component {
                       .filter(tx => tx.timestamps > day && tx.timestamps < nextDay)
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
-        labels.push(day);
+        let dateLabel = day.toDateString();
+        
+        labels.push(dateLabel);
         values.push(value);
       }
     }
@@ -113,7 +115,9 @@ class LineChart extends Component {
                       .filter(tx => tx.timestamps > prevMonday && tx.timestamps < nextMonday)
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
-        labels.push(prevMonday);
+        let dateLabel = prevMonday.toDateString();
+
+        labels.push(dateLabel);
         values.push(value);
       }
     }
@@ -137,11 +141,9 @@ class LineChart extends Component {
                       .filter(tx => tx.timestamps > firstDayOfMonth && tx.timestamps < lastDayOfMonth)
                       .reduce((acc, tx) => acc + tx.amount, 0)
 
+        let dateLabel = firstDayOfMonth.toDateString().split(" ")[1];
 
-        console.log("firstDayOfMonth", firstDayOfMonth)
-        console.log("value", value);
-
-        labels.push(firstDayOfMonth);
+        labels.push(dateLabel);
         values.push(value);
 
         month++;

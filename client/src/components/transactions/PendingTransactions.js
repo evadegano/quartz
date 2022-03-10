@@ -104,7 +104,7 @@ class Transactions extends Component {
       }
 
       // reset state
-      setTimeout( this.setState({ isMining: false }), 4000 );
+      setTimeout( this.setState({ isMining: false }), 10000 );
 
       // send a notification to the user who receives the reward
       const newRwrdNotif = {
