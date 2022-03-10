@@ -72,7 +72,7 @@ function getBalance(transactions, walletAddress) {
     }
   }
 
-  return balance.toLocaleString('en-US');
+  return balance;
 }
 
 

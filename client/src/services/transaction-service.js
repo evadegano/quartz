@@ -25,7 +25,7 @@ async function sendCoins(gun, amount, keypair, publicKey, senderAddress, receive
 
   console.log("balance =>", walletBalance);
 
-  if (walletBalance < amount) {
+  if (walletBalance < Number(amount)) {
     throw new Error("Insufficient funds.");
   }
 
