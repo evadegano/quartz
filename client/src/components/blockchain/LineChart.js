@@ -118,7 +118,7 @@ class LineChart extends Component {
       }
     }
 
-    // // agreggate transaction amounts per month for the last 12 months
+    // agreggate transaction amounts per month for the last 12 months
     if (this.props.timePeriod === "month") {
       let month = new Date().getMonth();
       let year = new Date().getFullYear() - 1;
@@ -136,6 +136,10 @@ class LineChart extends Component {
         const value = this.props.transactions
                       .filter(tx => tx.timestamps > firstDayOfMonth && tx.timestamps < lastDayOfMonth)
                       .reduce((acc, tx) => acc + tx.amount, 0)
+
+
+        console.log("firstDayOfMonth", firstDayOfMonth)
+        console.log("value", value);
 
         labels.push(firstDayOfMonth);
         values.push(value);
