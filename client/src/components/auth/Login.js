@@ -68,7 +68,7 @@ class Login extends Component {
           <h1 className="title">Log in</h1>
 
           <div className="auth-container">
-            <GoogleLogin 
+            {`<GoogleLogin 
               clientId="320266929740-ksdq1ug9o9abvl3752gfh21hpmd0elg3.apps.googleusercontent.com"
               render={renderProps => (
                 <button className="oAuth-btn" onClick={renderProps.onClick} disabled={renderProps.disabled}>
@@ -85,7 +85,7 @@ class Login extends Component {
 
             <div className="line-separator">
               <div>OR</div>
-            </div>
+            </div>`}
 
             <form onSubmit={this.handleSubmit}>
               <div className="field">
