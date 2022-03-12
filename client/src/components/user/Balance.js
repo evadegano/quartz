@@ -10,7 +10,7 @@ class Balance extends Component {
     return (
       <div className="chart-container">
         <div className="chart-header">
-          <h2>Balance: {this.props.balance} QRTZ</h2>
+          <h2>Balance: {this.props.balance.toLocaleString('en-US')} QRTZ</h2>
 
           <div>
             <button className={`time-btn ${this.state.timePeriod === "day" ? "active" : ""}`} onClick={() => this.setState({ timePeriod: "day"})}>Week</button>

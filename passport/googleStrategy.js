@@ -8,7 +8,7 @@ passport.use(new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_OAUTH_ID,
     clientSecret: process.env.GOOGLE_OAUTH_SECRET,
-    callbackURL: process.env.GOOGLE_OAUTH_CALLBACK_URL || "/auth/google"
+    callbackURL: process.env.GOOGLE_OAUTH_CALLBACK_URL || "/auth/google/callback"
   },
   (accessToken, refreshToken, profile, done) => {
     console.log("Google account details: ", profile);
