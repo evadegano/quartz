@@ -184,19 +184,12 @@ class App extends Component {
     let userWallet;
 
     // get user's active wallet address
-    if (this.state.loggedInUser.activeWallet) {
-      userWallet = this.state.loggedInUser.activeWallet;
-
-    } else {
-      // fetch data from database
-      loggedIn()
-        .then(response => {
-          // store user data
-          userWallet = response.walletAddress;
-        })
-        .catch((err) => this.setState({ loggedInUser: false }))
-    }
-
+    loggedIn()
+      .then(response => {
+        // store user data
+        userWallet = response.walletAddress;
+      })
+      .catch((err) => this.setState({ loggedInUser: false }))
 
     // init empty notifs array
     const notifsCopy = [];

@@ -93,7 +93,7 @@ class Transactions extends Component {
 
         } else {
           const newNotif = {
-            message: `Your purschase of ${tx.amount} QRTZ was rejected for ${rejectionErrors[tx.hash]}.`,
+            message: `Your purchase of ${tx.amount} QRTZ was rejected for ${rejectionErrors[tx.hash]}.`,
             user: tx.toAddress,
             isRead: false,
             timestamps: new Date().getTime()
@@ -104,7 +104,7 @@ class Transactions extends Component {
       }
 
       // reset state
-      setTimeout( this.setState({ isMining: false }), 10000 );
+      setTimeout( this.setState({ isMining: false }), 7000 );
 
       // send a notification to the user who receives the reward
       const newRwrdNotif = {
@@ -130,9 +130,9 @@ class Transactions extends Component {
     }
   };
 
-  componentDidMount() {
-    this.setState({ isMining: false });
-  }
+  // componentDidMount() {
+  //   this.setState({ isMining: false });
+  // }
 
   render() {
     const pendingTx = this.props.pendingTx.sort((a, b) => b.timestamps - a.timestamps);
