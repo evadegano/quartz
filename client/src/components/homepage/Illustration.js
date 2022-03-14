@@ -127,8 +127,8 @@ function Illustration(props) {
     var master = gsap.timeline();
 
     master.add(timeLine1())
-          .add(timeLine2(), 5)
-          .add(timeLine3(), 5)
+          .add(timeLine2(), 1)
+          .add(timeLine3(), 1)
   });
   
 

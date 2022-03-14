@@ -9,12 +9,6 @@ gsap.registerPlugin(MotionPathPlugin);
 
 
 function Homepage(props) {
-  
-  // wait until DOM has been rendered
-  // React.useEffect(() => {
-    
-  // });
-
   return (
     <div className="homepage">
       <FullNavbar user={props.user} />
