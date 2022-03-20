@@ -5,7 +5,6 @@ The app is available [here](https://quartz-bank.herokuapp.com/)
 
 ## Table of contents
 * [Scope](#scope)
-* [Technologies](#technologies)
 * [Features](#features)
 * [Setup](#setup)
 * [Run](#run)
