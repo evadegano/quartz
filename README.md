@@ -55,25 +55,20 @@ $ npm install
 * typescript: 4.5.5
 
 ### Config variables
-Add the following variable with your own values inside a `.env` file
+Add the following variable with your own values inside a `.env` file:
 
 #### Server
-* PORT
-* ORIGIN
-* MONGODB_URI
-* GMAIL_USER
-* GMAIL_PWD
-* GOOGLE_OAUTH_ID
-* GOOGLE_OAUTH_SECRET
-* GOOGLE_OAUTH_CALLBACK_URL
-* STRIPE_PRIV_KEY
+* PORT=5005 (local port to call the server)
+* ORIGIN=http://localhost:3000 (local URL to call the app)
+* MONGODB_URI=mongodb://localhost/quartz (local URL to call the database)
+* GMAIL_USER (Gmail address for Nodemailer)
+* GMAIL_PWD (Gmail address password)
+* STRIPE_PRIV_KEY (private key from your Stripe developer account)
 
 #### Client
-* REACT_APP_GUN_URL
-* REACT_APP_API_URL
-* REACT_APP_STRIPE_PUB_KEY
-* REACT_APP_GOOGLE_OAUTH_ID
-* REACT_APP_GOOGLE_OAUTH_SECRET
+* REACT_APP_GUN_URL=http://localhost:5005/gun
+* REACT_APP_API_URL=http://localhost:5005/api
+* REACT_APP_STRIPE_PUB_KEY (public key from your Stripe developer account)
 
 ## Run
 ```
@@ -86,6 +81,7 @@ You must log into Heroku first.
 ```
 $ git push heroku main
 ```
+
 ## API
 ### `POST /signup`
 
