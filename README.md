@@ -8,6 +8,9 @@ The app is available [here](https://quartz-bank.herokuapp.com/)
 * [Technologies](#technologies)
 * [Features](#features)
 * [Setup](#setup)
+* [Run](#run)
+* [Deploy](#deploy)
+* [API](#api)
 * [Sources](#sources)
 
 ## Scope
@@ -99,18 +102,63 @@ Response:
 ```
 {
   "newUser": "{
-    _id: newUser._id,
-    createdAt: newUser.createdAt,
-    email: newUser.email
+    "_id": "620d2a6cd7ba8f53a70a75e1",
+    "createdAt": "2022-02-16T16:46:36.854+00:00",
+    "email": "jdoe@gmail.com"
   }"
 }
 ```
 
-### `POST /signup`
+### `POST /login`
 
-Create a new user.
+Log a user in.
 ```json
-POST /signup
+POST /login
+{
+  "email": "jdoe@gmail.com",
+  "password": "Foobar@01"
+}
+```
+Response:
+```
+{
+  "userData": "{
+    "_id": "620d2a6cd7ba8f53a70a75e1",
+    "createdAt": "2022-02-16T16:46:36.854+00:00",
+    "email": "jdoe@gmail.com"
+  }",
+  "walletAddress": "4cd203f4eb2534875ac1fb365792ad020f87a2fda9633bfd062074ae2e82f9b1"
+}
+```
+
+### `GET /loggedin`
+
+Check whether a user is logged in.
+
+Response:
+```json
+{
+  "userData": "{
+    "_id": "620d2a6cd7ba8f53a70a75e1",
+    "createdAt": "2022-02-16T16:46:36.854+00:00",
+    "email": "jdoe@gmail.com"
+  }",
+  "walletAddress": "4cd203f4eb2534875ac1fb365792ad020f87a2fda9633bfd062074ae2e82f9b1"
+}
+```
+Error:
+403 
+```
+{
+  "message": "Unauthorized"
+}
+```
+
+### `PUT /:userId`
+
+Update a user's account data.
+```json
+PUT /:userId
 {
   "email": "jdoe@gmail.com",
   "password": "Foobar@01",
@@ -118,6 +166,67 @@ POST /signup
 }
 ```
 
+Response:
+```
+{
+  "user": "{
+    "_id": "620d2a6cd7ba8f53a70a75e1",
+    "createdAt": "2022-02-16T16:46:36.854+00:00",
+    "email": "jdoe@gmail.com"
+  }"
+}
+```
+
+### `DELETE /:userId`
+
+Delete a user's account.
+
+Response:
+```
+{
+  "message": "Your account has been removed successfully." 
+}
+```
+
+### `POST /wallets`
+
+Create a new user wallet.
+
+```json
+POST /wallets
+{
+  "userId": "hfu178387bde190332",
+}
+```
+
+Response:
+```
+{
+  "walletAddress": "4cd203f4eb2534875ac1fb365792ad020f87a2fda9633bfd062074ae2e82f9b1"
+}
+```
+
+### `POST /coins`
+
+Add QRTZ Coins to a user's wallet.
+
+```json
+POST /coins
+{
+  "amount": "3000",
+  "token": "",
+  "keypair": "",
+  "publicKey": ""
+}
+```
+
+Response:
+```
+{
+  "amount": "3000",
+  "keypair": ""
+}
+```
 
 ## Sources
 This project is based on O'Reilly's Mastering Bitcoin.
