@@ -26,8 +26,9 @@ It was awarded gold medal for best project by teachers and students.
 
 ## Set up
 ### Dependencies
-
+```
 $ npm install
+```
 
 * @types/node: 17.0.13
 * axios: 0.26.0
@@ -71,15 +72,30 @@ Add the following variable with your own values inside a `.env` file
 * REACT_APP_GOOGLE_OAUTH_ID
 * REACT_APP_GOOGLE_OAUTH_SECRET
 
-### Run
+## Run
+```
 $ npm run dev
+```
 
-### Deploy
+## Deploy
 You must log into Heroku first.
 
 ```
-$ git push heroku master
+$ git push heroku main
 ```
+## API
+### `POST /signup`
+
+Create a new user.
+```json
+POST /signup
+{
+  "email": "jdoe@gmail.com",
+  "password": "Foobar@01",
+  "passwordConfirm": "Foobar@01"
+}
+```
+
 
 ## Sources
 This project is based on O'Reilly's Mastering Bitcoin.
