@@ -7,7 +7,7 @@ The app is available [here](https://quartz-bank.herokuapp.com/)
 * [Scope](#scope)
 * [Technologies](#technologies)
 * [Features](#features)
-* [Setup](#set up)
+* [Setup](#setup)
 * [Run](#run)
 * [Deploy](#deploy)
 * [API](#api)
@@ -27,7 +27,7 @@ It was awarded gold medal for best project by teachers and students.
 * Proof of Work algorithm for block mining
 * Merkle Tree structure for storing transaction data
 
-## Set up
+## Setup
 ### Dependencies
 ```
 $ npm install
@@ -99,7 +99,7 @@ POST /signup
 }
 ```
 Response:
-```
+```json
 {
   "newUser": {
     "_id": "620d2a6cd7ba8f53a70a75e1",
@@ -138,11 +138,11 @@ Check whether a user is logged in.
 Response:
 ```json
 {
-  "userData": "{
+  "userData": {
     "_id": "620d2a6cd7ba8f53a70a75e1",
     "createdAt": "2022-02-16T16:46:36.854+00:00",
     "email": "jdoe@gmail.com"
-  }",
+  },
   "walletAddress": "4cd203f4eb2534875ac1fb365792ad020f87a2fda9633bfd062074ae2e82f9b1"
 }
 ```
