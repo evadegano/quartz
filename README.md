@@ -26,7 +26,9 @@ It was awarded gold medal for best project by teachers and students.
 
 ## Set up
 ### Dependencies
-This project is built with:
+
+$ npm install
+
 * @types/node: 17.0.13
 * axios: 0.26.0
 * bcryptjs: 2.4.3
@@ -49,17 +51,37 @@ This project is built with:
 * typescript: 4.5.5
 
 ### Config variables
+Add the following variable with your own values inside a `.env` file
+
+#### Server
 * PORT
-ORIGIN
-MONGODB_URI
-GMAIL_USER
-GMAIL_PWD
-GOOGLE_OAUTH_ID
-GOOGLE_OAUTH_SECRET
-GOOGLE_OAUTH_CALLBACK_URL
-STRIPE_PRIV_KEY
+* ORIGIN
+* MONGODB_URI
+* GMAIL_USER
+* GMAIL_PWD
+* GOOGLE_OAUTH_ID
+* GOOGLE_OAUTH_SECRET
+* GOOGLE_OAUTH_CALLBACK_URL
+* STRIPE_PRIV_KEY
+
+#### Client
+* REACT_APP_GUN_URL
+* REACT_APP_API_URL
+* REACT_APP_STRIPE_PUB_KEY
+* REACT_APP_GOOGLE_OAUTH_ID
+* REACT_APP_GOOGLE_OAUTH_SECRET
+
+### Run
+$ npm run dev
+
+### Deploy
+You must log into Heroku first.
+
+```
+$ git push heroku master
+```
 
 ## Sources
-This project is based on CodePulse's tutorial on Youtube.
+This project is based on O'Reilly's Mastering Bitcoin.
 
-Available at: https://www.youtube.com/watch?v=Eythq9848Fg&list=PLZQftyCk7_SdoVexSmwy_tBgs7P0b97yD&index=2
+Available at: https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/
