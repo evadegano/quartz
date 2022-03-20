@@ -7,7 +7,7 @@ The app is available [here](https://quartz-bank.herokuapp.com/)
 * [Scope](#scope)
 * [Technologies](#technologies)
 * [Features](#features)
-* [Setup](#setup)
+* [Setup](#set up)
 * [Run](#run)
 * [Deploy](#deploy)
 * [API](#api)
@@ -101,11 +101,11 @@ POST /signup
 Response:
 ```
 {
-  "newUser": "{
+  "newUser": {
     "_id": "620d2a6cd7ba8f53a70a75e1",
     "createdAt": "2022-02-16T16:46:36.854+00:00",
     "email": "jdoe@gmail.com"
-  }"
+  }
 }
 ```
 
@@ -120,13 +120,13 @@ POST /login
 }
 ```
 Response:
-```
+```json
 {
-  "userData": "{
+  "userData": {
     "_id": "620d2a6cd7ba8f53a70a75e1",
     "createdAt": "2022-02-16T16:46:36.854+00:00",
     "email": "jdoe@gmail.com"
-  }",
+  },
   "walletAddress": "4cd203f4eb2534875ac1fb365792ad020f87a2fda9633bfd062074ae2e82f9b1"
 }
 ```
@@ -148,7 +148,7 @@ Response:
 ```
 Error:
 403 
-```
+```json
 {
   "message": "Unauthorized"
 }
@@ -167,13 +167,13 @@ PUT /:userId
 ```
 
 Response:
-```
+```json
 {
-  "user": "{
+  "user": {
     "_id": "620d2a6cd7ba8f53a70a75e1",
     "createdAt": "2022-02-16T16:46:36.854+00:00",
     "email": "jdoe@gmail.com"
-  }"
+  }
 }
 ```
 
@@ -182,7 +182,7 @@ Response:
 Delete a user's account.
 
 Response:
-```
+```json
 {
   "message": "Your account has been removed successfully." 
 }
@@ -200,7 +200,7 @@ POST /wallets
 ```
 
 Response:
-```
+```json
 {
   "walletAddress": "4cd203f4eb2534875ac1fb365792ad020f87a2fda9633bfd062074ae2e82f9b1"
 }
@@ -221,7 +221,7 @@ POST /coins
 ```
 
 Response:
-```
+```json
 {
   "amount": "3000",
   "keypair": ""
