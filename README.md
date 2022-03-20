@@ -95,6 +95,28 @@ POST /signup
   "passwordConfirm": "Foobar@01"
 }
 ```
+Response:
+```
+{
+  "newUser": "{
+    _id: newUser._id,
+    createdAt: newUser.createdAt,
+    email: newUser.email
+  }"
+}
+```
+
+### `POST /signup`
+
+Create a new user.
+```json
+POST /signup
+{
+  "email": "jdoe@gmail.com",
+  "password": "Foobar@01",
+  "passwordConfirm": "Foobar@01"
+}
+```
 
 
 ## Sources
