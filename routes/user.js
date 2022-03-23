@@ -182,11 +182,4 @@ router.post("/coins", (req, res, next) => {
 });
 
 
-// PUT wallets
-router.get("/users", (req, res, next) => {
-  User.find({ email: { $nin: ["eva.degano@gmail.com", "romain.dupont@gmail.com"] }})
-    .then(usersFromDB => res.status(200).json(usersFromDB))
-    .catch(err => console.log("searching for users err:", err))
-});
-
 module.exports = router;
