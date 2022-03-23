@@ -6,9 +6,12 @@ The app is available [here](https://quartz-bank.herokuapp.com/)
 ## Table of contents
 * [Scope](#scope)
 * [Features](#features)
-* [Setup](#setup)
-* [Run](#run)
-* [Deploy](#deploy)
+* [Development](#development)
+** [Setup](#setup)
+** [Install](#install)
+** [Run](#run)
+** [Test](#test)
+** [Deploy](#deploy)
 * [API](#api)
 * [Sources](#sources)
 
@@ -26,32 +29,11 @@ It was awarded gold medal for best project by teachers and students.
 * Proof of Work algorithm for block mining
 * Merkle Tree structure for storing transaction data
 
-## Setup
-### Dependencies
-```
-$ npm install
-```
-
-* @types/node: 17.0.13
-* axios: 0.26.0
-* bcryptjs: 2.4.3
-* connect-mongo: 4.6.0
-* cookie-parser: 1.4.6
-* cors: 2.8.5
-* crypto-js: 4.1.1
-* dotenv: 14.3.2
-* express: 4.17.2
-* express-session: 1.17.2
-* gun: 0.2020.1235
-* human-readable-ids: 1.0.4
-* mongoose: 6.1.8
-* morgan: 1.10.0
-* nodemailer: 6.7.2
-* passport: 0.5.2
-* passport-google-oauth: 2.0.0
-* passport-local: 1.0.0
-* stripe: 8.203.0
-* typescript: 4.5.5
+## Development
+### Setup
+#### Requirements
+* [NodeJS](https://nodejs.org): >= 14
+* [NPM](https://www.npmjs.com/): >= 8.1.2
 
 ### Config variables
 Add the following variable with your own values inside a `.env` file:
@@ -69,15 +51,26 @@ Add the following variable with your own values inside a `.env` file:
 * REACT_APP_API_URL=http://localhost:5005/api
 * REACT_APP_STRIPE_PUB_KEY (public key from your Stripe developer account)
 
-## Run
+### Install
+```bash
+# install dependencies
+$ npm i 
 ```
+
+### Run
+```bash
+# launch the app in development modeh
 $ npm run dev
 ```
 
-## Deploy
-You must log into Heroku first.
+### Test
 
-```
+
+### Deploy
+You must log into [Heroku](https://id.heroku.com/login) first.
+
+```bash
+# deploy to Heroku
 $ git push heroku main
 ```
 
