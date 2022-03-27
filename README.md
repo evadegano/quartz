@@ -38,7 +38,7 @@ It was awarded gold medal for best project by teachers and students.
 ### Config variables
 Add the following variable with your own values inside a `.env` file:
 
-#### Server
+#### Server-side
 * PORT=5005 (local port to call the server)
 * ORIGIN=http://localhost:3000 (local URL to call the app)
 * MONGODB_URI=mongodb://localhost/quartz (local URL to call the database)
@@ -46,7 +46,7 @@ Add the following variable with your own values inside a `.env` file:
 * GMAIL_PWD (Gmail address password)
 * STRIPE_PRIV_KEY (private key from your Stripe developer account)
 
-#### Client
+#### Client-side
 * REACT_APP_GUN_URL=http://localhost:5005/gun
 * REACT_APP_API_URL=http://localhost:5005/api
 * REACT_APP_STRIPE_PUB_KEY (public key from your Stripe developer account)
@@ -64,7 +64,11 @@ $ npm run dev
 ```
 
 ### Populate with dummy data
-All the functions you need to populate the dabatabase with dummy users and wallets are in ./bin/seed.js.
+#### Server-side
+Populate the dabatabase with dummy users and wallets with the functions in ./bin/seed.js.
+
+#### Client-side
+2. 
 
 ### Deploy
 You must log into [Heroku](https://id.heroku.com/login) first.

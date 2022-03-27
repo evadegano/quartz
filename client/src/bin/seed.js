@@ -82,19 +82,23 @@ class Seed extends Component {
 
   render() {
     return (
-      <div className="seed">
-        <button onClick={this.initBlockchain}>init blockchain</button>
-        <button onClick={this.topUpWallets}>top up wallets</button>
-        <button onClick={this.mineBlock}>
-          verif pending transac
-          <br /> & mine block
-        </button>
-        <button onClick={this.genTx}>gen transactions</button>
-        <button onClick={this.sendNotif}>send notif</button>
+      <div className="inner-container inner-page">
+        <div className="centered-col-container seed">
+          <h1>Admin panel</h1>
+          <p>Click on the buttons below to </p>
 
-        {this.props.notifs.map((notif, idx) => {
-          return <p key={idx}>{notif.message}</p>;
-        })}
+          <div className="profile-container">
+            <button onClick={this.initBlockchain}>Init blockchain instance</button>
+            <button onClick={this.topUpWallets}>Top up wallets</button>
+            <button onClick={this.mineBlock}>
+              Verify pending transactions
+              <br /> & mine block
+            </button>
+            <button onClick={this.genTx}>Generate random transactions</button>
+            <button onClick={this.sendNotif}>Test notifications</button>
+          </div>
+
+        </div>
       </div>
     );
   }
