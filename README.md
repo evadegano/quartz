@@ -70,6 +70,13 @@ Populate the MongoDB dabatabase with dummy users and wallets with the functions 
 #### Client-side
 To populate the GunJS decentralized database with dummy transactions, go to the "/seed" root.
 
+Buttons action:
+- "Init blockchain instance": creates an instance of the singleton blockchain class in GunJS.
+- "Top up wallets": generate random transactions to top wallets up and store them on GunJS.
+- "Verify pending transactions & mine block": select a random wallet to verify current pending transactions and mine them into a block.
+- "Generate random transactions": generate random transactions between wallets and store them on GunJS.
+
+
 ### Deploy
 You must log into [Heroku](https://id.heroku.com/login) first.
 
