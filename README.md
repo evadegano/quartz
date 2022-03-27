@@ -10,7 +10,7 @@ The app is available [here](https://quartz-bank.herokuapp.com/)
   * [Setup](#setup)
   * [Install](#install)
   * [Run](#run)
-  * [Test](#test)
+  * [Populate with dummy data](#populate-with-dummy-data)
   * [Deploy](#deploy)
 * [API](#api)
 * [Sources](#sources)
@@ -62,6 +62,9 @@ $ npm i
 # launch the app in development modeh
 $ npm run dev
 ```
+
+### Populate with dummy data
+All the functions you need to populate the dabatabase with dummy users and wallets are in ./bin/seed.js.
 
 ### Deploy
 You must log into [Heroku](https://id.heroku.com/login) first.

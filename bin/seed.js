@@ -2,8 +2,6 @@
 const mongoose = require("mongoose");
 const crypto = require('crypto');
 const hri = require('human-readable-ids').hri;
-
-// package for password encryption
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 
@@ -13,20 +11,14 @@ const Wallet = require("../models/Wallet.model");
 
 // variables
 const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
-const users = require("./users.json");
 
-function run() {
+
+function dbConnect() {
   // connect to database
   mongoose.connect('mongodb+srv://evadgn:Pepsie01@cluster0.cq4jo.mongodb.net/Quartz?retryWrites=true&w=majority')
     .then(() => {
       console.log("connected!!");
-
-      const wallets = createWallets(users);
-      console.log(wallets);
-
-      //return addWalletsToDB(wallets);
     })
-    .then(() => console.log("did it!"))
     .catch(err => console.log("global err:", err))
 }
 
@@ -141,6 +133,3 @@ function addWalletsToDB(walletsArray) {
     .then(() => console.log("wallets added to db"))
     .catch(err => console.log("adding wallets err:", err))
 }
-
-
-run()
