@@ -1,12 +1,6 @@
 // packages
 import { Component } from "react";
-import gun from "gun";
 import Blockchain from "../services/classes/blockchain";
-import {
-  RewardTransaction,
-  PurchaseTransaction,
-} from "../services/classes/transaction";
-
 
 // helpers
 import { genDebitTx, genCreditTx, verifTx } from "./helpers";
@@ -56,7 +50,7 @@ class Seed extends Component {
   /*
     Generate random transactions to top wallets up and store them on GunJS
   */
-  topUpWallets = async (event) => {
+  topUpWallets = async () => {
     await genCreditTx(this.gun, wallets);
 
     console.log("Wallets were successfully topped up.");
@@ -66,7 +60,7 @@ class Seed extends Component {
   /* 
     Select a random wallet to verify current pending transactions and mine them into a block
   */
-  mineBlock = async (event) => {
+  mineBlock = async () => {
     const pendingTx = this.props.transactions.filter(tx => tx.status === "pending");
     const randWallet = Math.round(Math.random() * wallets.length);
     const miner = wallets[ randWallet ].name;
@@ -81,8 +75,8 @@ class Seed extends Component {
   /*
     Generate random transactions between wallets and store them on GunJS
   */
-  genTx = async (event) => {
-    await genDebitTx(this.gun, wallets);
+  genTx = () => {
+    genDebitTx(this.gun, wallets);
 
     console.log("Fake transactions were successfully generated between wallets.");
   };
@@ -91,7 +85,7 @@ class Seed extends Component {
     return (
       <div className="inner-container inner-page">
         <div className="centered-col-container seed">
-          <h1>Admin panel</h1>
+          <h1 className="title">Admin panel</h1>
           <p>Click on the buttons below to populate GunJs with dummy data</p>
 
           <div className="profile-container">

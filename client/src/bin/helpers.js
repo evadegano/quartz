@@ -20,26 +20,6 @@ function genRandomDate(start, end) {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
-// create wallets for users
-async function createWallets(users) {
-
-  for (let userID of users) {
-    // generate keypairs
-    let keypair = ec.genKeyPair();
-
-    // get public and private keys
-    let publicKey = keypair.getPublic("hex");
-    let privateKey = keypair.getPrivate("hex");
-
-    // derive wallet address from public key
-    let walletAddress = SHA256(publicKey).toString();
-
-    // create new wallet in MongoDB
-    await service.post("/wallets", { userID, walletAddress, keypair, publicKey, privateKey }).then(response => response.data)
-  }
-}
-
-
 async function genCreditTx(gun, wallets) {
 
   for (let wallet of wallets) {
@@ -95,4 +75,4 @@ async function verifTx(gun, blockchain, pendingTx, miner, transactions, timestam
 }
 
 
-export { createWallets, genDebitTx, genCreditTx, verifTx };
+export { genDebitTx, genCreditTx, verifTx };

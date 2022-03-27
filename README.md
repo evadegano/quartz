@@ -65,12 +65,17 @@ $ npm run dev
 
 ### Populate with dummy data
 #### Server-side
-Populate the MongoDB dabatabase with dummy users and wallets with the functions in ./bin/seed.js.
+Populate the MongoDB dabatabase with dummy users and wallets with the functions in `./bin/seed.js`.
 
 #### Client-side
-To populate the GunJS decentralized database with dummy transactions, go to the "/seed" root.
 
-Buttons action:
+Populate the GunJS decentralized database with a dummy blockchain and transactions with the functions in `./client/src/bin/seed`.
+
+1. Replace the content of `users.json` and `wallets.json` with the dummy data you have generated on the server-side.
+
+2. Go to the `/seed` route.
+
+Buttons purpose:
 - "Init blockchain instance": creates an instance of the singleton blockchain class in GunJS.
 - "Top up wallets": generate random transactions to top wallets up and store them on GunJS.
 - "Verify pending transactions & mine block": select a random wallet to verify current pending transactions and mine them into a block.
