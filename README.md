@@ -65,10 +65,10 @@ $ npm run dev
 
 ### Populate with dummy data
 #### Server-side
-Populate the dabatabase with dummy users and wallets with the functions in ./bin/seed.js.
+Populate the MongoDB dabatabase with dummy users and wallets with the functions in ./bin/seed.js.
 
 #### Client-side
-2. 
+To populate the GunJS decentralized database with dummy transactions, go to the "/seed" root.
 
 ### Deploy
 You must log into [Heroku](https://id.heroku.com/login) first.

@@ -4,7 +4,7 @@
 background: #222222; }
 
 .seed{
-  color: white;
+  height: 100vh;
 }
 
 .App-logo {
@@ -357,6 +357,12 @@ li * {
 .profile-container {
   width: 100%;
   margin-top: 40px;
+}
+.seed .profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 .settings-container {
   display: flex;
