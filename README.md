@@ -63,6 +63,9 @@ $ npm i
 $ npm run dev
 ```
 
+### Populate with dummy data
+
+
 ### Test
 
 
