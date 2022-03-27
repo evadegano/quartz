@@ -365,6 +365,9 @@ li * {
   justify-content: flex-start;
   gap: 20px;
 }
+.seed button {
+  width: 300px;
+}
 .settings-container {
   display: flex;
   justify-content: flex-end;
