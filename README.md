@@ -63,14 +63,13 @@ $ npm i
 $ npm run dev
 ```
 
-### Populate with dummy data
-
-
-### Test
-
-
 ### Deploy
 You must log into [Heroku](https://id.heroku.com/login) first.
+
+```bash
+# create an Heroku app in the root directory
+$ heroku create -a example-app
+```
 
 ```bash
 # deploy to Heroku
