@@ -1,6 +1,4 @@
 // packages
-import axios from "axios";
-import SHA256 from "crypto-js";
 import EC from "elliptic";
 
 
@@ -9,12 +7,6 @@ import { createPurchaseTx, sendCoins, processTx } from "../services/transaction-
 
 // init variables
 const ec = new EC.ec('secp256k1');
-
-// service to connect to the API
-const service = axios.create({
-  baseURL: "http://localhost:5005/api",
-  withCredentials: true
-})
 
 function genRandomDate(start, end) {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));

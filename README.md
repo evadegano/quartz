@@ -71,7 +71,7 @@ Populate the MongoDB dabatabase with dummy users and wallets with the functions 
 
 Populate the GunJS decentralized database with a dummy blockchain and transactions with the functions in `./client/src/bin/seed`.
 
-1. Replace the content of `users.json` and `wallets.json` with the dummy data you have generated on the server-side.
+1. Replace the content of `wallets.json` with the dummy wallets you have generated on the server-side.
 
 2. Go to the `/seed` route.
 

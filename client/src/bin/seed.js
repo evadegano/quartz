@@ -6,7 +6,6 @@ import Blockchain from "../services/classes/blockchain";
 import { genDebitTx, genCreditTx, verifTx } from "./helpers";
 
 // jsons
-import users from "./users.json";
 import wallets from "./wallets.json";
 
 // init variables

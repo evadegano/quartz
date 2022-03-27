@@ -1,7 +1,5 @@
 import { Component } from "react";
 import { getBalance } from "../../services/helpers";
-import QRCode from "qrcode";
-import { postWallets, putWallet } from "../../services/user-service";
 import Header from "../navbars/Header";
 import TransferBtns from "./TransferBtns";
 import Transactions from "../transactions/Transactions";
