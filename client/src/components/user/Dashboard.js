@@ -73,13 +73,13 @@ class Dashboard extends Component {
           gun={this.props.gun} />
 
         <div className="row-container">
-          <Balance balance={this.state.balance} transactions={userTransactions} />
+          <Balance balance={this.state.balance} userWalletName={this.props.userWalletName} transactions={userTransactions} />
           
           <TransferBtns walletAddress={walletAddress} />
           
         </div>
 
-        <Transactions transactions={userTransactions} />
+        <Transactions transactions={userTransactions} wallets={this.props.wallets} />
       </div>
     );
   }

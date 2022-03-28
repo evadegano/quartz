@@ -94,7 +94,8 @@ class SendCoins extends Component {
   render() {
     return (
       <div className="inner-container">
-        <h1 className="title">Send QRTZ</h1>
+        <h1 className="title">Send QRTZ Coins</h1>
+        <h2 className="subtitle">Wallet: {this.props.userWalletName}</h2>
 
         <form className="auth-container" onSubmit={this.handleSubmit}>
           <div className="field">

@@ -24,7 +24,7 @@ class Blockchain extends Component {
           <BlockchainStats blockchain={this.props.blockchain} blocks={this.props.blocks.length}/>
         </div>
 
-        <Blocks blocks={this.props.blocks} />
+        <Blocks blocks={this.props.blocks} wallets={this.props.wallets} />
       </div>
     );
   }

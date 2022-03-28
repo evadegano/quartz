@@ -36,11 +36,12 @@ class TxPages extends Component {
             pendingTx={pendingTx} 
             gun={this.props.gun}
             transactions={this.props.transactions}
+            wallets={this.props.wallets}
             blockchain={this.props.blockchain}
             fetchNotifs={this.props.fetchNotifs}
             fetchTx={this.props.fetchTx} />
 
-          <Transactions transactions={this.props.transactions} />
+          <Transactions transactions={this.props.transactions} wallets={this.props.wallets} />
         </div>
 
         <BottomNavbar user={this.props.user} />

@@ -19,6 +19,7 @@ class BlockPages extends Component {
               blockchain={this.props.blockchain} 
               blocks={this.props.blocks} 
               transactions={this.props.transactions}
+              wallets={this.props.wallets}
               notifs={this.props.notifs}
               updateUser={this.props.updateUser}
               fetchNotifs={this.props.fetchNotifs}

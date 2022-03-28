@@ -243,6 +243,7 @@ class App extends Component {
                 gun={this.gun}
                 user={this.state.loggedInUser}
                 transactions={this.state.transactions}
+                wallets={this.state.wallets}
                 notifs={this.state.notifs}
                 newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser} 
@@ -260,6 +261,7 @@ class App extends Component {
                 user={this.state.loggedInUser} 
                 blockchain={this.state.blockchain} 
                 transactions={this.state.transactions}
+                wallets={this.state.wallets}
                 notifs={this.state.notifs}
                 newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser}
@@ -278,10 +280,10 @@ class App extends Component {
                 blockchain={this.state.blockchain} 
                 blocks={this.state.blocks}
                 transactions={this.state.transactions}
+                wallets={this.state.wallets}
                 notifs={this.state.notifs}
                 newNotifs={this.state.newNotifs}
                 updateUser={this.updateLoggedInUser}
-                wallets={this.state.wallets}
                 fetchNotifs={this.fetchNotifs}
                 resetNotifsAlert={this.resetNotifsAlert} />} />
 
@@ -304,14 +306,18 @@ class App extends Component {
 
           <Route path="/recovery" render={() => <RecoveryPages /> } />
           
-          <Route path="/seed" render={(routerProps) => 
-            <Seed {...routerProps}
-            user={this.state.loggedInUser} 
-            gun={this.gun} 
-            blockchain={this.state.blockchain}
-            transactions={this.state.transactions}
-            notifs={this.state.notifs}
-            fetchNotifs={this.fetchNotifs} /> } />
+          <ProtectedRoute 
+            path="/seed" 
+            loggedin={this.state.loggedInUser._id}
+            pending={this.state.fetchingUser}
+            render={(routerProps) => 
+              <Seed {...routerProps}
+              user={this.state.loggedInUser} 
+              gun={this.gun} 
+              blockchain={this.state.blockchain}
+              transactions={this.state.transactions}
+              notifs={this.state.notifs}
+              fetchNotifs={this.fetchNotifs} /> } />
         </Switch>
       </div>
   );}

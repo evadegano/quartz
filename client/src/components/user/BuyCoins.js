@@ -82,9 +82,8 @@ class BuyCoins extends Component {
   render() {
     return (
       <div className="inner-container">
-        <h1 className="title">Add QRTZ</h1>
-        <h2 className="subtitle">to account:
-        <br />{this.props.match.params.walletId}</h2>
+        <h1 className="title">Buy QRTZ Coins</h1>
+        <h2 className="subtitle">Wallet: {this.props.userWalletName}</h2>
 
         <form className="auth-container" onSubmit={this.handleSubmit}>
           <div className="field">

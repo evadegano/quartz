@@ -59,6 +59,7 @@ class Blocks extends Component {
 
         {filteredBlocks.map((block, idx) => {
           return <Block 
+                    wallets={this.props.wallets}
                     key={idx} 
                     hash={block.hash} 
                     prevBlock={block.prevHash} 

@@ -59,6 +59,7 @@ class Transactions extends Component {
         
         {filteredTx.map((tx, idx) => {
           return <Transaction 
+                    wallets={this.props.wallets}
                     key={idx} 
                     hash={tx.hash} 
                     from={tx.fromAddress} 

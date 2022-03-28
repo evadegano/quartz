@@ -7,6 +7,8 @@ class Block extends Component {
   render() {
     // convert timestamps to date
     const date = timestampsToDate(this.props.date);
+    // get miner's wallet name
+    const minerWalletName = this.props.wallets.find(wallet => wallet.address === this.props.miner).name;
 
     return (
       <div className="table-row">
@@ -35,7 +37,7 @@ class Block extends Component {
               { 
                 !this.props.miner
                 ? <span>null</span>
-                : <Link to={`/wallets/${this.props.miner}`}>{this.props.miner}</Link>
+                : <Link to={`/wallets/${this.props.miner}`}>{minerWalletName}</Link>
               }
           </div>
           <div><span className="emph-txt">Reward:</span> {this.props.reward} QRTZ</div>

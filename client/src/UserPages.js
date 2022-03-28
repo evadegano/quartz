@@ -11,6 +11,8 @@ import BuyCoins from "./components/user/BuyCoins";
 
 class UserPages extends Component {
   render() {
+    const userWalletName = this.props.wallets.find(wallet => wallet.address === this.props.user.activeWallet).name;
+
     return (
       <div className="outer-container">
         <SideNavbar user={this.props.user} />
@@ -22,6 +24,8 @@ class UserPages extends Component {
               gun={this.props.gun}
               user={this.props.user} 
               transactions={this.props.transactions}
+              wallets={this.props.wallets}
+              userWalletName={userWalletName}
               notifs={this.props.notifs}
               newNotifs={this.props.newNotifs}
               updateUser={this.props.updateUser}
@@ -31,12 +35,14 @@ class UserPages extends Component {
           <Route exact path="/user/:walletId/send-coins" render={routerProps => 
             <SendCoins {...routerProps} 
               gun={this.props.gun} 
+              userWalletName={userWalletName}
               transactions={this.props.transactions}
               fetchTx={this.props.fetchTx} />} />
 
           <Route exact path="/user/:walletId/get-coins" render={routerProps => 
             <BuyCoins {...routerProps} 
               gun={this.props.gun} 
+              userWalletName={userWalletName}
               fetchTx={this.props.fetchTx} />} />
 
           <Route exact path="/user/:walletId/profile" render={routerProps => 

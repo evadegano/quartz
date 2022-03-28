@@ -17,6 +17,13 @@ class Transaction extends Component {
   }
 
   render() {
+    let fromWalletName, toWalletName;
+
+    // get sender's wallet name only if it's not a null sender address
+    !this.props.from.includes("null") ? fromWalletName = this.props.wallets.find(wallet => wallet.address === this.props.from).name : fromWalletName = this.props.from;
+    // get receiver's wallet name
+    toWalletName = this.props.wallets.find(wallet => wallet.address === this.props.to).name;
+
     return (
       <div className="table-row">
         <div className="table-col">
@@ -28,13 +35,13 @@ class Transaction extends Component {
               { 
                 this.props.from.includes("null")
                 ? <span>{this.props.from}</span>
-                : <Link to={`/wallets/${this.props.from}`}>{this.props.from}</Link>
+                : <Link to={`/wallets/${this.props.from}`}>{fromWalletName}</Link>
               }
             </div>
 
             <div className="trunc-txt">
               <span className="emph-txt">To: </span>
-              <Link to={`/wallets/${this.props.to}`}>{this.props.to}</Link>
+              <Link to={`/wallets/${this.props.to}`}>{toWalletName}</Link>
             </div>
         </div>
 

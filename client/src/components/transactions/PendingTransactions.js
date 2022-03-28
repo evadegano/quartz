@@ -103,9 +103,6 @@ class Transactions extends Component {
         }        
       }
 
-      // reset state
-      setTimeout( this.setState({ isMining: false }), 7000 );
-
       // send a notification to the user who receives the reward
       const newRwrdNotif = {
         message: `${rewardTx.amount} QRTZ have been issued for you as a reward for mining a block.`,
@@ -128,11 +125,10 @@ class Transactions extends Component {
 
       this.setState({ error: err });
     }
-  };
 
-  // componentDidMount() {
-  //   this.setState({ isMining: false });
-  // }
+    // reset state
+    setTimeout( this.setState({ isMining: false }), 7000 );
+  };
 
   render() {
     const pendingTx = this.props.pendingTx.sort((a, b) => b.timestamps - a.timestamps);
@@ -152,6 +148,7 @@ class Transactions extends Component {
 
             {!this.state.isMining && pendingTx.map((tx, idx) => {
               return <Transaction 
+                        wallets={this.props.wallets}
                         key={idx} 
                         hash={tx.hash} 
                         from={tx.fromAddress} 
