@@ -71,8 +71,7 @@ class SendCoins extends Component {
         error: "",
         success: "Your transaction was sent to the network for validation."
       });
-    }
-    catch (err) {
+    } catch (err) {
       this.setState({
         toAddress: "",
         amount: "",

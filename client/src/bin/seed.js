@@ -50,9 +50,13 @@ class Seed extends Component {
     Generate random transactions to top wallets up and store them on GunJS
   */
   topUpWallets = async () => {
-    await genCreditTx(this.gun, wallets);
+    try {
+      await genCreditTx(this.gun, wallets);
+      console.log("Wallets were successfully topped up.");
 
-    console.log("Wallets were successfully topped up.");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
 
@@ -65,19 +69,28 @@ class Seed extends Component {
     const miner = wallets[ randWallet ].name;
     const timestamps = new Date(2021, 11, 31).getTime();
 
-    await verifTx(this.gun, this.props.blockchain, pendingTx, miner, this.props.transactions, timestamps);
+    try {
+      await verifTx(this.gun, this.props.blockchain, pendingTx, miner, this.props.transactions, timestamps);
+      console.log("Transactions were successfully verified.");
 
-    console.log("Transactions were successfully verified.");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
 
   /*
     Generate random transactions between wallets and store them on GunJS
   */
-  genTx = () => {
-    genDebitTx(this.gun, wallets);
+  genTx = async () => {
 
-    console.log("Fake transactions were successfully generated between wallets.");
+    try {
+      await genDebitTx(this.gun, wallets, this.props.transactions);
+      console.log("Fake transactions were successfully generated between wallets.");
+
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   render() {

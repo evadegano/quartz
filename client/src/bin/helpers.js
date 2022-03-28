@@ -35,7 +35,7 @@ async function genCreditTx(gun, wallets) {
   }
 }
 
-async function genDebitTx(gun, wallets) {
+async function genDebitTx(gun, wallets, transactions) {
 
   for (let wallet of wallets) {
     //generate a random date
@@ -57,7 +57,7 @@ async function genDebitTx(gun, wallets) {
     const publicKey = keypair.getPublic("hex");
 
     // create transaction
-    await sendCoins(gun, amount, keypair, publicKey, senderAddress, receiverAddress, timestamps);    
+    await sendCoins(gun, amount, keypair, publicKey, senderAddress, receiverAddress, transactions, timestamps);    
   }
 }
 
