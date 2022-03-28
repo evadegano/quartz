@@ -20,8 +20,11 @@ class Transaction extends Component {
     let fromWalletName, toWalletName;
 
     if (this.props.wallets) {
+      console.log("first");
       // get sender's wallet name only if it's not a null sender address
       !this.props.from.includes("null") ? fromWalletName = this.props.wallets.find(wallet => wallet.address === this.props.from).name : fromWalletName = this.props.from;
+
+      console.log("second");
       // get receiver's wallet name
       toWalletName = this.props.wallets.find(wallet => wallet.address === this.props.to).name;
     } else {
