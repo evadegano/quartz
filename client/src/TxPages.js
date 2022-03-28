@@ -16,6 +16,8 @@ class TxPages extends Component {
   render() {
     const pendingTx = this.getPendingTx();
 
+    console.log("wallets", this.props.wallets);
+
     return (
       <div className="outer-container">
         <SideNavbar user={this.props.user} />

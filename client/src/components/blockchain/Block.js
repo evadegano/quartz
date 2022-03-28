@@ -7,8 +7,15 @@ class Block extends Component {
   render() {
     // convert timestamps to date
     const date = timestampsToDate(this.props.date);
+
     // get miner's wallet name
-    const minerWalletName = this.props.wallets.find(wallet => wallet.address === this.props.miner).name;
+    let minerWalletName;
+
+    if (this.props.wallets) {
+      minerWalletName = this.props.wallets.find(wallet => wallet.address === this.props.miner).name;
+    } else {
+      minerWalletName = this.props.miner;
+    }
 
     return (
       <div className="table-row">
