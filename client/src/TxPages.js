@@ -9,14 +9,11 @@ import Transactions from "./components/transactions/Transactions";
 class TxPages extends Component {
   getPendingTx = () => {
     const pendingTx = this.props.transactions.filter(tx => tx.status === "pending");
-
     return pendingTx;
   }
 
   render() {
     const pendingTx = this.getPendingTx();
-
-    console.log("wallets", this.props.wallets);
 
     return (
       <div className="outer-container">

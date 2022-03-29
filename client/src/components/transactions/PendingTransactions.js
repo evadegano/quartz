@@ -122,12 +122,8 @@ class Transactions extends Component {
     }
     catch(err) {
       console.log(err);
-
       this.setState({ error: err });
     }
-
-    // reset state
-    setTimeout( this.setState({ isMining: false }), 7000 );
   };
 
   render() {
