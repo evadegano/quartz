@@ -26,7 +26,14 @@ class Transaction extends Component {
 
       console.log("second");
       // get receiver's wallet name
-      toWalletName = this.props.wallets.find(wallet => wallet.address === this.props.to).name;
+      try {
+        toWalletName = this.props.wallets.find(wallet => wallet.address === this.props.to).name;
+        console.log("third");
+      } catch (err) {
+        toWalletName = this.props.to;
+        console.log(err);
+      }
+      
     } else {
       fromWalletName = this.props.from;
       toWalletName = this.props.to;
