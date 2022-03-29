@@ -12,7 +12,7 @@ class Balance extends Component {
         <div className="chart-header">
           <div>
             <h2>Balance: {this.props.balance.toLocaleString('en-US')} QRTZ</h2>
-            <h3 className="subtitle">Wallet: {this.props.userWalletName}</h3>
+            <h3 className="subtitle left-align">Wallet: {this.props.userWalletName}</h3>
           </div>
 
           <div>
