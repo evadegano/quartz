@@ -11,10 +11,11 @@ class Block extends Component {
     // get miner's wallet name
     let minerWalletName;
 
-    if (this.props.wallets) {
+    try {
       minerWalletName = this.props.wallets.find(wallet => wallet.address === this.props.miner).name;
-    } else {
+    } catch(err) {
       minerWalletName = this.props.miner;
+      console.log(err);
     }
 
     return (
