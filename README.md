@@ -20,12 +20,19 @@ The app was built as a second project during Ironhack's Full Stack Developer boo
 It was awarded gold medal for best project by teachers and students.
 
 ## Features
+<img src='https://user-images.githubusercontent.com/35829634/160679611-3de630cd-8897-45db-8a2b-c473154ecd78.gif' alt='' height='300' />
+
 * User authentication and authorization via Passport
-* Off-chain data stored in a MongoDB database
-* On-chain data store on [Gun](https://gun.eco/)
 * Password reset via Nodemailer
-* Svg animations using Green Sock
+<img src='https://user-images.githubusercontent.com/35829634/160679627-72ed3792-124b-4c18-b13a-e74493764e90.gif' alt='' height='300' />
+
+* Off-chain data stored in a MongoDB database
+* On-chain data stored on [Gun](https://gun.eco/)
+<img src='https://user-images.githubusercontent.com/35829634/160785120-ea534653-5498-4060-93f3-2487cd08de6c.gif' alt='' height='300' />
+
 * Purchasing QRTZ Coins via Stripe
+<img src='https://user-images.githubusercontent.com/35829634/160784315-e272bdff-8393-44f3-8acd-bc80e3b3dcc3.gif' alt='' height='300' />
+
 * Proof of Work algorithm for block mining
 * Merkle Tree structure for storing transaction data
 
