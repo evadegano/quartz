@@ -28,9 +28,11 @@ It was awarded gold medal for best project by teachers and students.
 
 * Off-chain data stored in a MongoDB database
 * On-chain data stored on [Gun](https://gun.eco/)
-
+<img src='https://user-images.githubusercontent.com/35829634/160784500-d9b2a725-25b0-475d-b6bb-a7948ca559aa.gif' alt='' height='300' />
 
 * Purchasing QRTZ Coins via Stripe
+<img src='https://user-images.githubusercontent.com/35829634/160784315-e272bdff-8393-44f3-8acd-bc80e3b3dcc3.gif' alt='' height='300' />
+
 * Proof of Work algorithm for block mining
 * Merkle Tree structure for storing transaction data
 
